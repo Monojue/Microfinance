@@ -1,0 +1,439 @@
+package entryForm;
+
+import java.awt.EventQueue;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+
+import database.DBConnection;
+
+import javax.swing.UIManager;
+import java.awt.Color;
+import java.awt.Component;
+
+import net.miginfocom.swing.MigLayout;
+import tool.Checking;
+import tool.MyDate;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.Choice;
+import java.awt.Button;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Checkbox;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.JCheckBox;
+
+public class ClientEntry extends JFrame {
+	
+	private JTextField helo;
+	private JPanel contentPane;
+	private JTextField textName;
+	private JTextField boxNo;
+	private JTextField textAge;
+	private JTextField textAddress;
+	private JTextField textCity;
+	private JTextField textState;
+	private JTextField textPh;
+	private JTextField textJob;
+	private JTextField textSalary;
+	private JTextField textCID;
+	private JTextField textDate;
+	private JLabel noteName;
+	private JLabel noteAge;
+	private JLabel noteAddress;
+	private JLabel noteCity;
+	private JLabel notePhone;
+	private JLabel noteHome;
+	private JLabel lblHome;
+	private JLabel noteJob;
+	private JLabel noteState;
+	private JLabel noteSalary;
+	private JLabel noteNRC;
+	private Choice boxN1;
+	private Choice boxN2;
+	private Choice boxN3;
+	private JCheckBox checkHome;
+	DBConnection myDbConnection = new DBConnection();
+	MyDate myDate = new MyDate();
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ClientEntry frame = new ClientEntry();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public void AutoID() {
+		 textCID.setText(myDbConnection.getAutoID("clientID", "Client", "CL-"));
+		 textDate.setText(myDate.getdate());
+	}
+
+	public void check() {
+		if (Checking.IsNull(textName.getText())) {
+			noteName.setText("* Required");
+			noteName.setVisible(true);
+		}else if (!Checking.IsLetter(textName.getText())) {
+			noteName.setText("* Invalid");
+			noteName.setVisible(true);
+		}
+		if (Checking.IsNull(textAge.getText().toString())) {
+			noteAge.setText("* Required");
+			noteAge.setVisible(true);
+		}
+		if (Checking.IsNull(textAddress.getText().toString())) {
+			noteAddress.setText("* Required");
+			noteAddress.setVisible(true);
+		}
+		if (Checking.IsNull(textCity.getText().toString())) {
+			noteCity.setText("* Required");
+			noteCity.setVisible(true);
+		}
+		if (Checking.IsNull(textState.getText())) {
+			noteState.setText("* Required");
+			noteState.setVisible(true);
+		}
+		if (Checking.IsNull(textPh.getText())) {
+			notePhone.setText("* Required");
+			notePhone.setVisible(true);
+		}
+		if (Checking.IsNull(textJob.getText())) {
+			noteJob.setText("* Required");
+			noteJob.setVisible(true);
+		}
+		if (Checking.IsNull(textSalary.getText())) {
+			noteSalary.setText("* Required");
+			noteSalary.setVisible(true);
+		}
+		if (!checkHome.isSelected()) {
+			noteHome.setText("* Required");
+			noteHome.setVisible(true);
+		}
+		if (Checking.IsNull(boxN1.getSelectedItem())) {
+			noteNRC.setText("* Required");
+			noteNRC.setVisible(true);
+		}else if (Checking.IsNull(boxN2.getSelectedItem())) {
+			noteNRC.setText("* Required");
+			noteNRC.setVisible(true);
+		}else if (Checking.IsNull(boxN3.getSelectedItem())) {
+			noteNRC.setText("* Required");
+			noteNRC.setVisible(true);
+		}else if (Checking.IsNull(boxNo.getText())) {
+			noteNRC.setText("* Required");
+			noteNRC.setVisible(true);
+		}
+			
+		
+		
+	}
+	
+	/**
+	 * Create the frame.
+	 */
+	public ClientEntry() {
+		initialize();
+		AutoID();
+	}
+	
+	public void initialize() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(450, 100, 560, 445);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "CLIENT INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setLayout(new MigLayout("", "[52.00][52px][28px][5px][4px][5px][13px][][17px][34px][38.00][][5px][57.00px][13.00px][31px][5px][52px][5px][25px][5px][34.00px,left][34.00px,left][62px,left]", "[][30][30][30][30][30][30][30][30][30]"));
+		
+		JLabel label = new JLabel("NAME");
+		panel.add(label, "cell 1 1,grow");
+		
+		noteName = new JLabel("* Required");
+		noteName.setForeground(Color.RED);
+		noteName.setBackground(Color.WHITE);
+		noteName.setVisible(false);
+		
+		textName = new JTextField();
+		textName.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteName.setVisible(false);
+			}
+		});
+		textName.setColumns(10);
+		panel.add(textName, "cell 2 1 16 1,grow");
+		panel.add(noteName, "cell 19 1 4 1,alignx left,growy");
+		
+		JLabel label_1 = new JLabel("NRC");
+		panel.add(label_1, "cell 1 2,alignx left,growy");
+		
+		boxN1 = new Choice();
+		boxN1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteNRC.setVisible(false);
+			}
+		});
+		boxN1.addItem("12");
+		panel.add(boxN1, "cell 2 2,alignx left,aligny top");
+		
+		JLabel label_2 = new JLabel("/");
+		panel.add(label_2, "cell 4 2,alignx left,growy");
+		
+		boxN2 = new Choice();
+		boxN2.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteNRC.setVisible(false);
+			}
+		});
+		boxN2.addItem("DAGARA");
+		panel.add(boxN2, "cell 6 2 4 1,growx,aligny top");
+		
+		boxN3 = new Choice();
+		boxN3.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteNRC.setVisible(false);
+			}
+		});
+		boxN3.addItem("N");
+		panel.add(boxN3, "cell 10 2,growx,aligny top");
+		
+		boxNo = new JTextField();
+		boxNo.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteNRC.setVisible(false);
+			}
+		});
+		boxNo.setColumns(10);
+		panel.add(boxNo, "cell 11 2 7 1,grow");
+		
+		noteNRC = new JLabel("* Invalid");
+		noteNRC.setForeground(Color.RED);
+		noteNRC.setBackground(Color.WHITE);
+		noteNRC.setVisible(false);
+		panel.add(noteNRC, "cell 18 2 5 1,alignx left,growy");
+		
+		JLabel label_3 = new JLabel("Age");
+		panel.add(label_3, "cell 1 3,alignx left,growy");
+		
+		textAge = new JTextField();
+		textAge.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteAge.setVisible(false);
+			}
+		});
+		textAge.setColumns(10);
+		panel.add(textAge, "cell 2 3,grow");
+		
+		noteAge = new JLabel("* Required");
+		noteAge.setForeground(Color.RED);
+		noteAge.setBackground(Color.WHITE);
+		noteAge.setVisible(false);
+		panel.add(noteAge, "cell 4 3 6 1,alignx left,growy");
+		
+		JLabel label_4 = new JLabel("ADDRESS");
+		panel.add(label_4, "cell 1 4,alignx left,growy");
+		
+		textAddress = new JTextField();
+		textAddress.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteAddress.setVisible(false);
+			}
+		});
+		textAddress.setColumns(10);
+		panel.add(textAddress, "cell 2 4 18 1,grow");
+		
+		noteAddress = new JLabel("* Required");
+		noteAddress.setForeground(Color.RED);
+		noteAddress.setBackground(Color.WHITE);
+		noteAddress.setVisible(false);
+		panel.add(noteAddress, "cell 21 4 2 1,alignx center,growy");
+		
+		JLabel label_7 = new JLabel("CITY");
+		panel.add(label_7, "cell 1 5,alignx left,growy");
+		
+		textCity = new JTextField();
+		textCity.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteCity.setVisible(false);
+			}
+		});
+		textCity.setColumns(10);
+		panel.add(textCity, "cell 2 5 6 1,grow");
+		
+		noteCity = new JLabel("* Required");
+		noteCity.setForeground(Color.RED);
+		noteCity.setBackground(Color.WHITE);
+		noteCity.setVisible(false);
+		panel.add(noteCity, "cell 10 5 2 1,alignx center,growy");
+		
+		JLabel label_5 = new JLabel("STATE");
+		panel.add(label_5, "cell 13 5 3 1,alignx left,aligny center");
+		
+		textState = new JTextField();
+		textState.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteState.setVisible(false);
+			}
+		});
+		textState.setColumns(10);
+		panel.add(textState, "cell 16 5 6 1,grow");
+		
+		noteState = new JLabel("* Required");
+		noteState.setForeground(Color.RED);
+		noteState.setBackground(Color.WHITE);
+		noteState.setVisible(false);
+		panel.add(noteState, "cell 22 5,grow");
+		
+		JLabel label_6 = new JLabel("PHONE NO");
+		panel.add(label_6, "cell 1 6,alignx left,growy");
+		
+		textPh = new JTextField();
+		textPh.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				notePhone.setVisible(false);
+			}
+		});
+		textPh.setColumns(10);
+		panel.add(textPh, "cell 2 6 8 1,grow");
+		
+		notePhone = new JLabel("* Required");
+		notePhone.setForeground(Color.RED);
+		notePhone.setBackground(Color.WHITE);
+		notePhone.setVisible(false);
+		panel.add(notePhone, "cell 10 6 2 1,alignx left,growy");
+		
+		lblHome = new JLabel("HOME");
+		panel.add(lblHome, "cell 1 7,alignx left,growy");
+		
+		noteHome = new JLabel("* Required");
+		noteHome.setForeground(Color.RED);
+		noteHome.setBackground(Color.WHITE);
+		noteHome.setVisible(false);
+		
+		checkHome = new JCheckBox("Owned");
+		checkHome.setBackground(Color.WHITE);
+		checkHome.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteHome.setVisible(false);
+			}
+		});
+		panel.add(checkHome, "cell 2 7 5 1");
+		panel.add(noteHome, "cell 7 7,alignx left,growy");
+		
+		JLabel lblJob = new JLabel("JOB");
+		panel.add(lblJob, "cell 1 8,alignx left,growy");
+		
+		textJob = new JTextField();
+		textJob.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteJob.setVisible(false);
+			}
+		});
+		textJob.setColumns(10);
+		panel.add(textJob, "cell 2 8 14 1,grow");
+		
+		noteJob = new JLabel("* Required");
+		noteJob.setForeground(Color.RED);
+		noteJob.setBackground(Color.WHITE);
+		noteJob.setVisible(false);
+		panel.add(noteJob, "cell 17 8,alignx left,growy");
+		
+		JLabel lblSalary = new JLabel("SALARY");
+		panel.add(lblSalary, "cell 1 9,alignx left,growy");
+		
+		textSalary = new JTextField();
+		textSalary.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteSalary.setVisible(false);
+			}
+		});
+		textSalary.setColumns(10);
+		panel.add(textSalary, "cell 2 9 8 1,grow");
+		contentPane.setLayout(new MigLayout("", "[524px]", "[36px][297px][34px]"));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setLayout(new MigLayout("", "[46px][93px][225.00][25.00px][103px]", "[20px]"));
+		
+		JLabel lblNewLabel = new JLabel("Client ID");
+		lblNewLabel.setBackground(Color.WHITE);
+		panel_1.add(lblNewLabel, "cell 0 0,growx,aligny center");
+		
+		JLabel lblNewLabel_1 = new JLabel("Date");
+		panel_1.add(lblNewLabel_1, "cell 3 0,growx,aligny center");
+		
+		textCID = new JTextField();
+		textCID.setEditable(false);
+		panel_1.add(textCID, "cell 1 0,growx,aligny top");
+		textCID.setColumns(10);
+		
+		textDate = new JTextField();
+		textDate.setEditable(false);
+		panel_1.add(textDate, "cell 4 0,growx,aligny top");
+		textDate.setColumns(10);
+		contentPane.add(panel_1, "cell 0 0,grow");
+		contentPane.add(panel, "cell 0 1,grow");
+		
+		noteSalary = new JLabel("* Required");
+		noteSalary.setForeground(Color.RED);
+		noteSalary.setBackground(Color.WHITE);
+		noteSalary.setVisible(false);
+		panel.add(noteSalary, "cell 10 9 2 1,alignx left,growy");
+		
+		JPanel panel_2 = new JPanel();
+		contentPane.add(panel_2, "cell 0 2,grow");
+		panel_2.setLayout(new MigLayout("", "[496.00][][]", "[]"));
+		
+		JButton button_1 = new JButton("Save");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				check();
+			}
+		});
+		panel_2.add(button_1, "cell 1 0");
+		
+		JButton button = new JButton("Cancel");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		panel_2.add(button, "cell 2 0");
+	}
+}
+
+
+
