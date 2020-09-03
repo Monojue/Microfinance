@@ -34,6 +34,7 @@ import java.awt.Insets;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 public class ClientEntry extends JFrame {
 	
@@ -41,7 +42,6 @@ public class ClientEntry extends JFrame {
 	private JPanel contentPane;
 	private JTextField textName;
 	private JTextField boxNo;
-	private JTextField textAge;
 	private JTextField textAddress;
 	private JTextField textCity;
 	private JTextField textState;
@@ -67,6 +67,9 @@ public class ClientEntry extends JFrame {
 	private JCheckBox checkHome;
 	DBConnection myDbConnection = new DBConnection();
 	MyDate myDate = new MyDate();
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
+	private JComboBox comboBox_2;
 	/**
 	 * Launch the application.
 	 */
@@ -96,10 +99,10 @@ public class ClientEntry extends JFrame {
 			noteName.setText("* Invalid");
 			noteName.setVisible(true);
 		}
-		if (Checking.IsNull(textAge.getText().toString())) {
-			noteAge.setText("* Required");
-			noteAge.setVisible(true);
-		}
+//		if (Checking.IsNull(textAge.getText().toString())) {
+//			noteAge.setText("* Required");
+//			noteAge.setVisible(true);
+//		}
 		if (Checking.IsNull(textAddress.getText().toString())) {
 			noteAddress.setText("* Required");
 			noteAddress.setVisible(true);
@@ -141,9 +144,6 @@ public class ClientEntry extends JFrame {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
 		}
-			
-		
-		
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public class ClientEntry extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "CLIENT INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.setLayout(new MigLayout("", "[52.00][52px][28px][5px][4px][5px][13px][][17px][34px][38.00][][5px][57.00px][13.00px][31px][5px][52px][5px][25px][5px][34.00px,left][34.00px,left][62px,left]", "[][30][30][30][30][30][30][30][30][30]"));
+		panel.setLayout(new MigLayout("", "[52.00][52px][28px,grow][5px][4px][5px][13px][grow][17px][34px][46.00,grow][][5px][57.00px][13.00px][31px][5px][52px][5px][25px][5px][34.00px,left][34.00px,left][62px,left]", "[][30][30][30][30][30][30][30][30][30]"));
 		
 		JLabel label = new JLabel("NAME");
 		panel.add(label, "cell 1 1,grow");
@@ -240,21 +240,20 @@ public class ClientEntry extends JFrame {
 		JLabel label_3 = new JLabel("Age");
 		panel.add(label_3, "cell 1 3,alignx left,growy");
 		
-		textAge = new JTextField();
-		textAge.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				noteAge.setVisible(false);
-			}
-		});
-		textAge.setColumns(10);
-		panel.add(textAge, "cell 2 3,grow");
-		
 		noteAge = new JLabel("* Required");
 		noteAge.setForeground(Color.RED);
 		noteAge.setBackground(Color.WHITE);
 		noteAge.setVisible(false);
-		panel.add(noteAge, "cell 4 3 6 1,alignx left,growy");
+		
+		comboBox = new JComboBox();
+		panel.add(comboBox, "cell 2 3 4 1,growx");
+		
+		comboBox_1 = new JComboBox();
+		panel.add(comboBox_1, "cell 6 3 4 1,growx");
+		
+		comboBox_2 = new JComboBox();
+		panel.add(comboBox_2, "cell 10 3 3 1,growx");
+		panel.add(noteAge, "cell 20 3 3 1,alignx left,growy");
 		
 		JLabel label_4 = new JLabel("ADDRESS");
 		panel.add(label_4, "cell 1 4,alignx left,growy");
