@@ -33,6 +33,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Date;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
@@ -67,9 +69,11 @@ public class ClientEntry extends JFrame {
 	private JCheckBox checkHome;
 	DBConnection myDbConnection = new DBConnection();
 	MyDate myDate = new MyDate();
-	private JComboBox comboBox;
-	private JComboBox comboBox_1;
-	private JComboBox comboBox_2;
+	private JComboBox boxDay;
+	private JComboBox<String> boxMonth;
+	private JComboBox boxYear;
+	Date date=new Date();
+	int TodayYear = Integer.parseInt(String.valueOf(date).substring(24));
 	/**
 	 * Launch the application.
 	 */
@@ -99,10 +103,6 @@ public class ClientEntry extends JFrame {
 			noteName.setText("* Invalid");
 			noteName.setVisible(true);
 		}
-//		if (Checking.IsNull(textAge.getText().toString())) {
-//			noteAge.setText("* Required");
-//			noteAge.setVisible(true);
-//		}
 		if (Checking.IsNull(textAddress.getText().toString())) {
 			noteAddress.setText("* Required");
 			noteAddress.setVisible(true);
@@ -127,10 +127,10 @@ public class ClientEntry extends JFrame {
 			noteSalary.setText("* Required");
 			noteSalary.setVisible(true);
 		}
-		if (!checkHome.isSelected()) {
-			noteHome.setText("* Required");
-			noteHome.setVisible(true);
-		}
+//		if (!checkHome.isSelected()) {
+//			noteHome.setText("* Required");
+//			noteHome.setVisible(true);
+//		}
 		if (Checking.IsNull(boxN1.getSelectedItem())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
@@ -144,9 +144,19 @@ public class ClientEntry extends JFrame {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
 		}
-		else if ((boxNo.getText().length() != 6)) {
+		else if (boxNo.getText().length() != 6) {
 			noteNRC.setText("* Invalid");
 			noteNRC.setVisible(true);
+		}
+		if (boxDay.getSelectedIndex()==0 || boxMonth.getSelectedIndex()==0 || boxYear.getSelectedIndex()==0) {
+			noteAge.setText("* Required");
+			noteAge.setVisible(true);
+			}
+		else if(boxYear.getSelectedIndex()!=0) {
+			int age = TodayYear-Integer.parseInt(boxYear.getSelectedItem().toString());
+			if(age<18 || age>60) {
+			noteAge.setText("* Invalid Age");
+			noteAge.setVisible(true);}
 		}
 	}
 	
@@ -241,23 +251,62 @@ public class ClientEntry extends JFrame {
 		noteNRC.setVisible(false);
 		panel.add(noteNRC, "cell 18 2 5 1,alignx left,growy");
 		
-		JLabel label_3 = new JLabel("Age");
-		panel.add(label_3, "cell 1 3,alignx left,growy");
+		JLabel lblDateOfBirth = new JLabel("Date of Birth");
+		panel.add(lblDateOfBirth, "cell 1 3,alignx left,growy");
 		
 		noteAge = new JLabel("* Required");
 		noteAge.setForeground(Color.RED);
 		noteAge.setBackground(Color.WHITE);
 		noteAge.setVisible(false);
 		
-		comboBox = new JComboBox();
-		panel.add(comboBox, "cell 2 3 4 1,growx");
+		boxDay = new JComboBox();
+		boxDay.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				noteAge.setVisible(false);
+			}
+		});
+		panel.add(boxDay, "cell 2 3 4 1,growx");
+		boxDay.addItem("");
+		for(int i=1;i<=31;i++) {
+			boxDay.addItem(i);
+		}
 		
-		comboBox_1 = new JComboBox();
-		panel.add(comboBox_1, "cell 6 3 4 1,growx");
+		boxMonth = new JComboBox();
+		boxMonth.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteAge.setVisible(false);
+			}
+		});
+		panel.add(boxMonth, "cell 6 3 4 1,growx,aligny bottom");
+		boxMonth.addItem("");
+		boxMonth.addItem("JANUARY");
+		boxMonth.addItem("FEBUARY");
+		boxMonth.addItem("MARCH");
+		boxMonth.addItem("APRIL");
+		boxMonth.addItem("MAY");
+		boxMonth.addItem("JUNE");
+		boxMonth.addItem("JULY");
+		boxMonth.addItem("AUGUST");
+		boxMonth.addItem("SEPTEMBER");
+		boxMonth.addItem("OCTOBER");
+		boxMonth.addItem("NOVEMBER");
+		boxMonth.addItem("DECEMBER");
 		
-		comboBox_2 = new JComboBox();
-		panel.add(comboBox_2, "cell 10 3 3 1,growx");
+		boxYear = new JComboBox();
+		boxYear.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				noteAge.setVisible(false);
+			}
+		});
+		panel.add(boxYear, "cell 10 3 3 1,growx");
 		panel.add(noteAge, "cell 20 3 3 1,alignx left,growy");
+		boxYear.addItem("");
+		for(int i=TodayYear-70;i<=TodayYear;i++) {
+			boxYear.addItem(i);
+		}
 		
 		JLabel label_4 = new JLabel("ADDRESS");
 		panel.add(label_4, "cell 1 4,alignx left,growy");
