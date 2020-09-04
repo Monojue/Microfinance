@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import database.DBConnection;
+import database.MyOueries;
 
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -20,6 +21,7 @@ import tool.Checking;
 import tool.MyDate;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Choice;
 import java.awt.Button;
@@ -68,6 +70,7 @@ public class ClientEntry extends JFrame {
 	private Choice boxN3;
 	private JCheckBox checkHome;
 	DBConnection myDbConnection = new DBConnection();
+	MyOueries msql = new MyOueries();
 	MyDate myDate = new MyDate();
 	private JComboBox boxDay;
 	private JComboBox<String> boxMonth;
@@ -95,69 +98,99 @@ public class ClientEntry extends JFrame {
 		 textDate.setText(myDate.getdate());
 	}
 
-	public void check() {
+	public boolean check() {
 		if (Checking.IsNull(textName.getText())) {
 			noteName.setText("* Required");
 			noteName.setVisible(true);
+			return false;
 		}else if (!Checking.IsLetter(textName.getText())) {
 			noteName.setText("* Invalid");
 			noteName.setVisible(true);
+			return false;
 		}
 		if (Checking.IsNull(textAddress.getText().toString())) {
 			noteAddress.setText("* Required");
 			noteAddress.setVisible(true);
+			return false;
 		}
 		if (Checking.IsNull(textCity.getText().toString())) {
 			noteCity.setText("* Required");
 			noteCity.setVisible(true);
+			return false;
 		}
 		if (Checking.IsNull(textState.getText())) {
 			noteState.setText("* Required");
 			noteState.setVisible(true);
+			return false;
 		}
 		if (Checking.IsNull(textPh.getText())) {
 			notePhone.setText("* Required");
 			notePhone.setVisible(true);
+			return false;
+		}
+		else if (Checking.IsLetter(textPh.getText())) {
+			notePhone.setText("* Invalid");
+			notePhone.setVisible(true);
+			return false;
+		}
+		else if(textPh.getText().length()<9 || textPh.getText().length()>15) {
+			notePhone.setText("* Invalid");
+			notePhone.setVisible(true);
+			return false;
 		}
 		if (Checking.IsNull(textJob.getText())) {
 			noteJob.setText("* Required");
 			noteJob.setVisible(true);
+			return false;
 		}
 		if (Checking.IsNull(textSalary.getText())) {
 			noteSalary.setText("* Required");
 			noteSalary.setVisible(true);
+			return false;
 		}
-//		if (!checkHome.isSelected()) {
-//			noteHome.setText("* Required");
-//			noteHome.setVisible(true);
-//		}
+		else if (Checking.IsLetter(textSalary.getText())) {
+			noteSalary.setText("* Invalid");
+			noteSalary.setVisible(true);
+			return false;
+		}
 		if (Checking.IsNull(boxN1.getSelectedItem())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
+			return false;
 		}else if (Checking.IsNull(boxN2.getSelectedItem())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
+			return false;
 		}else if (Checking.IsNull(boxN3.getSelectedItem())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
+			return false;
 		}else if (Checking.IsNull(boxNo.getText())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
+			return false;
 		}
 		else if (boxNo.getText().length() != 6) {
 			noteNRC.setText("* Invalid");
 			noteNRC.setVisible(true);
+			return false;
 		}
 		if (boxDay.getSelectedIndex()==0 || boxMonth.getSelectedIndex()==0 || boxYear.getSelectedIndex()==0) {
 			noteAge.setText("* Required");
 			noteAge.setVisible(true);
+			return false;
 			}
 		else if(boxYear.getSelectedIndex()!=0) {
 			int age = TodayYear-Integer.parseInt(boxYear.getSelectedItem().toString());
 			if(age<18 || age>60) {
 			noteAge.setText("* Invalid Age");
-			noteAge.setVisible(true);}
+			noteAge.setVisible(true);
+			return false;}
 		}
+		else {
+			return true;
+		}
+		return true;
 	}
 	
 	/**
@@ -472,9 +505,45 @@ public class ClientEntry extends JFrame {
 		JButton button_1 = new JButton("Save");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				check();
+				boolean check = check();
+				if(check) {
+					
+					String NRC = boxN1.getSelectedItem().toString()+"\\"+boxN2.getSelectedItem().toString()
+								 +"("+ boxN3.getSelectedItem().toString()+")" + boxNo.getText();
+					String DateOfBirth = boxDay.getSelectedItem().toString()+"-"+boxMonth.getSelectedItem().toString()+"-"+boxYear.getSelectedItem().toString();
+					String home = "0";
+					if(checkHome.isSelected()) {
+						home = "1";
+					}
+					String[] st = new String[1];
+					st[0] = NRC;
+					boolean dup = msql.IsDuplicate("client", st);
+					if(dup) {
+						noteNRC.setText("* Already Existed");
+						noteNRC.setVisible(true);
+					}
+					else {
+						String[] data = new String[9];
+						data[0] = textCID.getText();
+						data[1] = textName.getText();
+						data[2] = NRC;
+						data[3] = textAddress.getText();
+						data[4] = textPh.getText();
+						data[5] = DateOfBirth;
+						data[6] = home;
+						data[7] = textJob.getText();
+						data[8] = textSalary.getText();
+						boolean save = msql.InsertData("client", data);
+						if (save) {
+							JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+							AutoID();
+						} else {
+							JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+							AutoID();
+						}
+					}
 			}
-		});
+		}});
 		panel_2.add(button_1, "cell 1 0");
 		
 		JButton button = new JButton("Cancel");
