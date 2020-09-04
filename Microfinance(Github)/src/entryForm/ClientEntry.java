@@ -144,6 +144,10 @@ public class ClientEntry extends JFrame {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
 		}
+		else if ((boxNo.getText().length() != 6)) {
+			noteNRC.setText("* Invalid");
+			noteNRC.setVisible(true);
+		}
 	}
 	
 	/**
