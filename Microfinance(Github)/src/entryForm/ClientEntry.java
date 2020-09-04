@@ -42,6 +42,7 @@ import javax.swing.JComboBox;
 
 public class ClientEntry extends JFrame {
 	
+	//Nyi Linn Htin
 	private JTextField helo;
 	private JPanel contentPane;
 	private JTextField textName;
