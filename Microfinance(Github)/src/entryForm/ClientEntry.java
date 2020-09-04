@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import database.DBConnection;
-import database.MyOueries;
+import database.MyQueries;
 
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -70,7 +70,7 @@ public class ClientEntry extends JFrame {
 	private Choice boxN3;
 	private JCheckBox checkHome;
 	DBConnection myDbConnection = new DBConnection();
-	MyOueries msql = new MyOueries();
+	MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
 	private JComboBox boxDay;
 	private JComboBox<String> boxMonth;
