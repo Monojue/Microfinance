@@ -16,6 +16,7 @@ import database.DBConnection;
 import net.miginfocom.swing.MigLayout;
 import tool.MyDate;
 import tool.Select;
+import tool.MyString;
 
 import java.awt.Panel;
 import java.awt.Label;
@@ -32,24 +33,24 @@ public class GroupEntry extends JFrame {
 	private JTextField textGID;
 	private JTextField textDate;
 	private JPanel panel;
-	private Label label;
+	private  Label label;
 	private Label label_1;
 	private Label label_2;
 	private Label label_3;
 	private Label label_4;
 	private Label label_5;
 	private Label label_6;
-	private JTextField leadName;
-	private JTextField M1Name;
-	private JTextField M2Name;
-	private JTextField M3Name;
-	private JTextField M4Name;
-	private JTextField leadID;
-	private JTextField M1ID;
-	private JTextField M2ID;
-	private JTextField M3ID;
-	private JTextField M4ID;
-	private Button btn0;
+	private static JTextField leadName;
+	private static JTextField M1Name;
+	private static JTextField M2Name;
+	private static JTextField M3Name;
+	private static JTextField M4Name;
+	private static JTextField leadID;
+	private static JTextField M1ID;
+	private static JTextField M2ID;
+	private static JTextField M3ID;
+	private static JTextField M4ID;
+	private Button btnled;
 	private Button btn1;
 	private Button btn2;
 	private Button btn3;
@@ -60,6 +61,7 @@ public class GroupEntry extends JFrame {
 	DBConnection myDbConnection = new DBConnection();
 	MyDate myDate = new MyDate();
 	private JLabel lblAlert;
+	public static String selplus = ""; 
 	/**
 	 * Launch the application.
 	 */
@@ -88,6 +90,25 @@ public class GroupEntry extends JFrame {
 	
 	public void chooseClient() {
 		new Select("ONE").setVisible(true);
+	}
+	
+	public static void setID(String name,String ID) {
+		if(MyString.leader.equals(selplus)) {
+			leadName.setText(name);
+			leadID.setText(ID);
+		}else if (MyString.Mem_1.equals(selplus)) {
+			M1Name.setText(name);
+			M1ID.setText(ID);
+		}else if (MyString.Mem_2.equals(selplus)) {
+			M2Name.setText(name);
+			M2ID.setText(ID);
+		}else if (MyString.Mem_3.equals(selplus)) {
+			M3Name.setText(name);
+			M3ID.setText(ID);
+		}else if (MyString.Mem_4.equals(selplus)) {
+			M4Name.setText(name);
+			M4ID.setText(ID);
+		}
 	}
 	
 	public void initialize() {
@@ -130,13 +151,14 @@ public class GroupEntry extends JFrame {
 		label.setFont(new Font("Dialog", Font.PLAIN, 13));
 		panel.add(label, "cell 0 1,grow");
 		
-		btn0 = new Button("+");
-		btn0.addActionListener(new ActionListener() {
+		btnled = new Button("+");
+		btnled.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				selplus = MyString.leader;
 				chooseClient();
 			}
 		});
-		panel.add(btn0, "cell 3 1,alignx center,aligny center");
+		panel.add(btnled, "cell 3 1,alignx center,aligny center");
 		
 		label_1 = new Label("Member 1");
 		label_1.setFont(new Font("Dialog", Font.PLAIN, 13));
@@ -145,6 +167,7 @@ public class GroupEntry extends JFrame {
 		btn1 = new Button("+");
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				selplus = MyString.Mem_1;
 				chooseClient();
 			}
 		});
@@ -157,6 +180,7 @@ public class GroupEntry extends JFrame {
 		btn2 = new Button("+");
 		btn2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				selplus = MyString.Mem_2;
 				chooseClient();
 			}
 		});
@@ -169,6 +193,7 @@ public class GroupEntry extends JFrame {
 		btn3 = new Button("+");
 		btn3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				selplus = MyString.Mem_3;
 				chooseClient();
 			}
 		});
@@ -188,57 +213,48 @@ public class GroupEntry extends JFrame {
 		
 		leadName = new JTextField();
 		leadName.setEditable(false);
-		leadName.setEnabled(false);
 		panel.add(leadName, "cell 1 1,grow");
 		
 		M1Name = new JTextField();
 		M1Name.setEditable(false);
-		M1Name.setEnabled(false);
 		panel.add(M1Name, "cell 1 2,grow");
 		
 		M2Name = new JTextField();
 		M2Name.setEditable(false);
-		M2Name.setEnabled(false);
 		panel.add(M2Name, "cell 1 3,grow");
 		
 		M3Name = new JTextField();
 		M3Name.setEditable(false);
-		M3Name.setEnabled(false);
 		panel.add(M3Name, "cell 1 4,grow");
 		
 		M4Name = new JTextField();
 		M4Name.setEditable(false);
-		M4Name.setEnabled(false);
 		panel.add(M4Name, "cell 1 5,grow");
 		
 		leadID = new JTextField();
 		leadID.setEditable(false);
-		leadID.setEnabled(false);
 		panel.add(leadID, "cell 2 1,grow");
 		
 		M1ID = new JTextField();
 		M1ID.setEditable(false);
-		M1ID.setEnabled(false);
 		panel.add(M1ID, "cell 2 2,grow");
 		
 		M2ID = new JTextField();
 		M2ID.setEditable(false);
-		M2ID.setEnabled(false);
 		panel.add(M2ID, "cell 2 3,grow");
 		
 		M3ID = new JTextField();
 		M3ID.setEditable(false);
-		M3ID.setEnabled(false);
 		panel.add(M3ID, "cell 2 4,grow");
 		
 		M4ID = new JTextField();
 		M4ID.setEditable(false);
-		M4ID.setEnabled(false);
 		panel.add(M4ID, "cell 2 5,grow");
 		
 		btn4 = new Button("+");
 		btn4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				selplus = MyString.Mem_4;
 				chooseClient();
 			}
 		});
