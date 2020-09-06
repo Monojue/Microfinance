@@ -202,6 +202,24 @@ public class ClientEntry extends JFrame {
 		AutoID();
 	}
 	
+	public void Clear() {
+		textName.setText("");
+		boxN1.select(0);
+		boxN2.select(0);
+		boxN3.select(0);
+		boxNo.setText("");
+		boxDay.setSelectedIndex(0);
+		boxMonth.setSelectedIndex(0);
+		boxYear.setSelectedIndex(0);
+		textAddress.setText("");
+		textCity.setText("");
+		textState.setText("");
+		textPh.setText("");
+		checkHome.setSelected(false);
+		textJob.setText("");
+		textSalary.setText("");
+	}
+	
 	public void initialize() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(450, 100, 560, 445);
@@ -537,6 +555,7 @@ public class ClientEntry extends JFrame {
 						boolean save = msql.InsertData("client", data);
 						if (save) {
 							JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+							Clear();
 							AutoID();
 						} else {
 							JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
