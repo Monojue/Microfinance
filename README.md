@@ -2,4 +2,4 @@
 Microfinance Project
 
 
-https://github.com/downloads/Monojue/Microfinance.sql
+https://github.com/downloads/Monojue/Microfinance/Microfinance.sql
