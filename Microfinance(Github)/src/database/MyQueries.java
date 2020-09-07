@@ -120,6 +120,25 @@ public class MyQueries {
 		return false;
 	}
 	}
+	
+	//Guarantor Update!!!
+	public static boolean UpdateData(String tbName, String[] data) {
+	if(tbName.equals("guarantor")) {
+		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
+	}
+	try {
+		stmt = con.createStatement();
+		if(stmt.executeUpdate(query)==1) {
+			return true;
+		}else {
+			return false;
+		}
+	}catch (SQLException e) {
+		JOptionPane.showMessageDialog(null, e.getMessage());// TODO: handle exception
+		e.printStackTrace();
+		return false;
+	}
+	}	
 ///////////////////// Group Query Start ////////////////////////
 	
 	
