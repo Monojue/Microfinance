@@ -31,6 +31,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSlider;
 import java.awt.Choice;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.Font;
 
 public class LoanRequestForm extends JFrame {
 
@@ -51,8 +55,6 @@ public class LoanRequestForm extends JFrame {
 	private JTextField textGPhone;
 	private JTextField textGJob;
 	private JTextField textGSalary;
-	private JTextField LoanAmount;
-	private JTextField LoanDuration;
 	private JTable table;
 	private JTextField textID;
 	private JTextField textDate;
@@ -75,6 +77,8 @@ public class LoanRequestForm extends JFrame {
 	DBConnection myDbConnection = new DBConnection();
 	MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
+	private JTextField textDuration;
+	private JTextField textAmount;
 	/**
 	 * Launch the application.
 	 */
@@ -544,65 +548,100 @@ public class LoanRequestForm extends JFrame {
 	panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel_4.setBounds(414, 56, 394, 316);
 	panel.add(panel_4);
-	panel_4.setLayout(new MigLayout("", "[65px][81.00px][159px][77px]", "[26px][20px][14px][][23px]"));
+	panel_4.setLayout(new MigLayout("", "[65px][81.00px,grow][159px][77px]", "[26px][20px][14px][][38.00][][][][23px]"));
 	
-	JLabel lblNewLabel_2 = new JLabel("Amount");
-	panel_4.add(lblNewLabel_2, "cell 0 0,alignx left,aligny center");
-	
-	LoanAmount = new JTextField();
-	panel_4.add(LoanAmount, "cell 1 0,growx,aligny center");
-	LoanAmount.setColumns(10);
-	
-	JSlider slider_1 = new JSlider();
-	slider_1.setPaintTicks(true);
-	slider_1.setPaintLabels(true);
-	slider_1.setMinorTickSpacing(3);
-	slider_1.setMinimum(6);
-	slider_1.setMaximum(24);
-	slider_1.setMajorTickSpacing(3);
-	slider_1.setSnapToTicks(true);
-	panel_4.add(slider_1, "cell 2 0,alignx center,aligny center");
+	JSlider sliderAmount = new JSlider();
+	sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+		}
+	});
+	sliderAmount.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+		}
+	});
+	sliderAmount.setSnapToTicks(true);
+	sliderAmount.setPaintTicks(true);
+	//sliderAmount.setPaintLabels(true);
+	sliderAmount.setMinorTickSpacing(100000);
+	sliderAmount.setMinimum(100000);
+	sliderAmount.setMaximum(1000000);
+	sliderAmount.setMajorTickSpacing(100000);
+	panel_4.add(sliderAmount, "cell 0 0 3 1");
 	
 	JLabel label_23 = new JLabel("* Require");
 	label_23.setForeground(Color.RED);
 	panel_4.add(label_23, "cell 3 0");
 	
-	JLabel lblNewLabel_3 = new JLabel("Duration");
-	panel_4.add(lblNewLabel_3, "cell 0 1,growx,aligny center");
+	JLabel lblNewLabel_2 = new JLabel("Amount");
+	panel_4.add(lblNewLabel_2, "cell 0 1 1 2,alignx left");
 	
-	LoanDuration = new JTextField();
-	panel_4.add(LoanDuration, "cell 1 1,growx,aligny center");
-	LoanDuration.setColumns(10);
+	textAmount = new JTextField();
+	textAmount.setForeground(Color.black);
+	textAmount.setFont(new Font("Tahoma", Font.BOLD, 13));
+	textAmount.setColumns(10);
+	panel_4.add(textAmount, "cell 1 1 2 2,growx");
+	textAmount.setEnabled(false);
 	
-	JSlider slider = new JSlider();
-	slider.setPaintTicks(true);
-	slider.setPaintLabels(true);
-	slider.setMinorTickSpacing(3);
-	slider.setMinimum(6);
-	slider.setMaximum(24);
-	slider.setMajorTickSpacing(3);
-	slider.setMinorTickSpacing(3);
-	slider.setSnapToTicks(true);
-	panel_4.add(slider, "cell 2 1,alignx center,aligny center");
+	JSlider sliderDuration = new JSlider();
+	sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			textDuration.setText(Integer.toString(sliderDuration.getValue()));
+		}
+	});
+	sliderDuration.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			textDuration.setText(Integer.toString(sliderDuration.getValue()));
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			textDuration.setText(Integer.toString(sliderDuration.getValue()));
+		}
+	});
+	sliderDuration.setSnapToTicks(true);
+	sliderDuration.setPaintTicks(true);
+	sliderDuration.setPaintLabels(true);
+	sliderDuration.setMinorTickSpacing(3);
+	sliderDuration.setMinimum(6);
+	sliderDuration.setMaximum(24);
+	sliderDuration.setMajorTickSpacing(3);
+	panel_4.add(sliderDuration, "cell 0 3 3 1");
 	
 	JLabel label_24 = new JLabel("* Require");
 	label_24.setForeground(Color.RED);
-	panel_4.add(label_24, "cell 3 1");
+	panel_4.add(label_24, "cell 3 3");
+	
+	JLabel lblNewLabel_3 = new JLabel("Duration");
+	panel_4.add(lblNewLabel_3, "cell 0 4,alignx left");
+	
+	textDuration = new JTextField();
+	textDuration.setColumns(10);
+	panel_4.add(textDuration, "cell 1 4,growx");
+	textDuration.setEnabled(false);
 	
 	JLabel lblNewLabel_4 = new JLabel("Interest Rate");
-	panel_4.add(lblNewLabel_4, "cell 0 2,alignx left,aligny top");
+	panel_4.add(lblNewLabel_4, "cell 0 6");
 	
 	JLabel lblRate = new JLabel("Rate%");
-	panel_4.add(lblRate, "cell 1 2,alignx left,aligny top");
+	panel_4.add(lblRate, "cell 1 6");
 	
 	JLabel label_25 = new JLabel("Service Fees");
-	panel_4.add(label_25, "cell 0 3");
+	panel_4.add(label_25, "cell 0 7");
 	
 	JLabel label_26 = new JLabel("Rate%");
-	panel_4.add(label_26, "cell 1 3");
+	panel_4.add(label_26, "cell 1 7");
 	
 	JButton btnCalculate = new JButton("Calculate");
-	panel_4.add(btnCalculate, "cell 3 4,alignx left,aligny top");
+	panel_4.add(btnCalculate, "cell 3 8,alignx left,aligny top");
 	
 	JScrollPane scrollPane = new JScrollPane();
 	scrollPane.setBounds(814, 56, 469, 595);
