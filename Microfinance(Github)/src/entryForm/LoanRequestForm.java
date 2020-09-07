@@ -210,20 +210,20 @@ public class LoanRequestForm extends JFrame {
 	}
 	private void initialize() {		this.getContentPane().setBackground(Color.LIGHT_GRAY);
 	this.setTitle("Loan Request Form");
-	this.setBounds(260, 30, 857, 748);
+	this.setBounds(260, 30, 1316, 748);
 	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	this.getContentPane().setLayout(null);
 	this.setResizable(false);
 	
 	JPanel panel = new JPanel();
 	panel.setBackground(Color.LIGHT_GRAY);
-	panel.setBounds(10, 0, 821, 664);
+	panel.setBounds(10, 0, 1293, 664);
 	this.getContentPane().add(panel);
 	panel.setLayout(null);
 	
 	JPanel panel_1 = new JPanel();
 	panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "PERSONAL INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-	panel_1.setBounds(10, 56, 394, 316);
+	panel_1.setBounds(10, 56, 399, 316);
 	panel.add(panel_1);
 	panel_1.setLayout(new MigLayout("", "[][68px][27.00][40px,grow][4px][4px][4px][50px][8px][42px][8px][31px][8px][97px]", "[][30][20px][20px][20px][50][20px][20][20px][20px][]"));
 	
@@ -310,9 +310,9 @@ public class LoanRequestForm extends JFrame {
 	
 	JPanel panel_2 = new JPanel();
 	panel_2.setBounds(new Rectangle(0, 0, 5, 0));
-	panel_2.setBounds(10, 11, 811, 40);
+	panel_2.setBounds(10, 11, 1271, 40);
 	panel.add(panel_2);
-	panel_2.setLayout(new MigLayout("", "[70.00px][113.00px,grow][464.00][40px][135.00px]", "[26px]"));
+	panel_2.setLayout(new MigLayout("", "[70.00px][158.00px][464.00,grow][40px][135.00px]", "[26px]"));
 	
 	JLabel lblLoanRequestId = new JLabel("Loan Request ID:");
 	lblLoanRequestId.setBackground(Color.RED);
@@ -334,12 +334,12 @@ public class LoanRequestForm extends JFrame {
 	
 	JPanel panel_3 = new JPanel();
 	panel_3.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "GUARANTOR INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-	panel_3.setBounds(10, 383, 394, 268);
+	panel_3.setBounds(10, 383, 798, 268);
 	panel.add(panel_3);
-	panel_3.setLayout(new MigLayout("", "[68px][40px,grow][4px][4px][4px][50px][8px][42px][8px][31px][8px][97px][97px]", "[30,fill][30,fill][30,fill][30,fill][30,fill][30,fill][][30,grow,fill]"));
+	panel_3.setLayout(new MigLayout("", "[68px][40px][4px][4px][4px][50px][8px][42px][8px][69.00px][8px][97px][97px]", "[30,fill][30,fill][30,fill][30,fill][30,fill][30,fill][][30,grow,fill]"));
 	
-	JLabel label_11 = new JLabel("NAME");
-	panel_3.add(label_11, "cell 0 0,growx,aligny center");
+	JLabel lblName_1 = new JLabel("NAME(*)");
+	panel_3.add(lblName_1, "cell 0 0,growx,aligny center");
 	
 	textGName = new JTextField();
 	textGName.addFocusListener(new FocusAdapter() {
@@ -391,7 +391,7 @@ public class LoanRequestForm extends JFrame {
 	
 	noteGAddress = new JLabel("* Require");
 	noteGAddress.setForeground(Color.RED);
-	panel_3.add(noteGAddress, "cell 12 2");
+	panel_3.add(noteGAddress, "cell 12 2,growx");
 	noteGAddress.setVisible(false);
 	
 	textGCity = new JTextField();
@@ -424,7 +424,7 @@ public class LoanRequestForm extends JFrame {
 	
 	noteGState = new JLabel("* Require");
 	noteGState.setForeground(Color.RED);
-	panel_3.add(noteGState, "cell 12 3");
+	panel_3.add(noteGState, "cell 12 3,growx");
 	noteGState.setVisible(false);
 	
 	JLabel label_17 = new JLabel("PHONE NO");
@@ -490,7 +490,7 @@ public class LoanRequestForm extends JFrame {
 	
 	noteNRC = new JLabel("* Require");
 	noteNRC.setForeground(Color.RED);
-	panel_3.add(noteNRC, "cell 12 1");
+	panel_3.add(noteNRC, "cell 12 1,growx");
 	noteNRC.setVisible(false);
 	
 	noteGSalary = new JLabel("* Require");
@@ -519,7 +519,7 @@ public class LoanRequestForm extends JFrame {
 	
 	JPanel panel_4 = new JPanel();
 	panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-	panel_4.setBounds(414, 56, 407, 194);
+	panel_4.setBounds(414, 56, 394, 316);
 	panel.add(panel_4);
 	panel_4.setLayout(new MigLayout("", "[65px][81.00px][159px][77px]", "[26px][20px][14px][][23px]"));
 	
@@ -582,7 +582,7 @@ public class LoanRequestForm extends JFrame {
 	panel_4.add(btnCalculate, "cell 3 4,alignx left,aligny top");
 	
 	JScrollPane scrollPane = new JScrollPane();
-	scrollPane.setBounds(414, 261, 407, 390);
+	scrollPane.setBounds(814, 56, 469, 595);
 	panel.add(scrollPane);
 	
 	table = new JTable();
@@ -594,7 +594,7 @@ public class LoanRequestForm extends JFrame {
 			dispose();
 		}
 	});
-	btnCancel.setBounds(742, 677, 89, 23);
+	btnCancel.setBounds(1209, 674, 89, 23);
 	this.getContentPane().add(btnCancel);
 	
 	JButton btnRequestLoan = new JButton("Request Loan");
@@ -647,7 +647,7 @@ public class LoanRequestForm extends JFrame {
 //		}
 		}
 	});
-	btnRequestLoan.setBounds(611, 677, 122, 23);
+	btnRequestLoan.setBounds(1078, 674, 122, 23);
 	this.getContentPane().add(btnRequestLoan);
 	}
 }

@@ -31,6 +31,7 @@ import java.awt.TextField;
 import java.awt.Choice;
 import javax.swing.JList;
 import java.awt.Button;
+import java.awt.Font;
 
 public class GroupRequestForm extends JFrame{
 
@@ -38,10 +39,16 @@ public class GroupRequestForm extends JFrame{
 	private JTextField LoanDuration;
 	private JTable table;
 	private JTextField textID;
-	private JTextField textField_11;
+
 	private String Require = "* Required";
 	private String Invalid = "* Invalid";
 	private JTextField textDate;
+	private static JTextField txtGroupID;
+	public static TextField txtLID;
+	public static TextField txtM1ID;
+	public static TextField txtM2ID;
+	public static TextField txtM3ID;
+	public static TextField txtM4ID; 
 	LoanRequest loanRequest = new LoanRequest();
 	MyDate myDate = new MyDate();
 	
@@ -69,7 +76,12 @@ public class GroupRequestForm extends JFrame{
 	}
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
-		
+		txtGroupID.setText(id);
+		txtLID.setText(leader);
+		txtM1ID.setText(mem1);
+		txtM2ID.setText(mem2);
+		txtM3ID.setText(mem3);
+		txtM4ID.setText(mem4);
 	}
 	private void initialize() {
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -190,11 +202,10 @@ public class GroupRequestForm extends JFrame{
 		JLabel lblNewLabel = new JLabel("Group ID");
 		panel_1.add(lblNewLabel, "cell 0 0,alignx left");
 		
-		textField_11 = new JTextField();
-		textField_11.setEnabled(false);
-		textField_11.setEditable(false);
-		panel_1.add(textField_11, "cell 1 0,growx,aligny center");
-		textField_11.setColumns(10);
+		txtGroupID = new JTextField();
+		txtGroupID.setEditable(false);
+		panel_1.add(txtGroupID, "cell 1 0,growx,aligny center");
+		txtGroupID.setColumns(10);
 		
 		Label label = new Label("Leader");
 		panel_1.add(label, "cell 0 2,grow");
@@ -202,58 +213,60 @@ public class GroupRequestForm extends JFrame{
 		Label label_1 = new Label("Name");
 		panel_1.add(label_1, "cell 1 1,alignx center,aligny top");
 		
-		TextField textField = new TextField();
-		textField.setEnabled(false);
-		textField.setEditable(false);
-		panel_1.add(textField, "cell 2 2,grow");
+		txtLID = new TextField();
+		txtLID.setForeground(Color.BLACK);
+		txtLID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtLID.setEditable(false);
+		panel_1.add(txtLID, "cell 2 2,grow");
 		
 		Label label_2 = new Label("Client ID");
 		panel_1.add(label_2, "cell 2 1,alignx center,aligny top");
 		
-		TextField textField_1 = new TextField();
-		textField_1.setEnabled(false);
-		textField_1.setEditable(false);
-		panel_1.add(textField_1, "cell 2 3,grow");
+		txtM1ID = new TextField();
+		txtM1ID.setForeground(Color.BLACK);
+		txtM1ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM1ID.setEditable(false);
+		panel_1.add(txtM1ID, "cell 2 3,grow");
 		
-		TextField textField_2 = new TextField();
-		textField_2.setEnabled(false);
-		textField_2.setEditable(false);
-		panel_1.add(textField_2, "cell 2 4,grow");
+		txtM2ID = new TextField();
+		txtM2ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM2ID.setEditable(false);
+		panel_1.add(txtM2ID, "cell 2 4,grow");
 		
-		TextField textField_3 = new TextField();
-		textField_3.setEnabled(false);
-		textField_3.setEditable(false);
-		panel_1.add(textField_3, "cell 2 5,grow");
+		txtM3ID = new TextField();
+		txtM3ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM3ID.setEditable(false);
+		panel_1.add(txtM3ID, "cell 2 5,grow");
 		
-		TextField textField_4 = new TextField();
-		textField_4.setEnabled(false);
-		textField_4.setEditable(false);
-		panel_1.add(textField_4, "cell 2 6,grow");
+		txtM4ID = new TextField();
+		txtM4ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM4ID.setEditable(false);
+		panel_1.add(txtM4ID, "cell 2 6,grow");
 		
-		TextField textField_5 = new TextField();
-		textField_5.setEnabled(false);
-		textField_5.setEditable(false);
-		panel_1.add(textField_5, "cell 1 6,grow");
+		TextField txtM4Name = new TextField();
+		txtM4Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM4Name.setEditable(false);
+		panel_1.add(txtM4Name, "cell 1 6,grow");
 		
-		TextField textField_6 = new TextField();
-		textField_6.setEnabled(false);
-		textField_6.setEditable(false);
-		panel_1.add(textField_6, "cell 1 5,grow");
+		TextField txtM3Name = new TextField();
+		txtM3Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM3Name.setEditable(false);
+		panel_1.add(txtM3Name, "cell 1 5,grow");
 		
-		TextField textField_7 = new TextField();
-		textField_7.setEnabled(false);
-		textField_7.setEditable(false);
-		panel_1.add(textField_7, "cell 1 4,grow");
+		TextField txtM2Name = new TextField();
+		txtM2Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM2Name.setEditable(false);
+		panel_1.add(txtM2Name, "cell 1 4,grow");
 		
-		TextField textField_8 = new TextField();
-		textField_8.setEnabled(false);
-		textField_8.setEditable(false);
-		panel_1.add(textField_8, "cell 1 3,grow");
+		TextField txtM1Name = new TextField();
+		txtM1Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM1Name.setEditable(false);
+		panel_1.add(txtM1Name, "cell 1 3,growx,aligny top");
 		
-		TextField textField_9 = new TextField();
-		textField_9.setEnabled(false);
-		textField_9.setEditable(false);
-		panel_1.add(textField_9, "cell 1 2,grow");
+		TextField txtLName = new TextField();
+		txtLName.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtLName.setEditable(false);
+		panel_1.add(txtLName, "cell 1 2,grow");
 		
 		Label label_4 = new Label("Member 1");
 		panel_1.add(label_4, "cell 0 3,alignx left,growy");
