@@ -121,6 +121,7 @@ public class MyQueries {
 	}
 	}
 	
+	//Guarantor Update!!!
 	public static boolean UpdateData(String tbName, String[] data) {
 	if(tbName.equals("guarantor")) {
 		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
