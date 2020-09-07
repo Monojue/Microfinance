@@ -154,6 +154,11 @@ public class ClientEntry extends JFrame {
 			noteSalary.setVisible(true);
 			return false;
 		}
+		else if (Integer.parseInt(textSalary.getText())<150000) {
+			noteSalary.setText("* Salary too Low");
+			noteSalary.setVisible(true);
+			return false;
+		}
 		if (Checking.IsNull(boxN1.getSelectedItem())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
