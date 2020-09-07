@@ -100,6 +100,7 @@ public class ClientEntry extends JFrame {
 	}
 
 	public boolean check() {
+		//Check Name
 		if (Checking.IsNull(textName.getText())) {
 			noteName.setText("* Required");
 			noteName.setVisible(true);
@@ -109,51 +110,7 @@ public class ClientEntry extends JFrame {
 			noteName.setVisible(true);
 			return false;
 		}
-		if (Checking.IsNull(textAddress.getText().toString())) {
-			noteAddress.setText("* Required");
-			noteAddress.setVisible(true);
-			return false;
-		}
-		if (Checking.IsNull(textCity.getText().toString())) {
-			noteCity.setText("* Required");
-			noteCity.setVisible(true);
-			return false;
-		}
-		if (Checking.IsNull(textState.getText())) {
-			noteState.setText("* Required");
-			noteState.setVisible(true);
-			return false;
-		}
-		if (Checking.IsNull(textPh.getText())) {
-			notePhone.setText("* Required");
-			notePhone.setVisible(true);
-			return false;
-		}
-		else if (Checking.IsLetter(textPh.getText())) {
-			notePhone.setText("* Invalid");
-			notePhone.setVisible(true);
-			return false;
-		}
-		else if(textPh.getText().length()<9 || textPh.getText().length()>15) {
-			notePhone.setText("* Invalid");
-			notePhone.setVisible(true);
-			return false;
-		}
-		if (Checking.IsNull(textJob.getText())) {
-			noteJob.setText("* Required");
-			noteJob.setVisible(true);
-			return false;
-		}
-		if (Checking.IsNull(textSalary.getText())) {
-			noteSalary.setText("* Required");
-			noteSalary.setVisible(true);
-			return false;
-		}
-		else if (Checking.IsLetter(textSalary.getText())) {
-			noteSalary.setText("* Invalid");
-			noteSalary.setVisible(true);
-			return false;
-		}
+		//Check NRC
 		if (Checking.IsNull(boxN1.getSelectedItem())) {
 			noteNRC.setText("* Required");
 			noteNRC.setVisible(true);
@@ -176,6 +133,7 @@ public class ClientEntry extends JFrame {
 			noteNRC.setVisible(true);
 			return false;
 		}
+		//Check Date of Birth
 		if (boxDay.getSelectedIndex()==0 || boxMonth.getSelectedIndex()==0 || boxYear.getSelectedIndex()==0) {
 			noteAge.setText("* Required");
 			noteAge.setVisible(true);
@@ -188,10 +146,65 @@ public class ClientEntry extends JFrame {
 			noteAge.setVisible(true);
 			return false;}
 		}
+		//Check Address
+		if (Checking.IsNull(textAddress.getText().toString())) {
+			noteAddress.setText("* Required");
+			noteAddress.setVisible(true);
+			return false;
+		}
+		//Check City
+		if (Checking.IsNull(textCity.getText().toString())) {
+			noteCity.setText("* Required");
+			noteCity.setVisible(true);
+			return false;
+		}
+		//Check State
+		if (Checking.IsNull(textState.getText())) {
+			noteState.setText("* Required");
+			noteState.setVisible(true);
+			return false;
+		}
+		//Check Phone No
+		if (Checking.IsNull(textPh.getText())) {
+			notePhone.setText("* Required");
+			notePhone.setVisible(true);
+			return false;
+		}
+		else if (Checking.IsLetter(textPh.getText())) {
+			notePhone.setText("* Invalid");
+			notePhone.setVisible(true);
+			return false;
+		}
+		else if(textPh.getText().length()<9 || textPh.getText().length()>15) {
+			notePhone.setText("* Invalid");
+			notePhone.setVisible(true);
+			return false;
+		}
+		//Check Job
+		if (Checking.IsNull(textJob.getText())) {
+			noteJob.setText("* Required");
+			noteJob.setVisible(true);
+			return false;
+		}
+		//Check Salary
+		if (Checking.IsNull(textSalary.getText())) {
+			noteSalary.setText("* Required");
+			noteSalary.setVisible(true);
+			return false;
+		}
+		else if (Checking.IsLetter(textSalary.getText())) {
+			noteSalary.setText("* Invalid");
+			noteSalary.setVisible(true);
+			return false;
+		}
+		else if (Integer.parseInt(textSalary.getText())<150000) {
+			noteSalary.setText("* Too Low");
+			noteSalary.setVisible(true);
+			return false;
+		}
 		else {
 			return true;
 		}
-		return true;
 	}
 	
 	/**
