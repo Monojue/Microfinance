@@ -544,6 +544,7 @@ public class ClientEntry extends JFrame {
 								 +"("+ boxN3.getSelectedItem().toString()+")" + boxNo.getText();
 					String DateOfBirth = boxDay.getSelectedItem().toString()+"-"+boxMonth.getSelectedItem().toString()+"-"+boxYear.getSelectedItem().toString();
 					String home = "0";
+					String Address = textAddress.getText()+" , "+ textCity.getText() + " , " + textState.getText();
 					if(checkHome.isSelected()) {
 						home = "1";
 					}
@@ -559,7 +560,7 @@ public class ClientEntry extends JFrame {
 						data[0] = textCID.getText();
 						data[1] = textName.getText();
 						data[2] = NRC;
-						data[3] = textAddress.getText();
+						data[3] = Address;
 						data[4] = textPh.getText();
 						data[5] = DateOfBirth;
 						data[6] = home;
