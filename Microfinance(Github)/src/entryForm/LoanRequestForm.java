@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import java.awt.Rectangle;
 import net.miginfocom.swing.MigLayout;
 import tool.MyDate;
+import tool.MyString;
 import tool.Select;
 
 import javax.swing.JCheckBox;
@@ -24,13 +25,14 @@ import java.awt.Choice;
 
 public class LoanRequestForm extends JFrame {
 
-	private JTextField textPName;
-	private JTextField textPNRC;
-	private JTextField textPAge;
-	private JTextField textPAddress;
-	private JTextField textPPhone;
-	private JTextField textPJob;
-	private JTextField textPSalary;
+	private static JTextField textPName;
+	private static JTextField textPNRC;
+	private static JTextField textPDOB;
+	private static JTextField textPAddress;
+	private static JCheckBox checkPHome;
+	private static JTextField textPPhone;
+	private static JTextField textPJob;
+	private static JTextField textPSalary;
 	private JTextField textGName;
 	private JTextField textGNRC;
 	private JTextField textGAddress;
@@ -44,7 +46,7 @@ public class LoanRequestForm extends JFrame {
 	private JTable table;
 	private JTextField textID;
 	private JTextField textDate;
-	private JTextField textCID;
+	private static JTextField textCID;
 	LoanRequest loanRequest = new LoanRequest();
 	MyDate myDate = new MyDate();
 	/**
@@ -72,9 +74,23 @@ public class LoanRequestForm extends JFrame {
 		textDate.setText(myDate.getdate());
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	public static void setClientData(String id,String name,String NRC,String address,String phno,String DOB,String home,String job,String salary) {
+		textCID.setText(id);
+		textPName.setText(name);
+		textPNRC.setText(NRC);
+		textPAddress.setText(address);
+		textPPhone.setText(phno);
+		textPDOB.setText(DOB);
+		textPJob.setText(job);
+		textPSalary.setText(salary);
+		if (home.equals("1")) {
+			checkPHome.setSelected(true);
+		}
+		else {
+			checkPHome.setSelected(false);
+		}
+		
+	}
 	private void initialize() {
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
 		this.setTitle("Loan Request Form");
@@ -110,7 +126,6 @@ public class LoanRequestForm extends JFrame {
 		textPName.setEditable(false);
 		textPName.setColumns(10);
 		panel_1.add(textPName, "cell 3 2 9 1,growx,aligny top");
-		textPName.setText("Kaung Myat Thet");
 		
 		JLabel label_1 = new JLabel("NRC");
 		panel_1.add(label_1, "cell 1 3,alignx left,aligny center");
@@ -120,13 +135,13 @@ public class LoanRequestForm extends JFrame {
 		textPNRC.setColumns(10);
 		panel_1.add(textPNRC, "cell 3 3 7 1,growx,aligny top");
 		
-		JLabel lblNewLabel = new JLabel("Age");
+		JLabel lblNewLabel = new JLabel("Date Of Birth");
 		panel_1.add(lblNewLabel, "cell 1 4,alignx left,aligny center");
 		
-		textPAge = new JTextField();
-		textPAge.setEditable(false);
-		panel_1.add(textPAge, "cell 3 4,growx,aligny top");
-		textPAge.setColumns(10);
+		textPDOB = new JTextField();
+		textPDOB.setEditable(false);
+		panel_1.add(textPDOB, "cell 3 4 7 1,growx,aligny top");
+		textPDOB.setColumns(10);
 		
 		JLabel label = new JLabel("ADDRESS");
 		panel_1.add(label, "cell 1 5,alignx leading,aligny top");
@@ -147,7 +162,7 @@ public class LoanRequestForm extends JFrame {
 		JLabel label_9 = new JLabel("Home");
 		panel_1.add(label_9, "cell 1 7,alignx left,aligny center");
 		
-		JCheckBox checkPHome = new JCheckBox("Owned");
+		checkPHome = new JCheckBox("Owned");
 		panel_1.add(checkPHome, "cell 3 7 5 1,alignx left,aligny top");
 		
 		JLabel label_10 = new JLabel("Job");
@@ -169,7 +184,7 @@ public class LoanRequestForm extends JFrame {
 		JButton btnNewButton = new JButton("Select Client");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Select select = new Select("ONE");
+				Select select = new Select(MyString.One,MyString.LoanRequestForm);
 				select.setVisible(true);
 			}
 		});

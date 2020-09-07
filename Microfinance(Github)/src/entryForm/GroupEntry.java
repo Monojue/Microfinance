@@ -89,7 +89,7 @@ public class GroupEntry extends JFrame {
 	}
 	
 	public void chooseClient() {
-		new Select("ONE").setVisible(true);
+		new Select(MyString.One,MyString.GroupEntry).setVisible(true);
 	}
 	
 	public static void setID(String name,String ID) {

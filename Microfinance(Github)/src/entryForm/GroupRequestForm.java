@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import database.DBConnection;
 import net.miginfocom.swing.MigLayout;
 import tool.MyDate;
+import tool.MyString;
 import tool.Select;
 
 import java.awt.Label;
@@ -67,9 +68,9 @@ public class GroupRequestForm extends JFrame{
 		textDate.setText(myDate.getdate());
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
+		
+	}
 	private void initialize() {
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
 		this.setTitle("Group Registration Form");
@@ -269,7 +270,7 @@ public class GroupRequestForm extends JFrame{
 		JButton btnNewButton = new JButton("Select Group");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Select select = new Select("GROUP");
+				Select select = new Select(MyString.Group, MyString.GroupRequestForm);
 				select.setVisible(true);
 			}
 		});

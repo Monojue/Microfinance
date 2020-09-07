@@ -38,7 +38,6 @@ public class UQueries {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String strdataitem[]= new String[9];
 		try {
-			con=DBConnection.GetMySQLConnection();
 			stmt = con.createStatement();
 			String str ="Select * from Client";
 			ResultSet rs = stmt.executeQuery(str);
@@ -47,7 +46,7 @@ public class UQueries {
 			dtm.addColumn("NRC");
 			dtm.addColumn("Address");
 			dtm.addColumn("Phone");
-			dtm.addColumn("D.O.B");
+			dtm.addColumn("DateOfBirth");
 			dtm.addColumn("Home");
 			dtm.addColumn("Job");
 			dtm.addColumn("Salary");
@@ -57,21 +56,33 @@ public class UQueries {
 				strdataitem[2] = rs.getString("NRC");
 				strdataitem[3] = rs.getString("Address");
 				strdataitem[4] = rs.getString("Phone");
-				strdataitem[5] = rs.getString("DOB");
+				strdataitem[5] = rs.getString("DateOfBirth");
 				strdataitem[6] = rs.getString("Home");
 				strdataitem[7] = rs.getString("Job");
 				strdataitem[8] = rs.getString("Salary");
 				dtm.addRow(strdataitem);
 			}
 			return dtm;
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			System.out.println(e);
 		}
 		
 		return dtm;
 	}
 	
-	
+	public String getClientNameFormID(String id) {
+		query = "Select Name where clientID = '"+id+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			return rs.getString(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	
 ///////////////////// Client Query End /////////////////////////
 		//Duplicate Method
@@ -116,7 +127,37 @@ public class UQueries {
 	
 ///////////////////// Group Query Start ////////////////////////
 	
-	
+	public DefaultTableModel getAllGroup() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String strdataitem[]= new String[6];
+		try {
+			con=DBConnection.GetMySQLConnection();
+			stmt = con.createStatement();
+			String str ="Select * from ClientGroup";
+			ResultSet rs = stmt.executeQuery(str);
+			dtm.addColumn("GroupId");
+			dtm.addColumn("Leader");
+			dtm.addColumn("Member_1");
+			dtm.addColumn("Member_2");
+			dtm.addColumn("Member_3");
+			dtm.addColumn("Member_4");
+
+			while (rs.next()) {
+				strdataitem[0] = rs.getString("GroupId");
+				strdataitem[1] = rs.getString("Leader");
+				strdataitem[2] = rs.getString("Member_1");
+				strdataitem[3] = rs.getString("Member_2");
+				strdataitem[4] = rs.getString("Member_3");
+				strdataitem[5] = rs.getString("Member_4");
+				dtm.addRow(strdataitem);
+			}
+			return dtm;
+		} catch (SQLException | ClassNotFoundException e) {
+			System.out.println(e);
+		}
+		
+		return dtm;
+	}
 	
 	
 	

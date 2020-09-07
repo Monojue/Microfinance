@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import database.UQueries;
 import entryForm.ClientEntry;
 import entryForm.GroupEntry;
+import entryForm.GroupRequestForm;
+import entryForm.LoanRequestForm;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -31,6 +33,7 @@ public class Select extends JFrame {
 	public String ClientID;
 	DefaultTableModel dtm = new DefaultTableModel();
 	UQueries msql = new UQueries();
+	String form;
 	/**
 	 * Launch the application.
 	 */
@@ -54,22 +57,38 @@ public class Select extends JFrame {
 		initialize();
 		createTable();
 	}
-	public  Select(String FormType) {
+	public  Select(String FormType, String form) {
 		this.FormType = FormType;
+		this.form = form;
 		initialize();
 		createTable();
 	}
 	
 	public void createTable() {
-		table.setModel(msql.getAllClient());
-		table.getColumnModel().getColumn(0).setPreferredWidth(100);
-		table.getColumnModel().getColumn(1).setPreferredWidth(150);
-		table.getColumnModel().getColumn(2).setPreferredWidth(120);
-		table.getColumnModel().getColumn(3).setPreferredWidth(250);
-		table.getColumnModel().getColumn(4).setPreferredWidth(100);
-		table.getColumnModel().getColumn(5).setPreferredWidth(100);
-		table.getColumnModel().getColumn(6).setPreferredWidth(100);
-		table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		if(FormType.equals(MyString.One)) {
+			table.setModel(msql.getAllClient());
+			table.getColumnModel().getColumn(0).setPreferredWidth(100);
+			table.getColumnModel().getColumn(1).setPreferredWidth(150);
+			table.getColumnModel().getColumn(2).setPreferredWidth(120);
+			table.getColumnModel().getColumn(3).setPreferredWidth(250);
+			table.getColumnModel().getColumn(4).setPreferredWidth(100);
+			table.getColumnModel().getColumn(5).setPreferredWidth(100);
+			table.getColumnModel().getColumn(6).setPreferredWidth(100);
+			table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		}else if (FormType.equals(MyString.Group)) {
+			table.setModel(msql.getAllGroup());
+			table.getColumnModel().getColumn(0).setPreferredWidth(100);
+			table.getColumnModel().getColumn(1).setPreferredWidth(150);
+			table.getColumnModel().getColumn(2).setPreferredWidth(120);
+			table.getColumnModel().getColumn(3).setPreferredWidth(250);
+			table.getColumnModel().getColumn(4).setPreferredWidth(100);
+			table.getColumnModel().getColumn(5).setPreferredWidth(100);
+		}
+		
+	}
+	
+	public String gettableData(int row) {
+		return table.getValueAt(table.getSelectedRow(),row).toString();
 	}
 	
 	public void initialize() {
@@ -94,10 +113,10 @@ public class Select extends JFrame {
 		JRadioButton RadioName = new JRadioButton("Name");
 		panel.add(RadioName, "cell 2 0,growx,aligny top");
 		
-		if (FormType.equals("ONE")) {
+		if (FormType.equals(MyString.One)) {
 			RadioID.setText("Client ID");
 			RadioName.setText("Client Name");
-		}else if (FormType.equals("GROUP")) {
+		}else if (FormType.equals(MyString.Group)) {
 			RadioID.setText("Group ID");
 			RadioName.setText("Leader Name");
 		}else {
@@ -130,10 +149,10 @@ public class Select extends JFrame {
 		JButton btnNew = new JButton("New");
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (FormType.equals("ONE")) {
+				if (FormType.equals(MyString.One)) {
 					ClientEntry clientEntry = new ClientEntry();
 					clientEntry.setVisible(true);
-				}else if (FormType.equals("GROUP")) {
+				}else if (FormType.equals(MyString.Group)) {
 					GroupEntry groupEntry = new GroupEntry();
 					groupEntry.setVisible(true);
 				}
@@ -145,8 +164,33 @@ public class Select extends JFrame {
 		JButton btnOK = new JButton("OK");
 		btnOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GroupEntry.setID(table.getValueAt(table.getSelectedRow(),1).toString(),table.getValueAt(table.getSelectedRow(),0).toString());
+				if (MyString.GroupEntry.equals(form)) {
+					String id	=	gettableData(0);
+					String name	=	gettableData(1);
+					GroupEntry.setID(id, name);
+				}else if (MyString.GroupRequestForm.equals(form)) {
+					String id  = gettableData(0);
+					String leader = gettableData(1);
+					String mem1 = gettableData(2);
+					String mem2 = gettableData(3);
+					String mem3 = gettableData(4);
+					String mem4 = gettableData(5);
+					GroupRequestForm.setGroupData(id,leader,mem1,mem2,mem3,mem4);
+				}else if (MyString.LoanRequestForm.equals(form)) {
+					String id = gettableData(0);
+					String name  = gettableData(1);
+					String NRC = gettableData(2);
+					String address = gettableData(3);
+					String phno = gettableData(4);
+					String DOB = gettableData(5);
+					String home = gettableData(6);
+					String job = gettableData(7);
+					String salary = gettableData(8);
+					LoanRequestForm.setClientData(id,name,NRC,address,phno,DOB,home,job,salary);
+				}
+				
 				dispose();
+				
 			}
 		});
 		btnOK.setBounds(825, 92, 89, 23);
