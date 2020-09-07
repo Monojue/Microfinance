@@ -1,5 +1,5 @@
 # Microfinance
 Microfinance Project
 
-
-https://github.com/downloads/Monojue/Microfinance/Microfinance.sql
+Download SQL file!
+https://downgit.github.io/#/home?url=https://github.com/Monojue/Microfinance/blob/master/Microfinance.sql
