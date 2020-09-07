@@ -7,12 +7,15 @@ import java.awt.EventQueue;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import database.DBConnection;
+import database.MyQueries;
+import database.UQueries;
 import net.miginfocom.swing.MigLayout;
 import tool.MyDate;
 import tool.Select;
@@ -60,8 +63,9 @@ public class GroupEntry extends JFrame {
 	private JButton button_6;
 	DBConnection myDbConnection = new DBConnection();
 	MyDate myDate = new MyDate();
-	private JLabel lblAlert;
+	private static JLabel lblAlert;
 	public static String selplus = ""; 
+	UQueries msql = new UQueries();
 	/**
 	 * Launch the application.
 	 */
@@ -93,22 +97,40 @@ public class GroupEntry extends JFrame {
 	}
 	
 	public static void setID(String name,String ID) {
-		if(MyString.leader.equals(selplus)) {
-			leadName.setText(name);
-			leadID.setText(ID);
-		}else if (MyString.Mem_1.equals(selplus)) {
-			M1Name.setText(name);
-			M1ID.setText(ID);
-		}else if (MyString.Mem_2.equals(selplus)) {
-			M2Name.setText(name);
-			M2ID.setText(ID);
-		}else if (MyString.Mem_3.equals(selplus)) {
-			M3Name.setText(name);
-			M3ID.setText(ID);
-		}else if (MyString.Mem_4.equals(selplus)) {
-			M4Name.setText(name);
-			M4ID.setText(ID);
+		if(leadID.getText().equals(ID)||M1ID.getText().equals(ID)||M2ID.getText().equals(ID)||M3ID.getText().equals(ID)||M4ID.getText().equals(ID)) {
+			lblAlert.setText("Client Already Exits!");
+			lblAlert.setVisible(true);
+		}else {
+			if(MyString.leader.equals(selplus)) {
+				leadName.setText(name);
+				leadID.setText(ID);
+			}else if (MyString.Mem_1.equals(selplus)) {
+				M1Name.setText(name);
+				M1ID.setText(ID);
+			}else if (MyString.Mem_2.equals(selplus)) {
+				M2Name.setText(name);
+				M2ID.setText(ID);
+			}else if (MyString.Mem_3.equals(selplus)) {
+				M3Name.setText(name);
+				M3ID.setText(ID);
+			}else if (MyString.Mem_4.equals(selplus)) {
+				M4Name.setText(name);
+				M4ID.setText(ID);
+			}
 		}
+	}
+	
+	public void Clear() {
+		leadID.setText("");
+		leadName.setText("");
+		M1ID.setText("");
+		M1Name.setText("");
+		M2ID.setText("");
+		M2Name.setText("");
+		M3ID.setText("");
+		M3Name.setText("");
+		M4ID.setText("");
+		M4Name.setText("");
 	}
 	
 	public void initialize() {
@@ -274,6 +296,24 @@ public class GroupEntry extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (leadID.getText().isEmpty()||M1ID.getText().isEmpty()||M2ID.getText().isEmpty()||M3ID.getText().isEmpty()||M4ID.getText().isEmpty()) {
 					lblAlert.setVisible(true);
+				}else {
+					String[] data = new String[9];
+					data[0] = textGID.getText();
+					data[1] = leadID.getText();
+					data[2] = M1ID.getText();
+					data[3] = M2ID.getText();
+					data[4] = M3ID.getText();
+					data[5] = M4ID.getText();
+					
+					boolean save = msql.InsertData(MyString.GroupEntry, data);
+					if (save) {
+						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+						Clear();
+						AutoID();
+					} else {
+						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+						AutoID();
+					}
 				}
 			}
 		});

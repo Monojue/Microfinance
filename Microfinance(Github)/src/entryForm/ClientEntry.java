@@ -19,6 +19,7 @@ import java.awt.Component;
 import net.miginfocom.swing.MigLayout;
 import tool.Checking;
 import tool.MyDate;
+import tool.MyString;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -566,7 +567,7 @@ public class ClientEntry extends JFrame {
 						data[6] = home;
 						data[7] = textJob.getText();
 						data[8] = textSalary.getText();
-						boolean save = msql.InsertData("client", data);
+						boolean save = msql.InsertData(MyString.ClientEntry, data);
 						if (save) {
 							JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 							Clear();

@@ -2,6 +2,8 @@ package tool;
 
 public class MyString {
 	
+	public static String ClientEntry = "Client";
+	
 	public static String leader="leader";
 	public static String Mem_1="Mem_1";
 	public static String Mem_2="Mem_2";

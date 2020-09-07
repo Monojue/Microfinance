@@ -167,7 +167,7 @@ public class Select extends JFrame {
 				if (MyString.GroupEntry.equals(form)) {
 					String id	=	gettableData(0);
 					String name	=	gettableData(1);
-					GroupEntry.setID(id, name);
+					GroupEntry.setID(name, id);
 				}else if (MyString.GroupRequestForm.equals(form)) {
 					String id  = gettableData(0);
 					String leader = gettableData(1);
