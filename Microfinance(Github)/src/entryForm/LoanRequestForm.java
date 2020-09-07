@@ -4,9 +4,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+
+import database.DBConnection;
+import database.MyQueries;
+
 import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.Rectangle;
@@ -37,6 +42,7 @@ public class LoanRequestForm extends JFrame {
 	private static JTextField textPPhone;
 	private static JTextField textPJob;
 	private static JTextField textPSalary;
+	private JLabel noteClientError;
 	private JTextField textGName;
 	private JTextField textGNRC;
 	private JTextField textGAddress;
@@ -66,6 +72,8 @@ public class LoanRequestForm extends JFrame {
 	private JLabel noteGRelationship;
 	
 	LoanRequest loanRequest = new LoanRequest();
+	DBConnection myDbConnection = new DBConnection();
+	MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
 	/**
 	 * Launch the application.
@@ -110,8 +118,17 @@ public class LoanRequestForm extends JFrame {
 	}
 	
 	public boolean check() {
+		//Client ID
+		if (Checking.IsNull(textCID.getText())) {
+			noteClientError.setText("* Required");
+			noteClientError.setVisible(true);
+			return false;	
+	    }if (Checking.IsNull(textGName.getText())) {
+			noteGName.setText("* Required");
+			noteGName.setVisible(true);
+			return false;
 		//Check G Name
-		if (Checking.IsNull(textGName.getText())) {
+		}if (Checking.IsNull(textGName.getText())) {
 			noteGName.setText("* Required");
 			noteGName.setVisible(true);
 			return false;
@@ -304,9 +321,15 @@ public class LoanRequestForm extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			Select select = new Select(MyString.One,MyString.LoanRequestForm);
 			select.setVisible(true);
+			noteClientError.setVisible(false);
 		}
 	});
+	
+	noteClientError = new JLabel("* Choose Client");
+	noteClientError.setForeground(Color.RED);
+	panel_1.add(noteClientError, "cell 1 10 6 1");
 	panel_1.add(btnNewButton, "cell 13 10");
+	noteClientError.setVisible(false);
 	
 	JPanel panel_2 = new JPanel();
 	panel_2.setBounds(new Rectangle(0, 0, 5, 0));
@@ -602,50 +625,40 @@ public class LoanRequestForm extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			boolean check = check();
 			if(check) {
-				System.out.println("Success");
-			}
-			else {
-				System.out.println("gg");
-			}
-//			if(check) {
-//				
-//				String NRC = boxN1.getSelectedItem().toString()+"\\"+boxN2.getSelectedItem().toString()
-//							 +"("+ boxN3.getSelectedItem().toString()+")" + boxNo.getText();
-//				String DateOfBirth = boxDay.getSelectedItem().toString()+"-"+boxMonth.getSelectedItem().toString()+"-"+boxYear.getSelectedItem().toString();
-//				String home = "0";
-//				if(checkHome.isSelected()) {
-//					home = "1";
-//				}
-//				String[] st = new String[1];
+				
+				String NRC = boxGNRC1.getSelectedItem().toString()+"\\"+boxGNRC2.getSelectedItem().toString()
+							 +"("+ boxGNRC3.getSelectedItem().toString()+")" + textGNRC.getText();
+				String Address = textGAddress.getText()+","+textGCity.getText()+","+textGState.getText();
+				String[] st = new String[1];
+				
 //				st[0] = NRC;
 //				boolean dup = msql.IsDuplicate("client", st);
-//				if(dup) {
+				
+//				if(dup)
+//				{
 //					noteNRC.setText("* Already Existed");
 //					noteNRC.setVisible(true);
 //				}
-//				else {
-//					String[] data = new String[9];
-//					data[0] = textCID.getText();
-//					data[1] = textName.getText();
-//					data[2] = NRC;
-//					data[3] = textAddress.getText();
-//					data[4] = textPh.getText();
-//					data[5] = DateOfBirth;
-//					data[6] = home;
-//					data[7] = textJob.getText();
-//					data[8] = textSalary.getText();
-//					boolean save = msql.InsertData("client", data);
-//					if (save) {
-//						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
-//						Clear();
-//						AutoID();
-//					} else {
-//						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
-//						AutoID();
-//					}
-//				}
-//		}
+//				else 
+//				{
+					String[] data = new String[8];
+					data[0] = textCID.getText();
+					data[1] = textGName.getText();
+					data[2] = textGJob.getText();
+					data[3] = textGSalary.getText();
+					data[4] = textGRelationship.getText();
+					data[5] = Address;
+					data[6] = textGPhone.getText();
+					data[7] = NRC;
+					boolean update = msql.UpdateData("guarantor", data);
+					if (update) {
+						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
 		}
+//		}
 	});
 	btnRequestLoan.setBounds(611, 677, 122, 23);
 	this.getContentPane().add(btnRequestLoan);
