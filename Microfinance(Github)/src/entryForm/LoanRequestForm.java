@@ -631,16 +631,6 @@ public class LoanRequestForm extends JFrame {
 				String Address = textGAddress.getText()+","+textGCity.getText()+","+textGState.getText();
 				String[] st = new String[1];
 				
-//				st[0] = NRC;
-//				boolean dup = msql.IsDuplicate("client", st);
-				
-//				if(dup)
-//				{
-//					noteNRC.setText("* Already Existed");
-//					noteNRC.setVisible(true);
-//				}
-//				else 
-//				{
 					String[] data = new String[8];
 					data[0] = textCID.getText();
 					data[1] = textGName.getText();
@@ -658,7 +648,6 @@ public class LoanRequestForm extends JFrame {
 					}
 				}
 		}
-//		}
 	});
 	btnRequestLoan.setBounds(611, 677, 122, 23);
 	this.getContentPane().add(btnRequestLoan);
