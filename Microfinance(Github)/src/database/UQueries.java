@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 
 import database.DBConnection;
+import tool.MyString;
 
 public class UQueries {
 	static Connection con = null;
@@ -106,10 +107,14 @@ public class UQueries {
 	
 	//Insert
 	public static boolean InsertData(String tbName, String[] data) {
-	if(tbName.equals("client")) {
+	if(tbName.equals(MyString.ClientEntry)) {
 		query = "insert into client(ClientID,Name,NRC,Address,Phone,DateofBirth,Home,Job,Salary) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+Integer.parseInt(data[4])+"','"+data[5]+"','"+Integer.parseInt(data[6])+"','"+data[7]+"','"+Integer.parseInt(data[8])+"')";
+	}else if (tbName.equals(MyString.GroupEntry)) {
+		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"')";
 	}
+	
 	try {
 		stmt = con.createStatement();
 		System.out.println(query);

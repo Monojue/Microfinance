@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 
 import database.DBConnection;
+import tool.MyString;
 
 public class MyQueries {
 	static Connection con = null;
@@ -59,6 +60,20 @@ public class MyQueries {
 		//hh
 	}
 	
+	public String getClientNameFormID(String id) {
+		query = "Select Name where clientID = '"+id+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			return rs.getString(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
 	
 	
 ///////////////////// Client Query End /////////////////////////
@@ -83,10 +98,14 @@ public class MyQueries {
 	
 	//Insert
 	public static boolean InsertData(String tbName, String[] data) {
-	if(tbName.equals("client")) {
+	if(tbName.equals(MyString.ClientEntry)) {
 		query = "insert into client(ClientID,Name,NRC,Address,Phone,DateofBirth,Home,Job,Salary) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+Integer.parseInt(data[4])+"','"+data[5]+"','"+Integer.parseInt(data[6])+"','"+data[7]+"','"+Integer.parseInt(data[8])+"')";
+	}else if (tbName.equals(MyString.GroupEntry)) {
+		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"')";
 	}
+	
 	try {
 		stmt = con.createStatement();
 		System.out.println(query);
