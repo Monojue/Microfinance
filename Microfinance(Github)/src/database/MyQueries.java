@@ -105,6 +105,10 @@ public class MyQueries {
 		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"')";
 	}
+	else if(tbName.equals("loanrequest")) {
+		query = "insert into loanrequest(LoanRequestID,LoanType,Amount,Duration,InterestRate) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Float.parseFloat(data[4])+"')";
+	}
 	
 	try {
 		stmt = con.createStatement();
