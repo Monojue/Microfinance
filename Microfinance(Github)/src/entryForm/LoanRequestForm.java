@@ -95,6 +95,8 @@ public class LoanRequestForm extends JFrame {
 	private JTextField textDuration;
 	private JTextField textAmount;
 	private JTable table;
+	private JLabel lblNewLabel_6;
+	private JLabel lblMonth;
 	/**
 	 * Launch the application.
 	 */
@@ -417,7 +419,7 @@ public class LoanRequestForm extends JFrame {
 	textDate.setColumns(10);
 	
 	JPanel panel_3 = new JPanel();
-	panel_3.setBounds(10, 383, 798, 268);
+	panel_3.setBounds(10, 383, 708, 268);
 	panel_3.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "GUARANTOR INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel.add(panel_3);
 	panel_3.setLayout(new MigLayout("", "[68px][40px][4px][4px][4px][50px][8px][42px][8px][69.00px][8px][97px][97px]", "[30,fill][30,fill][30,fill][30,fill][30,fill][30,fill][][30,grow,fill]"));
@@ -608,10 +610,10 @@ public class LoanRequestForm extends JFrame {
 	noteGRelationship.setVisible(false);
 	
 	JPanel panel_4 = new JPanel();
-	panel_4.setBounds(414, 56, 394, 316);
+	panel_4.setBounds(414, 56, 304, 316);
 	panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel.add(panel_4);
-	panel_4.setLayout(new MigLayout("", "[65px][81.00px,grow][159px][77px]", "[26px][20px][14px][][38.00][][][][23px]"));
+	panel_4.setLayout(new MigLayout("", "[21.00][65px][81.00px][20.00px][77px]", "[26px][20px][14px][][38.00][][][][23px]"));
 
 	
 	JSlider sliderAmount = new JSlider();
@@ -641,22 +643,22 @@ public class LoanRequestForm extends JFrame {
 	sliderAmount.setMinimum(100000);
 	sliderAmount.setMaximum(1000000);
 	sliderAmount.setMajorTickSpacing(100000);
-	panel_4.add(sliderAmount, "cell 0 0 3 1");
+	panel_4.add(sliderAmount, "cell 1 0 3 1");
 	
 	noteAmount = new JLabel("* Require");
 	noteAmount.setForeground(Color.RED);
-	panel_4.add(noteAmount, "cell 3 0");
+	panel_4.add(noteAmount, "cell 4 0");
 	noteAmount.setVisible(false);
 	
 	JLabel lblNewLabel_2 = new JLabel("Amount");
-	panel_4.add(lblNewLabel_2, "cell 0 1 1 2,alignx left");
+	panel_4.add(lblNewLabel_2, "cell 1 1 1 2,alignx left");
 	
 	textAmount = new JTextField();
 	textAmount.setEditable(false);
 	textAmount.setForeground(Color.black);
 	textAmount.setFont(new Font("Tahoma", Font.BOLD, 13));
 	textAmount.setColumns(10);
-	panel_4.add(textAmount, "cell 1 1 2 2,growx");
+	panel_4.add(textAmount, "cell 2 1 2 2,growx");
 	
 	JSlider sliderDuration = new JSlider();
 	sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
@@ -678,6 +680,9 @@ public class LoanRequestForm extends JFrame {
 			textDuration.setText(Integer.toString(sliderDuration.getValue()));
 		}
 	});
+	
+	lblNewLabel_6 = new JLabel("Kyats");
+	panel_4.add(lblNewLabel_6, "cell 4 1 1 2,growy");
 	sliderDuration.setSnapToTicks(true);
 	sliderDuration.setPaintTicks(true);
 	sliderDuration.setPaintLabels(true);
@@ -685,32 +690,35 @@ public class LoanRequestForm extends JFrame {
 	sliderDuration.setMinimum(6);
 	sliderDuration.setMaximum(24);
 	sliderDuration.setMajorTickSpacing(3);
-	panel_4.add(sliderDuration, "cell 0 3 3 1");
+	panel_4.add(sliderDuration, "cell 1 3 3 1");
 	
 	noteDuration = new JLabel("* Require");
 	noteDuration.setForeground(Color.RED);
-	panel_4.add(noteDuration, "cell 3 3");
+	panel_4.add(noteDuration, "cell 4 3");
 	noteDuration.setVisible(false);
 	
 	JLabel lblNewLabel_3 = new JLabel("Duration");
-	panel_4.add(lblNewLabel_3, "cell 0 4,alignx left");
+	panel_4.add(lblNewLabel_3, "cell 1 4,alignx left");
 	
 	textDuration = new JTextField();
 	textDuration.setEditable(false);
 	textDuration.setColumns(10);
-	panel_4.add(textDuration, "cell 1 4,growx");
+	panel_4.add(textDuration, "cell 2 4,growx");
+	
+	lblMonth = new JLabel("Month");
+	panel_4.add(lblMonth, "cell 3 4 2 1");
 	
 	JLabel lblNewLabel_4 = new JLabel("Interest Rate");
-	panel_4.add(lblNewLabel_4, "cell 0 6");
+	panel_4.add(lblNewLabel_4, "cell 1 6");
 	
 	JLabel lblRate = new JLabel("Rate%");
-	panel_4.add(lblRate, "cell 1 6");
+	panel_4.add(lblRate, "cell 2 6");
 	
 	JLabel label_25 = new JLabel("Service Fees");
-	panel_4.add(label_25, "cell 0 7");
+	panel_4.add(label_25, "cell 1 7");
 	
 	JLabel label_26 = new JLabel("Rate%");
-	panel_4.add(label_26, "cell 1 7");
+	panel_4.add(label_26, "cell 2 7");
 	
 	JButton btnCalculate = new JButton("Calculate");
 	btnCalculate.addActionListener(new ActionListener() {
@@ -718,10 +726,10 @@ public class LoanRequestForm extends JFrame {
 			createTable();
 		}
 	});
-	panel_4.add(btnCalculate, "cell 3 8,alignx left,aligny top");
+	panel_4.add(btnCalculate, "cell 4 8,alignx left,aligny top");
 	
 	scrollPane = new JScrollPane();
-	scrollPane.setBounds(814, 56, 469, 595);
+	scrollPane.setBounds(722, 56, 561, 595);
 	panel.add(scrollPane);
 	
 	table = new JTable();
