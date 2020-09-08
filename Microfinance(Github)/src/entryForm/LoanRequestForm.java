@@ -290,7 +290,7 @@ public class LoanRequestForm extends JFrame {
 	private void initialize() {		
 	this.getContentPane().setBackground(Color.LIGHT_GRAY);
 	this.setTitle("Loan Request Form");
-	this.setBounds(20, 10, 1316, 748);
+	this.setBounds(0, 10, 1316, 748);
 	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	this.getContentPane().setLayout(null);
 	this.setResizable(false);
