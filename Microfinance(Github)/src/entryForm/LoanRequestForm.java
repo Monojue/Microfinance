@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 import database.DBConnection;
 import database.MyQueries;
@@ -20,6 +21,7 @@ import tool.MyDate;
 import tool.MyString;
 import tool.Select;
 import tool.Checking;
+import tool.Calculation;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -31,6 +33,16 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSlider;
 import java.awt.Choice;
+
+import java.awt.event.ItemListener;
+import java.util.Vector;
+import java.awt.event.ItemEvent;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.Font;
+
 
 public class LoanRequestForm extends JFrame {
 
@@ -51,11 +63,9 @@ public class LoanRequestForm extends JFrame {
 	private JTextField textGPhone;
 	private JTextField textGJob;
 	private JTextField textGSalary;
-	private JTextField LoanAmount;
-	private JTextField LoanDuration;
-	private JTable table;
 	private JTextField textID;
 	private JTextField textDate;
+	private JScrollPane scrollPane;
 	private static JTextField textCID;
 	private JLabel noteGName;
 	private Choice boxGNRC1;
@@ -70,11 +80,17 @@ public class LoanRequestForm extends JFrame {
 	private JLabel noteGSalary;
 	private JTextField textGRelationship;
 	private JLabel noteGRelationship;
+	private JLabel noteAmount;
+	private JLabel noteDuration;
 	
 	LoanRequest loanRequest = new LoanRequest();
 	DBConnection myDbConnection = new DBConnection();
 	MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
+	DefaultTableModel dtm = new DefaultTableModel();
+	private JTextField textDuration;
+	private JTextField textAmount;
+	private JTable table;
 	/**
 	 * Launch the application.
 	 */
@@ -91,15 +107,46 @@ public class LoanRequestForm extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
+	public void SetNRCcodeData() {
+		Vector<String> code = new Vector<>();
+		code.clear();
+		boxGNRC2.removeAll();
+		code = msql.getCodefromNo(boxGNRC1.getSelectedItem().toString());
+		for (String data : code) {
+			boxGNRC2.add(data);
+		}
+	}
 	public LoanRequestForm() {
 		initialize();
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
+		SetNRCcodeData();
 	}
-
+	
+	public void createTable() {
+		if(Checking.IsNull(textAmount.getText())) {
+			noteAmount.setVisible(true);
+		}
+		else if (Checking.IsNull(textDuration.getText())) {
+			noteDuration.setVisible(true);
+		}
+		else {
+		DefaultTableModel dtm = new DefaultTableModel(25,5);
+		dtm = Calculation.calculator(Integer.parseInt(textAmount.getText()),Integer.parseInt(textDuration.getText()),2.33);
+		table.setModel(dtm);
+		table.getColumnModel().getColumn(0).setPreferredWidth(40);
+		table.getColumnModel().getColumn(1).setPreferredWidth(130);
+		table.getColumnModel().getColumn(2).setPreferredWidth(130);
+		table.getColumnModel().getColumn(3).setPreferredWidth(130);
+		table.getColumnModel().getColumn(4).setPreferredWidth(130);
+		table.getColumnModel().getColumn(0).setHeaderValue("No");
+		table.getColumnModel().getColumn(1).setHeaderValue("Principal Outstanding");
+		table.getColumnModel().getColumn(2).setHeaderValue("Principal");
+		table.getColumnModel().getColumn(3).setHeaderValue("Interest");
+		table.getColumnModel().getColumn(4).setHeaderValue("Installment");
+		}
+		}
+	
 	public static void setClientData(String id,String name,String NRC,String address,String phno,String DOB,String home,String job,String salary) {
 		textCID.setText(id);
 		textPName.setText(name);
@@ -216,18 +263,30 @@ public class LoanRequestForm extends JFrame {
 			noteGSalary.setVisible(true);
 			return false;
 		}
+		//Check Relationship
 		if (Checking.IsNull(textGRelationship.getText())) {
 			noteGSalary.setText("* Required");
 			noteGSalary.setVisible(true);
+			return false;
+		}
+		//Check Amount
+		if(Checking.IsNull(textAmount.getText())) {
+			noteAmount.setVisible(true);
+			return false;
+		}
+		//Check Duration
+		if (Checking.IsNull(textDuration.getText())) {
+			noteDuration.setVisible(true);
 			return false;
 		}
 		else {
 			return true;
 		}
 	}
-	private void initialize() {		this.getContentPane().setBackground(Color.LIGHT_GRAY);
+	private void initialize() {		
+	this.getContentPane().setBackground(Color.LIGHT_GRAY);
 	this.setTitle("Loan Request Form");
-	this.setBounds(260, 30, 1316, 748);
+	this.setBounds(20, 10, 1316, 748);
 	this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	this.getContentPane().setLayout(null);
 	this.setResizable(false);
@@ -239,8 +298,8 @@ public class LoanRequestForm extends JFrame {
 	panel.setLayout(null);
 	
 	JPanel panel_1 = new JPanel();
-	panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "PERSONAL INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel_1.setBounds(10, 56, 399, 316);
+	panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "PERSONAL INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel.add(panel_1);
 	panel_1.setLayout(new MigLayout("", "[][68px][27.00][40px,grow][4px][4px][4px][50px][8px][42px][8px][31px][8px][97px]", "[][30][20px][20px][20px][50][20px][20][20px][20px][]"));
 	
@@ -259,7 +318,6 @@ public class LoanRequestForm extends JFrame {
 	textPName.setEditable(false);
 	textPName.setColumns(10);
 	panel_1.add(textPName, "cell 3 2 9 1,growx,aligny top");
-	//textPName.setText("Kaung Myat Thet");
 	
 	JLabel label_1 = new JLabel("NRC");
 	panel_1.add(label_1, "cell 1 3,alignx left,aligny center");
@@ -332,7 +390,6 @@ public class LoanRequestForm extends JFrame {
 	noteClientError.setVisible(false);
 	
 	JPanel panel_2 = new JPanel();
-	panel_2.setBounds(new Rectangle(0, 0, 5, 0));
 	panel_2.setBounds(10, 11, 1271, 40);
 	panel.add(panel_2);
 	panel_2.setLayout(new MigLayout("", "[70.00px][158.00px][464.00,grow][40px][135.00px]", "[26px]"));
@@ -356,8 +413,8 @@ public class LoanRequestForm extends JFrame {
 	textDate.setColumns(10);
 	
 	JPanel panel_3 = new JPanel();
-	panel_3.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "GUARANTOR INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel_3.setBounds(10, 383, 798, 268);
+	panel_3.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "GUARANTOR INFROMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel.add(panel_3);
 	panel_3.setLayout(new MigLayout("", "[68px][40px][4px][4px][4px][50px][8px][42px][8px][69.00px][8px][97px][97px]", "[30,fill][30,fill][30,fill][30,fill][30,fill][30,fill][][30,grow,fill]"));
 	
@@ -379,15 +436,14 @@ public class LoanRequestForm extends JFrame {
 	panel_3.add(noteGName, "cell 11 0 2 1");
 	noteGName.setVisible(false);
 	
-	JLabel label_12 = new JLabel("NRC");
-	panel_3.add(label_12, "cell 0 1,alignx left,aligny center");
+	JLabel lblNrc = new JLabel("NRC(*)");
+	panel_3.add(lblNrc, "cell 0 1,alignx left,aligny center");
 	
 	JLabel label_13 = new JLabel("/");
 	panel_3.add(label_13, "cell 3 1,alignx left,growy");
 	
 	boxGNRC2 = new Choice();
 	panel_3.add(boxGNRC2, "cell 5 1 2 1,growx,aligny top");
-	boxGNRC2.addItem("DaGaMa");
 			
 	textGNRC = new JTextField();
 	textGNRC.addFocusListener(new FocusAdapter() {
@@ -399,8 +455,8 @@ public class LoanRequestForm extends JFrame {
 	textGNRC.setColumns(10);
 	panel_3.add(textGNRC, "flowx,cell 9 1 4 1,alignx left,aligny top");
 	
-	JLabel label_15 = new JLabel("ADDRESS");
-	panel_3.add(label_15, "cell 0 2,alignx left,aligny center");
+	JLabel lblAddress = new JLabel("ADDRESS(*)");
+	panel_3.add(lblAddress, "cell 0 2,alignx left,aligny center");
 	
 	textGAddress = new JTextField();
 	textGAddress.addFocusListener(new FocusAdapter() {
@@ -450,8 +506,8 @@ public class LoanRequestForm extends JFrame {
 	panel_3.add(noteGState, "cell 12 3,growx");
 	noteGState.setVisible(false);
 	
-	JLabel label_17 = new JLabel("PHONE NO");
-	panel_3.add(label_17, "cell 0 4,alignx left,aligny center");
+	JLabel lblPhoneNo = new JLabel("PHONE NO(*)");
+	panel_3.add(lblPhoneNo, "cell 0 4,alignx left,aligny center");
 	
 	textGPhone = new JTextField();
 	textGPhone.addFocusListener(new FocusAdapter() {
@@ -463,16 +519,16 @@ public class LoanRequestForm extends JFrame {
 	textGPhone.setColumns(10);
 	panel_3.add(textGPhone, "cell 1 4 7 1,growx,aligny top");
 	
-	JLabel label_18 = new JLabel("CITY");
-	panel_3.add(label_18, "cell 0 3,alignx left,aligny center");
+	JLabel lblCity = new JLabel("CITY(*)");
+	panel_3.add(lblCity, "cell 0 3,alignx left,aligny center");
 	
 	noteGPhone = new JLabel("* Require");
 	noteGPhone.setForeground(Color.RED);
 	panel_3.add(noteGPhone, "cell 9 4");
 	noteGPhone.setVisible(false);
 	
-	JLabel label_20 = new JLabel("Job");
-	panel_3.add(label_20, "cell 0 5,alignx left,aligny center");
+	JLabel lblJob = new JLabel("Job(*)");
+	panel_3.add(lblJob, "cell 0 5,alignx left,aligny center");
 	
 	textGJob = new JTextField();
 	textGJob.addFocusListener(new FocusAdapter() {
@@ -489,9 +545,9 @@ public class LoanRequestForm extends JFrame {
 	panel_3.add(noteGJob, "cell 9 5");
 	noteGJob.setVisible(false);
 	
-	JLabel label_21 = new JLabel("Salary");
-	label_21.setHorizontalAlignment(SwingConstants.LEFT);
-	panel_3.add(label_21, "cell 0 6,alignx left");
+	JLabel lblSalary = new JLabel("Salary(*)");
+	lblSalary.setHorizontalAlignment(SwingConstants.LEFT);
+	panel_3.add(lblSalary, "cell 0 6,alignx left");
 	
 	textGSalary = new JTextField();
 	textGSalary.addFocusListener(new FocusAdapter() {
@@ -504,8 +560,15 @@ public class LoanRequestForm extends JFrame {
 	panel_3.add(textGSalary, "cell 1 6 7 1,growx");
 	
 	boxGNRC1 = new Choice();
+	boxGNRC1.addItemListener(new ItemListener() {
+		public void itemStateChanged(ItemEvent e) {
+			SetNRCcodeData();
+		}
+	});
+	for (int i = 1; i <= 12; i++) {
+		boxGNRC1.addItem(String.valueOf(i));
+	}
 	panel_3.add(boxGNRC1, "cell 1 1,growx,aligny top");
-	boxGNRC1.addItem("12");
 	
 	boxGNRC3 = new Choice();
 	panel_3.add(boxGNRC3, "cell 7 1,growx,aligny top");
@@ -521,7 +584,7 @@ public class LoanRequestForm extends JFrame {
 	panel_3.add(noteGSalary, "cell 9 6");
 	noteGSalary.setVisible(false);
 	
-	JLabel lblRelation = new JLabel("Relation");
+	JLabel lblRelation = new JLabel("Relation(*)");
 	lblRelation.setHorizontalAlignment(SwingConstants.LEFT);
 	panel_3.add(lblRelation, "cell 0 7,alignx left");
 	
@@ -541,12 +604,47 @@ public class LoanRequestForm extends JFrame {
 	noteGRelationship.setVisible(false);
 	
 	JPanel panel_4 = new JPanel();
-	panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel_4.setBounds(414, 56, 394, 316);
+	panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel.add(panel_4);
-	panel_4.setLayout(new MigLayout("", "[65px][81.00px][159px][77px]", "[26px][20px][14px][][23px]"));
+	panel_4.setLayout(new MigLayout("", "[65px][81.00px,grow][159px][77px]", "[26px][20px][14px][][38.00][][][][23px]"));
 	
-	JLabel lblNewLabel_2 = new JLabel("Amount");
+	JSlider sliderAmount = new JSlider();
+	sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			noteAmount.setVisible(false);
+			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+		}
+	});
+	sliderAmount.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			noteAmount.setVisible(false);
+			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			noteAmount.setVisible(false);
+			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+		}
+	});
+	sliderAmount.setSnapToTicks(true);
+	sliderAmount.setPaintTicks(true);
+	//sliderAmount.setPaintLabels(true);
+	sliderAmount.setMinorTickSpacing(100000);
+	sliderAmount.setMinimum(100000);
+	sliderAmount.setMaximum(1000000);
+	sliderAmount.setMajorTickSpacing(100000);
+	panel_4.add(sliderAmount, "cell 0 0 3 1");
+	
+	noteAmount = new JLabel("* Require");
+	noteAmount.setForeground(Color.RED);
+	panel_4.add(noteAmount, "cell 3 0");
+	noteAmount.setVisible(false);
+	
+
+	JLabel lblNewLabel_2 = new JLabel("Amount(*)");
 	panel_4.add(lblNewLabel_2, "cell 0 0,alignx left,aligny center");
 	
 	LoanAmount = new JTextField();
@@ -567,7 +665,7 @@ public class LoanRequestForm extends JFrame {
 	label_23.setForeground(Color.RED);
 	panel_4.add(label_23, "cell 3 0");
 	
-	JLabel lblNewLabel_3 = new JLabel("Duration");
+	JLabel lblNewLabel_3 = new JLabel("Duration(*)");
 	panel_4.add(lblNewLabel_3, "cell 0 1,growx,aligny center");
 	
 	LoanDuration = new JTextField();
@@ -588,27 +686,86 @@ public class LoanRequestForm extends JFrame {
 	JLabel label_24 = new JLabel("* Require");
 	label_24.setForeground(Color.RED);
 	panel_4.add(label_24, "cell 3 1");
+
+	JLabel lblNewLabel_2 = new JLabel("Amount");
+	panel_4.add(lblNewLabel_2, "cell 0 1 1 2,alignx left");
+	
+	textAmount = new JTextField();
+	textAmount.setEditable(false);
+	textAmount.setForeground(Color.black);
+	textAmount.setFont(new Font("Tahoma", Font.BOLD, 13));
+	textAmount.setColumns(10);
+	panel_4.add(textAmount, "cell 1 1 2 2,growx");
+	
+	JSlider sliderDuration = new JSlider();
+	sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			noteDuration.setVisible(false);
+			textDuration.setText(Integer.toString(sliderDuration.getValue()));
+		}
+	});
+	sliderDuration.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			noteDuration.setVisible(false);
+			textDuration.setText(Integer.toString(sliderDuration.getValue()));
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			noteDuration.setVisible(false);
+			textDuration.setText(Integer.toString(sliderDuration.getValue()));
+		}
+	});
+	sliderDuration.setSnapToTicks(true);
+	sliderDuration.setPaintTicks(true);
+	sliderDuration.setPaintLabels(true);
+	sliderDuration.setMinorTickSpacing(3);
+	sliderDuration.setMinimum(6);
+	sliderDuration.setMaximum(24);
+	sliderDuration.setMajorTickSpacing(3);
+	panel_4.add(sliderDuration, "cell 0 3 3 1");
+	
+	noteDuration = new JLabel("* Require");
+	noteDuration.setForeground(Color.RED);
+	panel_4.add(noteDuration, "cell 3 3");
+	noteDuration.setVisible(false);
+	
+	JLabel lblNewLabel_3 = new JLabel("Duration");
+	panel_4.add(lblNewLabel_3, "cell 0 4,alignx left");
+	
+	textDuration = new JTextField();
+	textDuration.setEditable(false);
+	textDuration.setColumns(10);
+	panel_4.add(textDuration, "cell 1 4,growx");
+
 	
 	JLabel lblNewLabel_4 = new JLabel("Interest Rate");
-	panel_4.add(lblNewLabel_4, "cell 0 2,alignx left,aligny top");
+	panel_4.add(lblNewLabel_4, "cell 0 6");
 	
 	JLabel lblRate = new JLabel("Rate%");
-	panel_4.add(lblRate, "cell 1 2,alignx left,aligny top");
+	panel_4.add(lblRate, "cell 1 6");
 	
 	JLabel label_25 = new JLabel("Service Fees");
-	panel_4.add(label_25, "cell 0 3");
+	panel_4.add(label_25, "cell 0 7");
 	
 	JLabel label_26 = new JLabel("Rate%");
-	panel_4.add(label_26, "cell 1 3");
+	panel_4.add(label_26, "cell 1 7");
 	
 	JButton btnCalculate = new JButton("Calculate");
-	panel_4.add(btnCalculate, "cell 3 4,alignx left,aligny top");
+	btnCalculate.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) { 
+			createTable();
+		}
+	});
+	panel_4.add(btnCalculate, "cell 3 8,alignx left,aligny top");
 	
-	JScrollPane scrollPane = new JScrollPane();
+	scrollPane = new JScrollPane();
 	scrollPane.setBounds(814, 56, 469, 595);
 	panel.add(scrollPane);
 	
 	table = new JTable();
+	scrollPane.setColumnHeaderView(table);
 	scrollPane.setViewportView(table);
 	
 	JButton btnCancel = new JButton("Cancel");
@@ -629,22 +786,33 @@ public class LoanRequestForm extends JFrame {
 				String NRC = boxGNRC1.getSelectedItem().toString()+"\\"+boxGNRC2.getSelectedItem().toString()
 							 +"("+ boxGNRC3.getSelectedItem().toString()+")" + textGNRC.getText();
 				String Address = textGAddress.getText()+","+textGCity.getText()+","+textGState.getText();
-				String[] st = new String[1];
 				
-					String[] data = new String[8];
-					data[0] = textCID.getText();
-					data[1] = textGName.getText();
-					data[2] = textGJob.getText();
-					data[3] = textGSalary.getText();
-					data[4] = textGRelationship.getText();
-					data[5] = Address;
-					data[6] = textGPhone.getText();
-					data[7] = NRC;
-					boolean update = msql.UpdateData("guarantor", data);
-					if (update) {
-						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					String[] GDetails = new String[8];
+					GDetails[0] = textCID.getText();
+					GDetails[1] = textGName.getText();
+					GDetails[2] = textGJob.getText();
+					GDetails[3] = textGSalary.getText();
+					GDetails[4] = textGRelationship.getText();
+					GDetails[5] = Address;
+					GDetails[6] = textGPhone.getText();
+					GDetails[7] = NRC;
+					boolean update = msql.UpdateData("guarantor", GDetails);
+					
+					String[] LoanRequest = new String[5];
+					LoanRequest[0] = textID.getText();
+					LoanRequest[1] = "Individual";
+					LoanRequest[2] = textAmount.getText();
+					LoanRequest[3] = textDuration.getText();
+					LoanRequest[4] = "2.33";
+					boolean insert = msql.InsertData("loanrequest", LoanRequest);
+					if (update && insert) {
+						JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else if(!update) {
+						JOptionPane.showMessageDialog(null, "Failed to Save Guarantor Information Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else if (!insert){
+						JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 		}

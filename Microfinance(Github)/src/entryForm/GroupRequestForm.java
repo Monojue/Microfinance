@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,13 +22,13 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import database.DBConnection;
+import database.UQueries;
 import net.miginfocom.swing.MigLayout;
 import tool.MyDate;
 import tool.MyString;
 import tool.Select;
 
 import java.awt.Label;
-import java.awt.TextField;
 import java.awt.Choice;
 import javax.swing.JList;
 import java.awt.Button;
@@ -44,13 +45,19 @@ public class GroupRequestForm extends JFrame{
 	private String Invalid = "* Invalid";
 	private JTextField textDate;
 	private static JTextField txtGroupID;
-	public static TextField txtLID;
-	public static TextField txtM1ID;
-	public static TextField txtM2ID;
-	public static TextField txtM3ID;
-	public static TextField txtM4ID; 
+	public static JTextField txtLID;
+	public static JTextField txtM1ID;
+	public static JTextField txtM2ID;
+	public static JTextField txtM3ID;
+	public static JTextField txtM4ID; 
 	LoanRequest loanRequest = new LoanRequest();
 	MyDate myDate = new MyDate();
+	static UQueries msql = new UQueries();
+	private static JTextField txtM3Name;
+	private static JTextField txtLName;
+	private static JTextField txtM2Name;
+	private static JTextField txtM1Name;
+	private static JTextField txtM4Name;
 	
 	
 	public static void main(String[] args) {
@@ -77,11 +84,17 @@ public class GroupRequestForm extends JFrame{
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
 		txtGroupID.setText(id);
-		txtLID.setText(leader);
-		txtM1ID.setText(mem1);
-		txtM2ID.setText(mem2);
-		txtM3ID.setText(mem3);
-		txtM4ID.setText(mem4);
+		txtLName.setText(leader);
+		txtM1Name.setText(mem1);
+		txtM2Name.setText(mem2);
+		txtM3Name.setText(mem3);
+		txtM4Name.setText(mem4);
+		Vector<String> clientID = msql.getClientIDFormGroupID(id);
+		txtLID.setText(clientID.get(0));
+		txtM1ID.setText(clientID.get(1));
+		txtM2ID.setText(clientID.get(2));
+		txtM3ID.setText(clientID.get(3));
+		txtM4ID.setText(clientID.get(4));
 	}
 	private void initialize() {
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -203,6 +216,7 @@ public class GroupRequestForm extends JFrame{
 		panel_1.add(lblNewLabel, "cell 0 0,alignx left");
 		
 		txtGroupID = new JTextField();
+		txtGroupID.setFont(new Font("Century", Font.PLAIN, 14));
 		txtGroupID.setEditable(false);
 		panel_1.add(txtGroupID, "cell 1 0,growx,aligny center");
 		txtGroupID.setColumns(10);
@@ -213,58 +227,68 @@ public class GroupRequestForm extends JFrame{
 		Label label_1 = new Label("Name");
 		panel_1.add(label_1, "cell 1 1,alignx center,aligny top");
 		
-		txtLID = new TextField();
+		txtLID = new JTextField();
+		txtLID.setColumns(10);
 		txtLID.setForeground(Color.BLACK);
-		txtLID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtLID.setFont(new Font("Century", Font.PLAIN, 14));
 		txtLID.setEditable(false);
 		panel_1.add(txtLID, "cell 2 2,grow");
 		
 		Label label_2 = new Label("Client ID");
 		panel_1.add(label_2, "cell 2 1,alignx center,aligny top");
 		
-		txtM1ID = new TextField();
+		txtM1ID = new JTextField();
+		txtM1ID.setColumns(10);
 		txtM1ID.setForeground(Color.BLACK);
-		txtM1ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM1ID.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM1ID.setEditable(false);
 		panel_1.add(txtM1ID, "cell 2 3,grow");
 		
-		txtM2ID = new TextField();
-		txtM2ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM2ID = new JTextField();
+		txtM2ID.setColumns(10);
+		txtM2ID.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM2ID.setEditable(false);
 		panel_1.add(txtM2ID, "cell 2 4,grow");
 		
-		txtM3ID = new TextField();
-		txtM3ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM3ID = new JTextField();
+		txtM3ID.setColumns(10);
+		txtM3ID.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM3ID.setEditable(false);
 		panel_1.add(txtM3ID, "cell 2 5,grow");
 		
-		txtM4ID = new TextField();
-		txtM4ID.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM4ID = new JTextField();
+		txtM4ID.setColumns(10);
+		txtM4ID.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM4ID.setEditable(false);
 		panel_1.add(txtM4ID, "cell 2 6,grow");
 		
-		TextField txtM4Name = new TextField();
-		txtM4Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM4Name = new JTextField();
+		txtM4Name.setColumns(10);
+		txtM4Name.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM4Name.setEditable(false);
 		panel_1.add(txtM4Name, "cell 1 6,grow");
 		
-		TextField txtM3Name = new TextField();
-		txtM3Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM3Name = new JTextField();
+		txtM3Name.setColumns(10);
+		txtM3Name.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM3Name.setEditable(false);
 		panel_1.add(txtM3Name, "cell 1 5,grow");
 		
-		TextField txtM2Name = new TextField();
-		txtM2Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM2Name = new JTextField();
+		txtM2Name.setColumns(10);
+		txtM2Name.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM2Name.setEditable(false);
 		panel_1.add(txtM2Name, "cell 1 4,grow");
 		
-		TextField txtM1Name = new TextField();
-		txtM1Name.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtM1Name = new JTextField();
+		txtM1Name.setColumns(10);
+		txtM1Name.setFont(new Font("Century", Font.PLAIN, 14));
 		txtM1Name.setEditable(false);
-		panel_1.add(txtM1Name, "cell 1 3,growx,aligny top");
+		panel_1.add(txtM1Name, "cell 1 3,grow");
 		
-		TextField txtLName = new TextField();
-		txtLName.setFont(new Font("MS UI Gothic", Font.PLAIN, 12));
+		txtLName = new JTextField();
+		txtLName.setColumns(10);
+		txtLName.setFont(new Font("Century", Font.PLAIN, 14));
 		txtLName.setEditable(false);
 		panel_1.add(txtLName, "cell 1 2,grow");
 		

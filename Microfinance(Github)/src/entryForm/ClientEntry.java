@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 
 import database.DBConnection;
 import database.MyQueries;
+import database.UQueries;
 
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -37,9 +38,17 @@ import java.awt.Insets;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+
+import java.awt.Font;
+import java.awt.Cursor;
+
 
 public class ClientEntry extends JFrame {
 	
@@ -55,7 +64,6 @@ public class ClientEntry extends JFrame {
 	private JTextField textJob;
 	private JTextField textSalary;
 	private JTextField textCID;
-	private JTextField textDate;
 	private JLabel noteName;
 	private JLabel noteAge;
 	private JLabel noteAddress;
@@ -79,6 +87,8 @@ public class ClientEntry extends JFrame {
 	private JComboBox boxYear;
 	Date date=new Date();
 	int TodayYear = Integer.parseInt(String.valueOf(date).substring(24));
+	private JTextField textField;
+	private JLabel lblNewLabel_1;
 	/**
 	 * Launch the application.
 	 */
@@ -97,7 +107,6 @@ public class ClientEntry extends JFrame {
 	
 	public void AutoID() {
 		 textCID.setText(myDbConnection.getAutoID("clientID", "Client", "CL-"));
-		 textDate.setText(myDate.getdate());
 	}
 
 	public boolean check() {
@@ -214,6 +223,17 @@ public class ClientEntry extends JFrame {
 	public ClientEntry() {
 		initialize();
 		AutoID();
+		SetNRCcodeData();
+	}
+	
+	public void SetNRCcodeData() {
+		Vector<String> code = new Vector<>();
+		code.clear();
+		boxN2.removeAll();
+		code = msql.getCodefromNo(boxN1.getSelectedItem().toString());
+		for (String data : code) {
+			boxN2.add(data);
+		}
 	}
 	
 	public void Clear() {
@@ -236,7 +256,7 @@ public class ClientEntry extends JFrame {
 	
 	public void initialize() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(450, 100, 560, 445);
+		setBounds(450, 100, 681, 454);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -247,14 +267,17 @@ public class ClientEntry extends JFrame {
 		panel.setLayout(new MigLayout("", "[52.00][52px][28px,grow][5px][4px][5px][13px][grow][17px][34px][46.00,grow][][5px][57.00px][13.00px][31px][5px][52px][5px][25px][5px][34.00px,left][34.00px,left][62px,left]", "[][30][30][30][30][30][30][30][30][30]"));
 		
 		JLabel label = new JLabel("NAME");
+		label.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(label, "cell 1 1,grow");
 		
 		noteName = new JLabel("* Required");
+		noteName.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteName.setForeground(Color.RED);
 		noteName.setBackground(Color.WHITE);
 		noteName.setVisible(false);
 		
 		textName = new JTextField();
+		textName.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textName.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -266,32 +289,46 @@ public class ClientEntry extends JFrame {
 		panel.add(noteName, "cell 19 1 4 1,alignx left,growy");
 		
 		JLabel label_1 = new JLabel("NRC");
+		label_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(label_1, "cell 1 2,alignx left,growy");
 		
 		boxN1 = new Choice();
+
+		boxN1.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				SetNRCcodeData();
+			}
+		});
+
+		boxN1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
 		boxN1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				noteNRC.setVisible(false);
 			}
 		});
-		boxN1.addItem("12");
+		for (int i = 1; i <= 12; i++) {
+			boxN1.addItem(String.valueOf(i));
+		}
+		
 		panel.add(boxN1, "cell 2 2,alignx left,aligny top");
 		
 		JLabel label_2 = new JLabel("/");
 		panel.add(label_2, "cell 4 2,alignx left,growy");
 		
 		boxN2 = new Choice();
+		boxN2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxN2.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
 				noteNRC.setVisible(false);
 			}
 		});
-		boxN2.addItem("DAGARA");
 		panel.add(boxN2, "cell 6 2 4 1,growx,aligny top");
 		
 		boxN3 = new Choice();
+		boxN3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxN3.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -302,6 +339,7 @@ public class ClientEntry extends JFrame {
 		panel.add(boxN3, "cell 10 2,growx,aligny top");
 		
 		boxNo = new JTextField();
+		boxNo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxNo.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -312,20 +350,24 @@ public class ClientEntry extends JFrame {
 		panel.add(boxNo, "cell 11 2 7 1,grow");
 		
 		noteNRC = new JLabel("* Invalid");
+		noteNRC.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteNRC.setForeground(Color.RED);
 		noteNRC.setBackground(Color.WHITE);
 		noteNRC.setVisible(false);
 		panel.add(noteNRC, "cell 18 2 5 1,alignx left,growy");
 		
 		JLabel lblDateOfBirth = new JLabel("Date of Birth");
+		lblDateOfBirth.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(lblDateOfBirth, "cell 1 3,alignx left,growy");
 		
 		noteAge = new JLabel("* Required");
+		noteAge.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteAge.setForeground(Color.RED);
 		noteAge.setBackground(Color.WHITE);
 		noteAge.setVisible(false);
 		
 		boxDay = new JComboBox();
+		boxDay.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxDay.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -339,6 +381,7 @@ public class ClientEntry extends JFrame {
 		}
 		
 		boxMonth = new JComboBox();
+		boxMonth.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxMonth.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -361,6 +404,7 @@ public class ClientEntry extends JFrame {
 		boxMonth.addItem("DECEMBER");
 		
 		boxYear = new JComboBox();
+		boxYear.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxYear.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -375,9 +419,11 @@ public class ClientEntry extends JFrame {
 		}
 		
 		JLabel label_4 = new JLabel("ADDRESS");
+		label_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(label_4, "cell 1 4,alignx left,growy");
 		
 		textAddress = new JTextField();
+		textAddress.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textAddress.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -388,15 +434,18 @@ public class ClientEntry extends JFrame {
 		panel.add(textAddress, "cell 2 4 18 1,grow");
 		
 		noteAddress = new JLabel("* Required");
+		noteAddress.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteAddress.setForeground(Color.RED);
 		noteAddress.setBackground(Color.WHITE);
 		noteAddress.setVisible(false);
 		panel.add(noteAddress, "cell 21 4 2 1,alignx center,growy");
 		
 		JLabel label_7 = new JLabel("CITY");
+		label_7.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(label_7, "cell 1 5,alignx left,growy");
 		
 		textCity = new JTextField();
+		textCity.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textCity.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -407,15 +456,18 @@ public class ClientEntry extends JFrame {
 		panel.add(textCity, "cell 2 5 6 1,grow");
 		
 		noteCity = new JLabel("* Required");
+		noteCity.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteCity.setForeground(Color.RED);
 		noteCity.setBackground(Color.WHITE);
 		noteCity.setVisible(false);
 		panel.add(noteCity, "cell 10 5 2 1,alignx center,growy");
 		
 		JLabel label_5 = new JLabel("STATE");
+		label_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(label_5, "cell 13 5 3 1,alignx left,aligny center");
 		
 		textState = new JTextField();
+		textState.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textState.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -426,15 +478,18 @@ public class ClientEntry extends JFrame {
 		panel.add(textState, "cell 16 5 6 1,grow");
 		
 		noteState = new JLabel("* Required");
+		noteState.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteState.setForeground(Color.RED);
 		noteState.setBackground(Color.WHITE);
 		noteState.setVisible(false);
 		panel.add(noteState, "cell 22 5,grow");
 		
 		JLabel label_6 = new JLabel("PHONE NO");
+		label_6.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(label_6, "cell 1 6,alignx left,growy");
 		
 		textPh = new JTextField();
+		textPh.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textPh.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -445,20 +500,24 @@ public class ClientEntry extends JFrame {
 		panel.add(textPh, "cell 2 6 8 1,grow");
 		
 		notePhone = new JLabel("* Required");
+		notePhone.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		notePhone.setForeground(Color.RED);
 		notePhone.setBackground(Color.WHITE);
 		notePhone.setVisible(false);
 		panel.add(notePhone, "cell 10 6 2 1,alignx left,growy");
 		
 		lblHome = new JLabel("HOME");
+		lblHome.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(lblHome, "cell 1 7,alignx left,growy");
 		
 		noteHome = new JLabel("* Required");
+		noteHome.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteHome.setForeground(Color.RED);
 		noteHome.setBackground(Color.WHITE);
 		noteHome.setVisible(false);
 		
 		checkHome = new JCheckBox("Owned");
+		checkHome.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		checkHome.setBackground(Color.WHITE);
 		checkHome.addFocusListener(new FocusAdapter() {
 			@Override
@@ -470,9 +529,11 @@ public class ClientEntry extends JFrame {
 		panel.add(noteHome, "cell 7 7,alignx left,growy");
 		
 		JLabel lblJob = new JLabel("JOB");
+		lblJob.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(lblJob, "cell 1 8,alignx left,growy");
 		
 		textJob = new JTextField();
+		textJob.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textJob.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -483,15 +544,18 @@ public class ClientEntry extends JFrame {
 		panel.add(textJob, "cell 2 8 14 1,grow");
 		
 		noteJob = new JLabel("* Required");
+		noteJob.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteJob.setForeground(Color.RED);
 		noteJob.setBackground(Color.WHITE);
 		noteJob.setVisible(false);
 		panel.add(noteJob, "cell 17 8,alignx left,growy");
 		
 		JLabel lblSalary = new JLabel("SALARY");
+		lblSalary.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel.add(lblSalary, "cell 1 9,alignx left,growy");
 		
 		textSalary = new JTextField();
+		textSalary.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textSalary.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -500,32 +564,38 @@ public class ClientEntry extends JFrame {
 		});
 		textSalary.setColumns(10);
 		panel.add(textSalary, "cell 2 9 8 1,grow");
-		contentPane.setLayout(new MigLayout("", "[524px]", "[36px][297px][34px]"));
+		contentPane.setLayout(new MigLayout("", "[524px]", "[36px][297px][60.00px]"));
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setLayout(new MigLayout("", "[46px][93px][225.00][25.00px][103px]", "[20px]"));
+		panel_1.setLayout(new MigLayout("", "[46px][118.00px][171.00][24.00px][103px][][][][][grow]", "[20px]"));
 		
 		JLabel lblNewLabel = new JLabel("Client ID");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel.setBackground(Color.WHITE);
 		panel_1.add(lblNewLabel, "cell 0 0,growx,aligny center");
 		
-		JLabel lblNewLabel_1 = new JLabel("Date");
-		panel_1.add(lblNewLabel_1, "cell 3 0,growx,aligny center");
-		
 		textCID = new JTextField();
+		textCID.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textCID.setEditable(false);
 		panel_1.add(textCID, "cell 1 0,growx,aligny top");
 		textCID.setColumns(10);
-		
-		textDate = new JTextField();
-		textDate.setEditable(false);
-		panel_1.add(textDate, "cell 4 0,growx,aligny top");
-		textDate.setColumns(10);
 		contentPane.add(panel_1, "cell 0 0,grow");
+		
+		lblNewLabel_1 = new JLabel("Date");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panel_1.add(lblNewLabel_1, "cell 7 0");
+		
+		textField = new JTextField();
+		textField.setText("2020-Sep-08");
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textField.setEditable(false);
+		textField.setColumns(10);
+		panel_1.add(textField, "cell 9 0,growx");
 		contentPane.add(panel, "cell 0 1,grow");
 		
 		noteSalary = new JLabel("* Required");
+		noteSalary.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		noteSalary.setForeground(Color.RED);
 		noteSalary.setBackground(Color.WHITE);
 		noteSalary.setVisible(false);
@@ -533,9 +603,13 @@ public class ClientEntry extends JFrame {
 		
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, "cell 0 2,grow");
-		panel_2.setLayout(new MigLayout("", "[496.00][][]", "[]"));
+		panel_2.setLayout(new MigLayout("", "[496.00][][]", "[77.00]"));
 		
 		JButton button_1 = new JButton("Save");
+		button_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		button_1.setForeground(Color.BLACK);
+		button_1.setBackground(Color.WHITE);
+		button_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean check = check();
@@ -582,6 +656,9 @@ public class ClientEntry extends JFrame {
 		panel_2.add(button_1, "cell 1 0");
 		
 		JButton button = new JButton("Cancel");
+		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		button.setBackground(Color.WHITE);
+		button.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -72,10 +72,11 @@ public class UQueries {
 	}
 	
 	public String getClientNameFormID(String id) {
-		query = "Select Name where clientID = '"+id+"';";
+		query = "Select Name from client where clientID = '"+id+"';";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
+			rs.next();
 			return rs.getString(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -104,6 +105,25 @@ public class UQueries {
 			return true;
 		}
 	}
+	
+	public Vector<String> getCodefromNo(String number) {
+		Vector<String> code = new Vector<>();
+		query = "Select *  from nrc where number = "+number+" order by Code";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				code.add(rs.getString(3));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return code;
+	}
+	
+	
 	
 	//Insert
 	public static boolean InsertData(String tbName, String[] data) {
@@ -149,11 +169,11 @@ public class UQueries {
 
 			while (rs.next()) {
 				strdataitem[0] = rs.getString("GroupId");
-				strdataitem[1] = rs.getString("Leader");
-				strdataitem[2] = rs.getString("Member_1");
-				strdataitem[3] = rs.getString("Member_2");
-				strdataitem[4] = rs.getString("Member_3");
-				strdataitem[5] = rs.getString("Member_4");
+				strdataitem[1] = getClientNameFormID(rs.getString("Leader"));
+				strdataitem[2] = getClientNameFormID(rs.getString("Member_1"));
+				strdataitem[3] = getClientNameFormID(rs.getString("Member_2"));
+				strdataitem[4] = getClientNameFormID(rs.getString("Member_3"));
+				strdataitem[5] = getClientNameFormID(rs.getString("Member_4"));
 				dtm.addRow(strdataitem);
 			}
 			return dtm;
@@ -162,6 +182,24 @@ public class UQueries {
 		}
 		
 		return dtm;
+	}
+	
+	public Vector<String> getClientIDFormGroupID(String GroupID) {
+		Vector<String> clientID = new Vector<>();
+		query = "Select * from clientgroup where groupID='"+GroupID+"'";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				for (int i = 2; i <=6 ; i++) {
+					clientID.add(rs.getString(i));
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return clientID;
 	}
 	
 	

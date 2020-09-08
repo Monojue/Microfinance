@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -96,6 +96,23 @@ public class MyQueries {
 		}
 	}
 	
+	public Vector<String> getCodefromNo(String number) {
+		Vector<String> code = new Vector<>();
+		query = "Select *  from nrc where number = "+number+" order by Code";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				code.add(rs.getString(3));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return code;
+	}
+	
 	//Insert
 	public static boolean InsertData(String tbName, String[] data) {
 	if(tbName.equals(MyString.ClientEntry)) {
@@ -104,6 +121,10 @@ public class MyQueries {
 	}else if (tbName.equals(MyString.GroupEntry)) {
 		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"')";
+	}
+	else if(tbName.equals("loanrequest")) {
+		query = "insert into loanrequest(LoanRequestID,LoanType,Amount,Duration,InterestRate) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Float.parseFloat(data[4])+"')";
 	}
 	
 	try {
