@@ -42,6 +42,8 @@ import java.util.Vector;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import java.awt.Font;
+import java.awt.Cursor;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -293,7 +295,6 @@ public class ClientEntry extends JFrame {
 		panel.add(label_1, "cell 1 2,alignx left,growy");
 		
 		boxN1 = new Choice();
-
 		boxN1.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				SetNRCcodeData();
@@ -301,7 +302,6 @@ public class ClientEntry extends JFrame {
 		});
 
 		boxN1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-
 		boxN1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {

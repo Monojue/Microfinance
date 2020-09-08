@@ -33,6 +33,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JSlider;
 import java.awt.Choice;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.Font;
 
 import java.awt.event.ItemListener;
 import java.util.Vector;
@@ -608,6 +612,7 @@ public class LoanRequestForm extends JFrame {
 	panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 	panel.add(panel_4);
 	panel_4.setLayout(new MigLayout("", "[65px][81.00px,grow][159px][77px]", "[26px][20px][14px][][38.00][][][][23px]"));
+
 	
 	JSlider sliderAmount = new JSlider();
 	sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
@@ -643,50 +648,6 @@ public class LoanRequestForm extends JFrame {
 	panel_4.add(noteAmount, "cell 3 0");
 	noteAmount.setVisible(false);
 	
-
-	JLabel lblNewLabel_2 = new JLabel("Amount(*)");
-	panel_4.add(lblNewLabel_2, "cell 0 0,alignx left,aligny center");
-	
-	LoanAmount = new JTextField();
-	panel_4.add(LoanAmount, "cell 1 0,growx,aligny center");
-	LoanAmount.setColumns(10);
-	
-	JSlider slider_1 = new JSlider();
-	slider_1.setPaintTicks(true);
-	slider_1.setPaintLabels(true);
-	slider_1.setMinorTickSpacing(3);
-	slider_1.setMinimum(6);
-	slider_1.setMaximum(24);
-	slider_1.setMajorTickSpacing(3);
-	slider_1.setSnapToTicks(true);
-	panel_4.add(slider_1, "cell 2 0,alignx center,aligny center");
-	
-	JLabel label_23 = new JLabel("* Require");
-	label_23.setForeground(Color.RED);
-	panel_4.add(label_23, "cell 3 0");
-	
-	JLabel lblNewLabel_3 = new JLabel("Duration(*)");
-	panel_4.add(lblNewLabel_3, "cell 0 1,growx,aligny center");
-	
-	LoanDuration = new JTextField();
-	panel_4.add(LoanDuration, "cell 1 1,growx,aligny center");
-	LoanDuration.setColumns(10);
-	
-	JSlider slider = new JSlider();
-	slider.setPaintTicks(true);
-	slider.setPaintLabels(true);
-	slider.setMinorTickSpacing(3);
-	slider.setMinimum(6);
-	slider.setMaximum(24);
-	slider.setMajorTickSpacing(3);
-	slider.setMinorTickSpacing(3);
-	slider.setSnapToTicks(true);
-	panel_4.add(slider, "cell 2 1,alignx center,aligny center");
-	
-	JLabel label_24 = new JLabel("* Require");
-	label_24.setForeground(Color.RED);
-	panel_4.add(label_24, "cell 3 1");
-
 	JLabel lblNewLabel_2 = new JLabel("Amount");
 	panel_4.add(lblNewLabel_2, "cell 0 1 1 2,alignx left");
 	
@@ -738,7 +699,6 @@ public class LoanRequestForm extends JFrame {
 	textDuration.setEditable(false);
 	textDuration.setColumns(10);
 	panel_4.add(textDuration, "cell 1 4,growx");
-
 	
 	JLabel lblNewLabel_4 = new JLabel("Interest Rate");
 	panel_4.add(lblNewLabel_4, "cell 0 6");
