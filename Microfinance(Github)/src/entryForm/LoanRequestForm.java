@@ -74,6 +74,8 @@ public class LoanRequestForm extends JFrame {
 	private JLabel noteGSalary;
 	private JTextField textGRelationship;
 	private JLabel noteGRelationship;
+	private JLabel noteAmount;
+	private JLabel noteDuration;
 	
 	LoanRequest loanRequest = new LoanRequest();
 	DBConnection myDbConnection = new DBConnection();
@@ -109,6 +111,13 @@ public class LoanRequestForm extends JFrame {
 	}
 	
 	public void createTable() {
+		if(Checking.IsNull(textAmount.getText())) {
+			noteAmount.setVisible(true);
+		}
+		else if (Checking.IsNull(textDuration.getText())) {
+			noteDuration.setVisible(true);
+		}
+		else {
 		DefaultTableModel dtm = new DefaultTableModel(25,5);
 		dtm = Calculation.calculator(Integer.parseInt(textAmount.getText()),Integer.parseInt(textDuration.getText()),2.33);
 		table.setModel(dtm);
@@ -122,7 +131,8 @@ public class LoanRequestForm extends JFrame {
 		table.getColumnModel().getColumn(2).setHeaderValue("Principal");
 		table.getColumnModel().getColumn(3).setHeaderValue("Interest");
 		table.getColumnModel().getColumn(4).setHeaderValue("Installment");
-	}
+		}
+		}
 	
 	public static void setClientData(String id,String name,String NRC,String address,String phno,String DOB,String home,String job,String salary) {
 		textCID.setText(id);
@@ -240,9 +250,20 @@ public class LoanRequestForm extends JFrame {
 			noteGSalary.setVisible(true);
 			return false;
 		}
+		//Check Relationship
 		if (Checking.IsNull(textGRelationship.getText())) {
 			noteGSalary.setText("* Required");
 			noteGSalary.setVisible(true);
+			return false;
+		}
+		//Check Amount
+		if(Checking.IsNull(textAmount.getText())) {
+			noteAmount.setVisible(true);
+			return false;
+		}
+		//Check Duration
+		if (Checking.IsNull(textDuration.getText())) {
+			noteDuration.setVisible(true);
 			return false;
 		}
 		else {
@@ -574,16 +595,19 @@ public class LoanRequestForm extends JFrame {
 	sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			noteAmount.setVisible(false);
 			textAmount.setText(Integer.toString(sliderAmount.getValue()));
 		}
 	});
 	sliderAmount.addMouseListener(new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			noteAmount.setVisible(false);
 			textAmount.setText(Integer.toString(sliderAmount.getValue()));
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			noteAmount.setVisible(false);
 			textAmount.setText(Integer.toString(sliderAmount.getValue()));
 		}
 	});
@@ -596,9 +620,10 @@ public class LoanRequestForm extends JFrame {
 	sliderAmount.setMajorTickSpacing(100000);
 	panel_4.add(sliderAmount, "cell 0 0 3 1");
 	
-	JLabel label_23 = new JLabel("* Require");
-	label_23.setForeground(Color.RED);
-	panel_4.add(label_23, "cell 3 0");
+	noteAmount = new JLabel("* Require");
+	noteAmount.setForeground(Color.RED);
+	panel_4.add(noteAmount, "cell 3 0");
+	noteAmount.setVisible(false);
 	
 	JLabel lblNewLabel_2 = new JLabel("Amount");
 	panel_4.add(lblNewLabel_2, "cell 0 1 1 2,alignx left");
@@ -614,16 +639,19 @@ public class LoanRequestForm extends JFrame {
 	sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			noteDuration.setVisible(false);
 			textDuration.setText(Integer.toString(sliderDuration.getValue()));
 		}
 	});
 	sliderDuration.addMouseListener(new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			noteDuration.setVisible(false);
 			textDuration.setText(Integer.toString(sliderDuration.getValue()));
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			noteDuration.setVisible(false);
 			textDuration.setText(Integer.toString(sliderDuration.getValue()));
 		}
 	});
@@ -636,9 +664,10 @@ public class LoanRequestForm extends JFrame {
 	sliderDuration.setMajorTickSpacing(3);
 	panel_4.add(sliderDuration, "cell 0 3 3 1");
 	
-	JLabel label_24 = new JLabel("* Require");
-	label_24.setForeground(Color.RED);
-	panel_4.add(label_24, "cell 3 3");
+	noteDuration = new JLabel("* Require");
+	noteDuration.setForeground(Color.RED);
+	panel_4.add(noteDuration, "cell 3 3");
+	noteDuration.setVisible(false);
 	
 	JLabel lblNewLabel_3 = new JLabel("Duration");
 	panel_4.add(lblNewLabel_3, "cell 0 4,alignx left");
@@ -694,22 +723,33 @@ public class LoanRequestForm extends JFrame {
 				String NRC = boxGNRC1.getSelectedItem().toString()+"\\"+boxGNRC2.getSelectedItem().toString()
 							 +"("+ boxGNRC3.getSelectedItem().toString()+")" + textGNRC.getText();
 				String Address = textGAddress.getText()+","+textGCity.getText()+","+textGState.getText();
-				String[] st = new String[1];
 				
-					String[] data = new String[8];
-					data[0] = textCID.getText();
-					data[1] = textGName.getText();
-					data[2] = textGJob.getText();
-					data[3] = textGSalary.getText();
-					data[4] = textGRelationship.getText();
-					data[5] = Address;
-					data[6] = textGPhone.getText();
-					data[7] = NRC;
-					boolean update = msql.UpdateData("guarantor", data);
-					if (update) {
-						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					String[] GDetails = new String[8];
+					GDetails[0] = textCID.getText();
+					GDetails[1] = textGName.getText();
+					GDetails[2] = textGJob.getText();
+					GDetails[3] = textGSalary.getText();
+					GDetails[4] = textGRelationship.getText();
+					GDetails[5] = Address;
+					GDetails[6] = textGPhone.getText();
+					GDetails[7] = NRC;
+					boolean update = msql.UpdateData("guarantor", GDetails);
+					
+					String[] LoanRequest = new String[5];
+					LoanRequest[0] = textID.getText();
+					LoanRequest[1] = "Individual";
+					LoanRequest[2] = textAmount.getText();
+					LoanRequest[3] = textDuration.getText();
+					LoanRequest[4] = "2.33";
+					boolean insert = msql.InsertData("loanrequest", LoanRequest);
+					if (update && insert) {
+						JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else if(!update) {
+						JOptionPane.showMessageDialog(null, "Failed to Save Guarantor Information Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else if (!insert){
+						JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 		}
