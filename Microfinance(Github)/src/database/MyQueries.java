@@ -124,6 +124,14 @@ public class MyQueries {
 		query = "insert into loanrequest(LoanRequestID,LoanType,Amount,Duration,InterestRate) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Float.parseFloat(data[4])+"')";
 	}
+	else if(tbName.equals("Iloansetting")) {
+		query = "insert into loansetting(ID,Duration,Intervall,InterestRate,ServiceRate,Date) "
+				+ "values('"+"Ls-1"+"','"+24+"','"+3+"','"+2.33+"','"+1.00+"','"+data[0]+"')";
+	}
+	else if(tbName.equals("Gloansetting")) {
+		query = "insert into loansetting(ID,Duration,Intervall,InterestRate,ServiceRate,Date) "
+				+ "values('"+"Ls-2"+"','"+24+"','"+3+"','"+2.33+"','"+1.00+"','"+data[0]+"')";
+	}
 	
 	try {
 		stmt = con.createStatement();
@@ -144,6 +152,9 @@ public class MyQueries {
 	public static boolean UpdateData(String tbName, String[] data) {
 	if(tbName.equals("guarantor")) {
 		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
+	}
+	else if(tbName.equals("Iloansetting")) {
+		query = "update loansetting set Duration= '"+Integer.parseInt(data[0])+"',Intervall= '"+Integer.parseInt(data[1])+"' ,InterestRate= '"+Float.parseFloat(data[2])+"' ,ServiceRate= '"+Float.parseFloat(data[3])+"' ,Date= '"+data[4]+"' where ID= '"+"Ls-1"+"'";
 	}
 	try {
 		stmt = con.createStatement();
@@ -174,10 +185,27 @@ public class MyQueries {
 			return data;
 		}
 		catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
 			return null;
 		}
 	}
+	public String[] GetGroupLoanSetting() {
+		try {
+			String data[] = new String[4];
+			stmt = con.createStatement();
+			query = "select * from loansetting where ID='"+"Ls-2"+"'";
+			rs = stmt.executeQuery(query);
+			rs.next();
+			data[0] = rs.getString(2);
+			data[1] = rs.getString(3);
+			data[2] = rs.getString(4);
+			data[3] = rs.getString(5);
+			return data;
+		}
+		catch(SQLException e) {
+			return null;
+		}
+	}
+///////////////////// Get Loan Setting End ////////////////////////
 	
 ///////////////////// Group Query Start ////////////////////////
 	
