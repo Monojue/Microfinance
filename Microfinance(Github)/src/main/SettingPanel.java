@@ -36,7 +36,7 @@ public class SettingPanel extends JPanel {
 	private JTextField Irate;
 	private JTextField Ifees;
 	private JTextField Gduration;
-	private JTextField GInterval;
+	private JTextField Ginterval;
 	private JTextField Grate;
 	private JTextField Gfees;
 	private AbstractButton IEdit;
@@ -44,6 +44,7 @@ public class SettingPanel extends JPanel {
 	private JButton GEdit;
 	private JButton Gcancel;
 	private JLabel noteISetting;
+	private JLabel noteGSetting;
 	
 	MyQueries msql = new MyQueries();
 	/**
@@ -77,7 +78,7 @@ public class SettingPanel extends JPanel {
 		try {
 		String[] IData = msql.GetGroupLoanSetting();
 		Gduration.setText(IData[0]);
-		GInterval.setText(IData[1]);
+		Ginterval.setText(IData[1]);
 		Grate.setText(IData[2]);
 		Gfees.setText(IData[3]);
 		}
@@ -158,13 +159,81 @@ public class SettingPanel extends JPanel {
 			return true;
 	}
 	
+	public boolean Gcheck() {
+		//Duration
+		if(Checking.IsNull(Gduration.getText())) {
+			noteGSetting.setText("* Duration must be filled");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Checking.IsLetter(Gduration.getText())) {
+			noteGSetting.setText("* Duration must be number only");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Integer.parseInt(Gduration.getText())<9 || Integer.parseInt(Gduration.getText())>60) {
+			noteGSetting.setText("* Duration must be between 9 and 60");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		//Interval
+		if(Checking.IsNull(Ginterval.getText())) {
+			noteGSetting.setText("* Interval must be filled");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Checking.IsLetter(Ginterval.getText())) {
+			noteGSetting.setText("* Interval must be number only");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Integer.parseInt(Ginterval.getText())<1 || Integer.parseInt(Ginterval.getText())>100) {
+			noteGSetting.setText("* Interval must be between 1 and 100");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		//Interest Rate
+		if(Checking.IsNull(Grate.getText())) {
+			noteGSetting.setText("* Interest Rate must be filled");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Checking.IsLetter(Grate.getText())) {
+			noteGSetting.setText("* Interest Rate must be number only");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Float.parseFloat(Grate.getText())<1 || Float.parseFloat(Grate.getText())>30) {
+			noteGSetting.setText("* Interest Rate must be between 1 and 30");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		//Service Fee
+		if(Checking.IsNull(Gfees.getText())) {
+			noteGSetting.setText("* Service Fee must be filled");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Checking.IsLetter(Gfees.getText())) {
+			noteGSetting.setText("* Service Fee must be number only");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+		if(Float.parseFloat(Gfees.getText())<1 || Float.parseFloat(Gfees.getText())>30) {
+			noteGSetting.setText("* Service Fee must be between 1 and 30");
+			noteGSetting.setVisible(true);
+			return false;
+		}
+			return true;
+	}
+	
 	public void fieldDisable() {
 		Iduration.setEditable(false);
 		Iinterval.setEditable(false);
 		Irate.setEditable(false);
 		Ifees.setEditable(false);
 		Gduration.setEditable(false);
-		GInterval.setEditable(false);
+		Ginterval.setEditable(false);
 		Grate.setEditable(false);
 		Gfees.setEditable(false);
 		Icancel.setVisible(false);
@@ -184,7 +253,7 @@ public class SettingPanel extends JPanel {
 	
 	public void GroupfieldEnable() {
 		Gduration.setEditable(true);
-		GInterval.setEditable(true);
+		Ginterval.setEditable(true);
 		Grate.setEditable(true);
 		Gfees.setEditable(true);
 		GEdit.setText("Save");
@@ -263,10 +332,10 @@ public class SettingPanel extends JPanel {
 		JLabel label_1 = new JLabel("Interval");
 		panel.add(label_1, "cell 11 4");
 		
-		GInterval = new JTextField();
-		GInterval.setEditable(false);
-		GInterval.setColumns(10);
-		panel.add(GInterval, "cell 13 4 5 1,growx");
+		Ginterval = new JTextField();
+		Ginterval.setEditable(false);
+		Ginterval.setColumns(10);
+		panel.add(Ginterval, "cell 13 4 5 1,growx");
 		
 		JLabel label_5 = new JLabel("Month");
 		panel.add(label_5, "cell 18 4");
@@ -332,8 +401,7 @@ public class SettingPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if(IEdit.getText()=="Edit") {
 				IndividualfieldEnable();
-				}
-				
+				}				
 				else if(IEdit.getText()=="Save") {
 					boolean check = Icheck();
 					if(check) {
@@ -365,7 +433,7 @@ public class SettingPanel extends JPanel {
 		panel.add(noteISetting, "cell 1 7 7 1");
 		noteISetting.setVisible(false);
 		
-		JLabel noteGSetting = new JLabel("* Error");
+		noteGSetting = new JLabel("* Error");
 		noteGSetting.setForeground(Color.RED);
 		panel.add(noteGSetting, "cell 11 7 7 1");
 		noteGSetting.setVisible(false);
@@ -384,7 +452,32 @@ public class SettingPanel extends JPanel {
 		GEdit = new JButton("Edit");
 		GEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(GEdit.getText()=="Edit") {
 				GroupfieldEnable();
+				}				
+				else if(GEdit.getText()=="Save") {
+					boolean check = Gcheck();
+					if(check) {
+						String[] GNewSetting = new String[5];
+						GNewSetting[0] = Gduration.getText();
+						GNewSetting[1] = Ginterval.getText();
+						GNewSetting[2] = Grate.getText();
+						GNewSetting[3] = Gfees.getText();
+						GNewSetting[4] = java.time.LocalDate.now().toString();
+						boolean update = msql.UpdateData("Gloansetting", GNewSetting);
+						if(update) {
+							fieldDisable();
+							JOptionPane.showMessageDialog(null, "Group Loan Setting is Updated!","Save Sucessfully!",JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							GroupfieldEnable();
+							JOptionPane.showMessageDialog(null, "Failed to Update new Individual Setting!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					else if(!check) {
+						GroupfieldEnable();
+					}
+				}
 			}
 		});
 		panel.add(GEdit, "cell 11 8,growx");
@@ -393,6 +486,7 @@ public class SettingPanel extends JPanel {
 		Gcancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				fieldDisable();
+				GetGData();
 			}
 		});
 		panel.add(Gcancel, "cell 12 8 3 1");
