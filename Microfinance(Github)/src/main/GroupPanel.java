@@ -12,6 +12,7 @@ import javax.swing.border.LineBorder;
 
 import entryForm.GroupEntry;
 import net.miginfocom.swing.MigLayout;
+import tool.MyString;
 
 import java.awt.Color;
 import javax.swing.JSeparator;
@@ -19,17 +20,38 @@ import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.SoftBevelBorder;
+
+import database.UQueries;
+
 import javax.swing.border.BevelBorder;
 
 public class GroupPanel extends JPanel {
 
 	private JTextField textField;
 	private JTable table;
-
+	private UQueries msql = new UQueries();
 	/**
 	 * Create the panel.
 	 */
+	
+	
+
 	public GroupPanel() {
+		Initialize();
+		createTable();
+	}
+	
+	public void createTable() {
+		table.setModel(msql.getAllGroup());
+		table.getColumnModel().getColumn(0).setPreferredWidth(200);
+		table.getColumnModel().getColumn(1).setPreferredWidth(200);
+		table.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table.getColumnModel().getColumn(3).setPreferredWidth(200);
+		table.getColumnModel().getColumn(4).setPreferredWidth(200);
+		table.getColumnModel().getColumn(5).setPreferredWidth(200);
+	
+	}
+	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
 		setLayout(null);

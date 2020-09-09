@@ -5,11 +5,15 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
+import database.MyQueries;
+import database.UQueries;
 import entryForm.ClientEntry;
 
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import net.miginfocom.swing.MigLayout;
+import tool.MyString;
+
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -23,10 +27,32 @@ public class ClientPanel extends JPanel {
 	private JTextField textField;
 	private JTable table;
 	private JTextField test;
+	UQueries msql = new UQueries();
 	/**
 	 * Create the panel.
 	 */
+	
+	
+
 	public ClientPanel() {
+		Initialize();
+		createTable();
+	}
+	
+	public void createTable() {
+			table.setModel(msql.getAllClient());
+			table.getColumnModel().getColumn(0).setPreferredWidth(100);
+			table.getColumnModel().getColumn(1).setPreferredWidth(150);
+			table.getColumnModel().getColumn(2).setPreferredWidth(200);
+			table.getColumnModel().getColumn(3).setPreferredWidth(250);
+			table.getColumnModel().getColumn(4).setPreferredWidth(100);
+			table.getColumnModel().getColumn(5).setPreferredWidth(100);
+			table.getColumnModel().getColumn(6).setPreferredWidth(50);
+			table.getColumnModel().getColumn(7).setPreferredWidth(100);
+			table.getColumnModel().getColumn(7).setPreferredWidth(100);
+	}
+	
+	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
 		setLayout(null);

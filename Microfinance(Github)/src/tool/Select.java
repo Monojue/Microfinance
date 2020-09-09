@@ -23,6 +23,8 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ButtonGroup;
+import java.awt.Color;
 
 public class Select extends JFrame {
 
@@ -34,6 +36,8 @@ public class Select extends JFrame {
 	DefaultTableModel dtm = new DefaultTableModel();
 	UQueries msql = new UQueries();
 	String form;
+	private final ButtonGroup radioGroup = new ButtonGroup();
+	private JLabel lblError;
 	/**
 	 * Launch the application.
 	 */
@@ -69,26 +73,32 @@ public class Select extends JFrame {
 			table.setModel(msql.getAllClient());
 			table.getColumnModel().getColumn(0).setPreferredWidth(100);
 			table.getColumnModel().getColumn(1).setPreferredWidth(150);
-			table.getColumnModel().getColumn(2).setPreferredWidth(120);
+			table.getColumnModel().getColumn(2).setPreferredWidth(200);
 			table.getColumnModel().getColumn(3).setPreferredWidth(250);
 			table.getColumnModel().getColumn(4).setPreferredWidth(100);
 			table.getColumnModel().getColumn(5).setPreferredWidth(100);
-			table.getColumnModel().getColumn(6).setPreferredWidth(100);
+			table.getColumnModel().getColumn(6).setPreferredWidth(50);
+			table.getColumnModel().getColumn(7).setPreferredWidth(100);
 			table.getColumnModel().getColumn(7).setPreferredWidth(100);
 		}else if (FormType.equals(MyString.Group)) {
 			table.setModel(msql.getAllGroup());
-			table.getColumnModel().getColumn(0).setPreferredWidth(100);
-			table.getColumnModel().getColumn(1).setPreferredWidth(150);
-			table.getColumnModel().getColumn(2).setPreferredWidth(120);
-			table.getColumnModel().getColumn(3).setPreferredWidth(250);
-			table.getColumnModel().getColumn(4).setPreferredWidth(100);
-			table.getColumnModel().getColumn(5).setPreferredWidth(100);
+			table.getColumnModel().getColumn(0).setPreferredWidth(200);
+			table.getColumnModel().getColumn(1).setPreferredWidth(200);
+			table.getColumnModel().getColumn(2).setPreferredWidth(200);
+			table.getColumnModel().getColumn(3).setPreferredWidth(200);
+			table.getColumnModel().getColumn(4).setPreferredWidth(200);
+			table.getColumnModel().getColumn(5).setPreferredWidth(200);
 		}
 		
 	}
 	
 	public String gettableData(int row) {
 		return table.getValueAt(table.getSelectedRow(),row).toString();
+	}
+	
+	public void showError(String error) {
+		lblError.setText(error);
+		lblError.setVisible(true);
 	}
 	
 	public void initialize() {
@@ -102,15 +112,18 @@ public class Select extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 11, 904, 36);
 		contentPane.add(panel);
-		panel.setLayout(new MigLayout("", "[96.00px][109px][109px][143px][89px]", "[23px]"));
+		panel.setLayout(new MigLayout("", "[96.00px][109px][109px][143px][89px][130.00]", "[23px]"));
 		
 		JLabel lblNewLabel = new JLabel("Search With");
 		panel.add(lblNewLabel, "cell 0 0,growx,aligny center");
 		
 		JRadioButton RadioID = new JRadioButton("ID");
+		RadioID.setSelected(true);
+		radioGroup.add(RadioID);
 		panel.add(RadioID, "cell 1 0,growx,aligny top");
 		
 		JRadioButton RadioName = new JRadioButton("Name");
+		radioGroup.add(RadioName);
 		panel.add(RadioName, "cell 2 0,growx,aligny top");
 		
 		if (FormType.equals(MyString.One)) {
@@ -131,10 +144,45 @@ public class Select extends JFrame {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				textSearch.setText(FormType);
+				
+				
+				if (radioGroup.isSelected(RadioID.getModel())) {
+					if (textSearch.getText().equals("")) {
+						showError("Please Type Client ID To Search");
+					}else {
+						table.removeAll();
+						table.setModel(msql.getClientFormID("CL-"+textSearch.getText().trim()));;
+						table.getColumnModel().getColumn(0).setPreferredWidth(100);
+						table.getColumnModel().getColumn(1).setPreferredWidth(150);
+						table.getColumnModel().getColumn(2).setPreferredWidth(200);
+						table.getColumnModel().getColumn(3).setPreferredWidth(250);
+						table.getColumnModel().getColumn(4).setPreferredWidth(100);
+						table.getColumnModel().getColumn(5).setPreferredWidth(100);
+						table.getColumnModel().getColumn(6).setPreferredWidth(50);
+						table.getColumnModel().getColumn(7).setPreferredWidth(100);
+						table.getColumnModel().getColumn(7).setPreferredWidth(100);
+					}
+				}else if (radioGroup.isSelected(RadioName.getModel())) {
+					if (textSearch.getText().equals("")) {
+						showError("Please Type Client Name To Search");
+					}else {
+						
+						table.getColumnModel().getColumn(0).setPreferredWidth(200);
+						table.getColumnModel().getColumn(1).setPreferredWidth(200);
+						table.getColumnModel().getColumn(2).setPreferredWidth(200);
+						table.getColumnModel().getColumn(3).setPreferredWidth(200);
+						table.getColumnModel().getColumn(4).setPreferredWidth(200);
+						table.getColumnModel().getColumn(5).setPreferredWidth(200);
+					}
+				}
 			}
 		});
 		panel.add(btnSearch, "cell 4 0");
+		
+		lblError = new JLabel("New label");
+		lblError.setForeground(Color.RED);
+		lblError.setVisible(false);
+		panel.add(lblError, "cell 5 0");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 58, 800, 534);

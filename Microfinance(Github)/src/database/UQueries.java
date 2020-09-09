@@ -19,6 +19,7 @@ public class UQueries {
 	static Statement stmt;
 	static String query,query1;
 	ResultSet rs;
+	DefaultTableModel dtm = new DefaultTableModel();
 	DBConnection connect = new DBConnection();
 	
 	public UQueries() {
@@ -34,23 +35,33 @@ public class UQueries {
 
 	}
 	
+	public void cleardtm() {
+		if (dtm.getRowCount() > 0) {
+		    for (int i = dtm.getRowCount() - 1; i > -1; i--) {
+		    	dtm.removeRow(i);
+		    }
+		}
+	}
 ///////////////////// Client Query Start ///////////////////////
 	public DefaultTableModel getAllClient() {
-		DefaultTableModel dtm = new DefaultTableModel();
+		
 		String strdataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
 			String str ="Select * from Client";
 			ResultSet rs = stmt.executeQuery(str);
-			dtm.addColumn("ClientID");
-			dtm.addColumn("Name");
-			dtm.addColumn("NRC");
-			dtm.addColumn("Address");
-			dtm.addColumn("Phone");
-			dtm.addColumn("DateOfBirth");
-			dtm.addColumn("Home");
-			dtm.addColumn("Job");
-			dtm.addColumn("Salary");
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("ClientID");
+				dtm.addColumn("Name");
+				dtm.addColumn("NRC");
+				dtm.addColumn("Address");
+				dtm.addColumn("Phone");
+				dtm.addColumn("DateOfBirth");
+				dtm.addColumn("Home");
+				dtm.addColumn("Job");
+				dtm.addColumn("Salary");
+			}
 			while (rs.next()) {
 				strdataitem[0] = rs.getString("ClientID");
 				strdataitem[1] = rs.getString("Name");
@@ -81,9 +92,44 @@ public class UQueries {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-		return null;
+	}
+	public DefaultTableModel getClientFormID(String Id) {
+		dtm= new DefaultTableModel();
+		query="Select * from client where clientID= '"+Id+"'";
+		String strdataitem[]= new String[9];
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+				dtm.addColumn("ClientID");
+				dtm.addColumn("Name");
+				dtm.addColumn("NRC");
+				dtm.addColumn("Address");
+				dtm.addColumn("Phone");
+				dtm.addColumn("DateOfBirth");
+				dtm.addColumn("Home");
+				dtm.addColumn("Job");
+				dtm.addColumn("Salary");
+			while (rs.next()) {
+				strdataitem[0] = rs.getString("ClientID");
+				strdataitem[1] = rs.getString("Name");
+				strdataitem[2] = rs.getString("NRC");
+				strdataitem[3] = rs.getString("Address");
+				strdataitem[4] = rs.getString("Phone");
+				strdataitem[5] = rs.getString("DateOfBirth");
+				strdataitem[6] = rs.getString("Home");
+				strdataitem[7] = rs.getString("Job");
+				strdataitem[8] = rs.getString("Salary");
+				dtm.addRow(strdataitem);
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
 		
+		return dtm;
 	}
 	
 ///////////////////// Client Query End /////////////////////////
@@ -153,7 +199,6 @@ public class UQueries {
 ///////////////////// Group Query Start ////////////////////////
 	
 	public DefaultTableModel getAllGroup() {
-		DefaultTableModel dtm = new DefaultTableModel();
 		String strdataitem[]= new String[6];
 		try {
 			con=DBConnection.GetMySQLConnection();
