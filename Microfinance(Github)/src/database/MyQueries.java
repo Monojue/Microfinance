@@ -73,11 +73,9 @@ public class MyQueries {
 		return null;
 		
 	}
-	
-	
-	
+
 ///////////////////// Client Query End /////////////////////////
-		//Duplicate Method
+	//Duplicate Method
 	public boolean IsDuplicate(String tbName, String[] data) {
 		if(tbName.equals("client")) {
 			query = "select * from client where NRC='"+data[0]+"'";
@@ -159,7 +157,28 @@ public class MyQueries {
 		e.printStackTrace();
 		return false;
 	}
-	}	
+	}
+	
+/////////////////Get Loan Setting////////////////////////////////////
+	public String[] GetIndividualLoanSetting() {
+		try {
+			String data[] = new String[4];
+			stmt = con.createStatement();
+			query = "select * from loansetting where ID='"+"Ls-1"+"'";
+			rs = stmt.executeQuery(query);
+			rs.next();
+			data[0] = rs.getString(2);
+			data[1] = rs.getString(3);
+			data[2] = rs.getString(4);
+			data[3] = rs.getString(5);
+			return data;
+		}
+		catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return null;
+		}
+	}
+	
 ///////////////////// Group Query Start ////////////////////////
 	
 	
