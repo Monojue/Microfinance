@@ -8,8 +8,9 @@ public class Calculation {
 	public static DefaultTableModel calculator(int amount, int duration, double rate) {
 		int principal;
 		int interest;
+		int TotalPrincipal=0 ;int TotalInterest =0;int TotalInstallment = 0;
 		principal = Math.round(amount/duration);
-		DefaultTableModel dtm = new DefaultTableModel(duration,5);
+		DefaultTableModel dtm = new DefaultTableModel(duration+1,5);
 		for (int i = 0; i < duration; i++) {
 			interest = (int) Math.round((amount*rate)/100);
 			dtm.setValueAt(String.valueOf(i+1), i, 0);
@@ -18,7 +19,15 @@ public class Calculation {
 			dtm.setValueAt(String.valueOf(interest), i, 3);
 			dtm.setValueAt(String.valueOf(principal+interest), i, 4);
 			amount = amount - principal;
+			TotalPrincipal = TotalPrincipal + principal;
+			TotalInterest = TotalInterest + interest;
+			TotalInstallment = TotalInstallment + principal+interest;
 		}
+		int TotalRows = dtm.getRowCount()-1;
+		dtm.setValueAt("Total", TotalRows, 1);
+		dtm.setValueAt(String.valueOf(TotalPrincipal), TotalRows, 2);
+		dtm.setValueAt(String.valueOf(TotalInterest), TotalRows, 3);
+		dtm.setValueAt(String.valueOf(TotalInstallment), TotalRows, 4);
 		return dtm;
 	}
 	
