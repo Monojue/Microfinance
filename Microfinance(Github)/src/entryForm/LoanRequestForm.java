@@ -86,6 +86,8 @@ public class LoanRequestForm extends JFrame {
 	private JLabel noteGRelationship;
 	private JLabel noteAmount;
 	private JLabel noteDuration;
+	private JLabel lblRate;
+	private JLabel lblFees;
 	
 	LoanRequest loanRequest = new LoanRequest();
 	DBConnection myDbConnection = new DBConnection();
@@ -97,6 +99,8 @@ public class LoanRequestForm extends JFrame {
 	private JTable table;
 	private JLabel lblNewLabel_6;
 	private JLabel lblMonth;
+	private int Duration,Interval;
+	private float Rate,Fees;
 	/**
 	 * Launch the application.
 	 */
@@ -123,10 +127,29 @@ public class LoanRequestForm extends JFrame {
 		}
 	}
 	public LoanRequestForm() {
+		GetILoanSetting();
 		initialize();
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
 		SetNRCcodeData();
+	}
+	
+	//Get Individual Loan Setting
+	public void GetILoanSetting() {
+		try {
+			String[] IData = msql.GetIndividualLoanSetting();
+			Duration = Integer.parseInt(IData[0]);
+			Interval = Integer.parseInt(IData[1]);
+			Rate = Float.parseFloat(IData[2]);
+			Fees = Float.parseFloat(IData[3]);
+			}
+			catch(NullPointerException e) {
+				String[] data = new String[1];
+				data[0] = java.time.LocalDate.now().toString();
+				System.out.println(data[0]);
+				msql.InsertData("Iloansetting", data);
+				GetILoanSetting();
+			}
 	}
 	
 	public void createTable() {
@@ -137,8 +160,8 @@ public class LoanRequestForm extends JFrame {
 			noteDuration.setVisible(true);
 		}
 		else {
-		DefaultTableModel dtm = new DefaultTableModel(25,5);
-		dtm = Calculation.calculator(Integer.parseInt(textAmount.getText()),Integer.parseInt(textDuration.getText()),2.33);
+		DefaultTableModel dtm = new DefaultTableModel(Integer.parseInt(textDuration.getText())+2,5);
+		dtm = Calculation.calculator(Integer.parseInt(textAmount.getText()),Integer.parseInt(textDuration.getText()),Rate);
 		table.setModel(dtm);
 		table.getColumnModel().getColumn(0).setPreferredWidth(40);
 		table.getColumnModel().getColumn(1).setPreferredWidth(130);
@@ -686,10 +709,10 @@ public class LoanRequestForm extends JFrame {
 	sliderDuration.setSnapToTicks(true);
 	sliderDuration.setPaintTicks(true);
 	sliderDuration.setPaintLabels(true);
-	sliderDuration.setMinorTickSpacing(3);
+	sliderDuration.setMinorTickSpacing(Interval);
 	sliderDuration.setMinimum(6);
-	sliderDuration.setMaximum(24);
-	sliderDuration.setMajorTickSpacing(3);
+	sliderDuration.setMaximum(Duration);
+	sliderDuration.setMajorTickSpacing(Interval);
 	panel_4.add(sliderDuration, "cell 1 3 3 1");
 	
 	noteDuration = new JLabel("* Require");
@@ -711,14 +734,16 @@ public class LoanRequestForm extends JFrame {
 	JLabel lblNewLabel_4 = new JLabel("Interest Rate");
 	panel_4.add(lblNewLabel_4, "cell 1 6");
 	
-	JLabel lblRate = new JLabel("Rate%");
+	lblRate = new JLabel(Rate + "%");
+	lblRate.setForeground(Color.BLUE);
 	panel_4.add(lblRate, "cell 2 6");
 	
 	JLabel label_25 = new JLabel("Service Fees");
 	panel_4.add(label_25, "cell 1 7");
 	
-	JLabel label_26 = new JLabel("Rate%");
-	panel_4.add(label_26, "cell 2 7");
+	lblFees = new JLabel(Fees + "%");
+	lblFees.setForeground(Color.BLUE);
+	panel_4.add(lblFees, "cell 2 7");
 	
 	JButton btnCalculate = new JButton("Calculate");
 	btnCalculate.addActionListener(new ActionListener() {
