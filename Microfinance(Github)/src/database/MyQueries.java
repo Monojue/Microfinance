@@ -156,6 +156,9 @@ public class MyQueries {
 	else if(tbName.equals("Iloansetting")) {
 		query = "update loansetting set Duration= '"+Integer.parseInt(data[0])+"',Intervall= '"+Integer.parseInt(data[1])+"' ,InterestRate= '"+Float.parseFloat(data[2])+"' ,ServiceRate= '"+Float.parseFloat(data[3])+"' ,Date= '"+data[4]+"' where ID= '"+"Ls-1"+"'";
 	}
+	else if(tbName.equals("Gloansetting")) {
+		query = "update loansetting set Duration= '"+Integer.parseInt(data[0])+"',Intervall= '"+Integer.parseInt(data[1])+"' ,InterestRate= '"+Float.parseFloat(data[2])+"' ,ServiceRate= '"+Float.parseFloat(data[3])+"' ,Date= '"+data[4]+"' where ID= '"+"Ls-2"+"'";
+	}
 	try {
 		stmt = con.createStatement();
 		if(stmt.executeUpdate(query)==1) {
