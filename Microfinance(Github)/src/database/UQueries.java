@@ -106,9 +106,14 @@ public class UQueries {
 ///////////////////// Client Query End /////////////////////////
 		//Duplicate Method
 	public boolean IsDuplicate(String tbName, String[] data) {
-		if(tbName.equals("client")) {
+		if(tbName.equals(MyString.ClientEntry)) {
 			query = "select * from client where NRC='"+data[0]+"'";
-		}		
+		}
+//		else if (tbName.equals(MyString.GroupEntry)) {
+//			query = "select * from clientgroup where leader='"+data[0]+"', Member_1='"+data[1]+"' and Member_2='"+data[2]
+//					+"' and Member_3='"+data[3]+"', Member_4='"+data[4]+"'";
+//					
+//		}
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);

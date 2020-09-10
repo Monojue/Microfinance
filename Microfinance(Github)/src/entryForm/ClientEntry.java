@@ -625,7 +625,7 @@ public class ClientEntry extends JFrame {
 					}
 					String[] st = new String[1];
 					st[0] = NRC;
-					boolean dup = msql.IsDuplicate("client", st);
+					boolean dup = msql.IsDuplicate(MyString.ClientEntry, st);
 					if(dup) {
 						noteNRC.setText("* Already Existed");
 						noteNRC.setVisible(true);
