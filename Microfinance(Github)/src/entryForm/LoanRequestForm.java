@@ -99,7 +99,7 @@ public class LoanRequestForm extends JFrame {
 	private JTable table;
 	private JLabel lblNewLabel_6;
 	private JLabel lblMonth;
-	private int Duration,Interval;
+	private int MaxAmount,MinAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval;
 	private float Rate,Fees;
 	/**
 	 * Launch the application.
@@ -139,15 +139,29 @@ public class LoanRequestForm extends JFrame {
 	public void GetILoanSetting() {
 		try {
 			String[] IData = msql.GetIndividualLoanSetting();
-			Duration = Integer.parseInt(IData[0]);
-			Interval = Integer.parseInt(IData[1]);
-			Rate = Float.parseFloat(IData[2]);
-			Fees = Float.parseFloat(IData[3]);
+			MinAmount = Integer.parseInt(IData[0]);
+			MaxAmount = Integer.parseInt(IData[1]);
+			MinDuration = Integer.parseInt(IData[2]);
+			MaxDuration = Integer.parseInt(IData[3]);
+			AmountInterval = Integer.parseInt(IData[4]);
+			DurationInterval = Integer.parseInt(IData[5]);
+			Rate = Float.parseFloat(IData[6]);
+			Fees = Float.parseFloat(IData[7]);
 			}
 			catch(NullPointerException e) {
-				String[] data = new String[1];
-				data[0] = java.time.LocalDate.now().toString();
-				System.out.println(data[0]);
+				String[] data = new String[12];
+				data[0] =  myDbConnection.getAutoID("ID", "loansetting", "Ls-");
+				data[1] = "100000";
+				data[2] = "1000000";
+				data[3] = "6";
+				data[4] = "24";
+				data[5] = "100000";
+				data[6] = "3";
+				data[7] = "2.33";
+				data[8] = "1";
+				data[9] = java.time.LocalDate.now().toString();
+				data[10] = "Individual";
+				data[11] = "1";
 				msql.InsertData("Iloansetting", data);
 				GetILoanSetting();
 			}
@@ -663,10 +677,10 @@ public class LoanRequestForm extends JFrame {
 	sliderAmount.setSnapToTicks(true);
 	sliderAmount.setPaintTicks(true);
 	//sliderAmount.setPaintLabels(true);
-	sliderAmount.setMinorTickSpacing(100000);
-	sliderAmount.setMinimum(100000);
-	sliderAmount.setMaximum(1000000);
-	sliderAmount.setMajorTickSpacing(100000);
+	sliderAmount.setMinorTickSpacing(AmountInterval);
+	sliderAmount.setMinimum(MinAmount);
+	sliderAmount.setMaximum(MaxAmount);
+	sliderAmount.setMajorTickSpacing(AmountInterval);
 	panel_4.add(sliderAmount, "cell 1 0 3 1");
 	
 	noteAmount = new JLabel("* Require");
@@ -710,10 +724,10 @@ public class LoanRequestForm extends JFrame {
 	sliderDuration.setSnapToTicks(true);
 	sliderDuration.setPaintTicks(true);
 	sliderDuration.setPaintLabels(true);
-	sliderDuration.setMinorTickSpacing(Interval);
-	sliderDuration.setMinimum(6);
-	sliderDuration.setMaximum(Duration);
-	sliderDuration.setMajorTickSpacing(Interval);
+	sliderDuration.setMinorTickSpacing(DurationInterval);
+	sliderDuration.setMinimum(MinDuration);
+	sliderDuration.setMaximum(MaxDuration);
+	sliderDuration.setMajorTickSpacing(DurationInterval);
 	panel_4.add(sliderDuration, "cell 1 3 3 1");
 	
 	noteDuration = new JLabel("* Require");
