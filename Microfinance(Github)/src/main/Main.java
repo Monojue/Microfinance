@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
+import javax.swing.JTextField;
 
 public class Main extends JFrame {
 
@@ -49,12 +50,14 @@ public class Main extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 0, 1059, 606);
 		contentPane.add(tabbedPane);
 		
 		ClientPanel clientPanel = new ClientPanel();
 		tabbedPane.addTab("          CLIENT          ", clientPanel);
+		
 		
 		GroupPanel groupPanel = new GroupPanel();
 		tabbedPane.addTab("          GROUP          ", groupPanel);

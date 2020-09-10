@@ -12,10 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.ButtonGroup;
 
 public class PaymentPanel extends JPanel {
 	private JTable table;
 	private JTextField textField;
+	private final ButtonGroup radioGroup = new ButtonGroup();
 
 	/**
 	 * Create the panel.
@@ -36,14 +38,17 @@ public class PaymentPanel extends JPanel {
 		panel.add(label, "cell 0 0");
 		
 		JRadioButton radioButton = new JRadioButton("Loan Request ID");
+		radioGroup.add(radioButton);
 		radioButton.setBackground(Color.LIGHT_GRAY);
 		panel.add(radioButton, "cell 1 0");
 		
 		JRadioButton radioButton_1 = new JRadioButton("Client ID");
+		radioGroup.add(radioButton_1);
 		radioButton_1.setBackground(Color.LIGHT_GRAY);
 		panel.add(radioButton_1, "cell 2 0");
 		
 		JRadioButton radioButton_2 = new JRadioButton("Group ID");
+		radioGroup.add(radioButton_2);
 		radioButton_2.setBackground(Color.LIGHT_GRAY);
 		panel.add(radioButton_2, "cell 3 0");
 		

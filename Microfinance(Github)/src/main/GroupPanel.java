@@ -24,12 +24,15 @@ import javax.swing.border.SoftBevelBorder;
 import database.UQueries;
 
 import javax.swing.border.BevelBorder;
+import javax.swing.ButtonGroup;
 
 public class GroupPanel extends JPanel {
 
-	private JTextField textField;
+	private JTextField textSearch;
 	private JTable table;
 	private UQueries msql = new UQueries();
+	private final ButtonGroup radioGroup = new ButtonGroup();
+	private JLabel lblError;
 	/**
 	 * Create the panel.
 	 */
@@ -51,6 +54,12 @@ public class GroupPanel extends JPanel {
 		table.getColumnModel().getColumn(5).setPreferredWidth(200);
 	
 	}
+	
+	public void showError(String error) {
+		lblError.setText(error);
+		lblError.setVisible(true);
+	}
+	
 	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
@@ -61,29 +70,68 @@ public class GroupPanel extends JPanel {
 		panel.setBackground(Color.LIGHT_GRAY);
 		panel.setBounds(10, 11, 1039, 37);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][151.00][][][][][][][][grow]", "[grow]"));
+		panel.setLayout(new MigLayout("", "[][][][][][151.00][][224][][][][][][grow]", "[grow]"));
 		
 		JLabel lblNewLabel = new JLabel("Search With");
 		panel.add(lblNewLabel, "cell 0 0");
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Group ID");
-		rdbtnNewRadioButton.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdbtnNewRadioButton, "cell 1 0");
+		JLabel lblPrefix = new JLabel("GP-");
+		panel.add(lblPrefix, "cell 4 0,alignx trailing");
 		
-		JRadioButton rdbtnClientName = new JRadioButton("Leader Name");
-		rdbtnClientName.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdbtnClientName, "cell 2 0");
+		JRadioButton RadioID = new JRadioButton("Group ID");
+		radioGroup.add(RadioID);
+		RadioID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblPrefix.setVisible(true);
+			}
+		});
+		RadioID.setSelected(true);
+		RadioID.setBackground(Color.LIGHT_GRAY);
+		panel.add(RadioID, "cell 1 0");
 		
-		textField = new JTextField();
-		panel.add(textField, "cell 4 0,growx");
-		textField.setColumns(10);
+		JRadioButton RadioName = new JRadioButton("Leader Name");
+		radioGroup.add(RadioName);
+		RadioName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblPrefix.setVisible(false);
+			}
+		});
+		RadioName.setBackground(Color.LIGHT_GRAY);
+		panel.add(RadioName, "cell 2 0");
 		
-		JButton btnNewButton = new JButton("Search");
-		panel.add(btnNewButton, "cell 5 0");
 		
-		JSeparator separator = new JSeparator();
-		separator.setOrientation(SwingConstants.VERTICAL);
-		panel.add(separator, "cell 6 0,grow");
+		
+		textSearch = new JTextField();
+		panel.add(textSearch, "cell 5 0,growx");
+		textSearch.setColumns(10);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (radioGroup.isSelected(RadioID.getModel())) {
+					if (textSearch.getText().equals("")) {
+						showError("Please Type Group ID To Search");
+					}else {
+						table.setModel(msql.getGroup("GP-"+textSearch.getText().trim(),MyString.ID));;
+					}
+				}else if (radioGroup.isSelected(RadioName.getModel())) {
+					if (textSearch.getText().equals("")) {
+						showError("Please Type Leader Name To Search");
+					}else {
+						table.setModel(msql.getGroup(textSearch.getText().trim(),MyString.Name));;
+				}
+				
+			}
+				table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				table.getColumnModel().getColumn(1).setPreferredWidth(200);
+				table.getColumnModel().getColumn(2).setPreferredWidth(200);
+				table.getColumnModel().getColumn(3).setPreferredWidth(200);
+				table.getColumnModel().getColumn(4).setPreferredWidth(200);
+				table.getColumnModel().getColumn(5).setPreferredWidth(200);
+			}
+		});
+		panel.add(btnSearch, "cell 6 0");
 		
 		JButton btnNewButton_1 = new JButton("New Group");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -91,17 +139,26 @@ public class GroupPanel extends JPanel {
 				new GroupEntry().setVisible(true);
 			}
 		});
-		panel.add(btnNewButton_1, "cell 7 0");
+		
+		lblError = new JLabel("");
+		lblError.setForeground(Color.RED);
+		panel.add(lblError, "cell 7 0,grow");
+		panel.add(btnNewButton_1, "cell 8 0");
 		
 		JButton btnNewButton_2 = new JButton("Edit Group");
-		panel.add(btnNewButton_2, "cell 9 0");
+		panel.add(btnNewButton_2, "cell 10 0");
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		panel.add(separator_1, "cell 10 0,grow");
+		panel.add(separator_1, "cell 11 0,grow");
 		
 		JButton btnNewButton_3 = new JButton("Refresh");
-		panel.add(btnNewButton_3, "cell 11 0");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				createTable();
+			}
+		});
+		panel.add(btnNewButton_3, "cell 12 0");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 59, 1039, 510);

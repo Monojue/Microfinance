@@ -540,6 +540,9 @@ public class SettingPanel extends JPanel {
 		textGAmountInterval.setColumns(10);
 		panel.add(textGAmountInterval, "cell 13 5,growx");
 		
+		JLabel label_1 = new JLabel("Kyats");
+		panel.add(label_1, "cell 15 5");
+		
 		JLabel lblNewLabel_5 = new JLabel("Duration Interval");
 		panel.add(lblNewLabel_5, "cell 1 6");
 		

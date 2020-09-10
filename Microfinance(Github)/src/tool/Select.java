@@ -195,13 +195,13 @@ public class Select extends JFrame {
 				}else if (FormType.equals(MyString.Group)) {
 					if (radioGroup.isSelected(RadioID.getModel())) {
 						if (textSearch.getText().equals("")) {
-							showError("Please Type Client ID To Search");
+							showError("Please Type Group ID To Search");
 						}else {
 							table.setModel(msql.getGroup("GP-"+textSearch.getText().trim(),MyString.ID));;
 						}
 					}else if (radioGroup.isSelected(RadioName.getModel())) {
 						if (textSearch.getText().equals("")) {
-							showError("Please Type Client Name To Search");
+							showError("Please Type Leader Name To Search");
 						}else {
 							table.setModel(msql.getGroup(textSearch.getText().trim(),MyString.Name));;
 					}

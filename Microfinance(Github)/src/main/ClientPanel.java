@@ -3,6 +3,8 @@ package main;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.border.LineBorder;
 
 import database.MyQueries;
@@ -22,12 +24,16 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ButtonGroup;
 
 public class ClientPanel extends JPanel {
-	private JTextField textField;
+	private JTextField textSearch;
 	private JTable table;
 	private JTextField test;
 	UQueries msql = new UQueries();
+	private ButtonGroup radioGroup = new ButtonGroup();
+	private JLabel lblPrefix;
+	private JLabel lblError;
 	/**
 	 * Create the panel.
 	 */
@@ -51,7 +57,10 @@ public class ClientPanel extends JPanel {
 			table.getColumnModel().getColumn(7).setPreferredWidth(100);
 			table.getColumnModel().getColumn(7).setPreferredWidth(100);
 	}
-	
+	public void showError(String error) {
+		lblError.setText(error);
+		lblError.setVisible(true);
+	}
 	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
@@ -62,29 +71,73 @@ public class ClientPanel extends JPanel {
 		panel.setBackground(Color.LIGHT_GRAY);
 		panel.setBounds(10, 11, 1039, 37);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][151.00][][][][][][][][grow]", "[grow]"));
+		panel.setLayout(new MigLayout("", "[][][][][][151.00][][224.00][][][][][][6.00]", "[grow]"));
 		
 		JLabel lblNewLabel = new JLabel("Search With");
 		panel.add(lblNewLabel, "cell 0 0");
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Client ID");
-		rdbtnNewRadioButton.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdbtnNewRadioButton, "cell 1 0");
+		JRadioButton RadioID = new JRadioButton("Client ID");
+		radioGroup.add(RadioID);
+		RadioID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblPrefix.setVisible(true);
+			}
+		});
+		RadioID.setSelected(true);
+		RadioID.setBackground(Color.LIGHT_GRAY);
+		panel.add(RadioID, "cell 1 0");
 		
-		JRadioButton rdbtnClientName = new JRadioButton("Client Name");
-		rdbtnClientName.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdbtnClientName, "cell 2 0");
+		JRadioButton RadioName = new JRadioButton("Client Name");
+		radioGroup.add(RadioName);
+		RadioName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblPrefix.setVisible(false);
+			}
+		});
+		RadioName.setBackground(Color.LIGHT_GRAY);
+		panel.add(RadioName, "cell 2 0");
 		
-		textField = new JTextField();
-		panel.add(textField, "cell 4 0,growx");
-		textField.setColumns(10);
+		lblPrefix = new JLabel("CL-");
+		panel.add(lblPrefix, "cell 4 0,alignx trailing");
 		
-		JButton btnNewButton = new JButton("Search");
-		panel.add(btnNewButton, "cell 5 0");
+		textSearch = new JTextField();
+		panel.add(textSearch, "cell 5 0,growx");
+		textSearch.setColumns(10);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+					
+					if (radioGroup.isSelected(RadioID.getModel())) {
+						if (textSearch.getText().equals("")) {
+							showError("Please Type Client ID To Search");
+						}else {
+							table.setModel(msql.getClient("CL-"+textSearch.getText().trim(),MyString.ID));;
+						}
+					}else if (radioGroup.isSelected(RadioName.getModel())) {
+						if (textSearch.getText().equals("")) {
+							showError("Please Type Client Name To Search");
+						}else {
+							table.setModel(msql.getClient(textSearch.getText().trim(),MyString.Name));;
+						}
+					}
+					table.getColumnModel().getColumn(0).setPreferredWidth(100);
+					table.getColumnModel().getColumn(1).setPreferredWidth(150);
+					table.getColumnModel().getColumn(2).setPreferredWidth(200);
+					table.getColumnModel().getColumn(3).setPreferredWidth(250);
+					table.getColumnModel().getColumn(4).setPreferredWidth(100);
+					table.getColumnModel().getColumn(5).setPreferredWidth(100);
+					table.getColumnModel().getColumn(6).setPreferredWidth(50);
+					table.getColumnModel().getColumn(7).setPreferredWidth(100);
+					table.getColumnModel().getColumn(7).setPreferredWidth(100);
+					
+			}
+		});
+		panel.add(btnSearch, "cell 6 0");
 		
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-		panel.add(separator, "cell 6 0,growy");
+		panel.add(separator, "flowx,cell 7 0,growy");
 		
 		JButton btnNewButton_1 = new JButton("New Client");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -92,17 +145,26 @@ public class ClientPanel extends JPanel {
 				new ClientEntry().setVisible(true);
 			}
 		});
-		panel.add(btnNewButton_1, "cell 7 0,alignx center");
+		panel.add(btnNewButton_1, "cell 8 0,alignx center");
 		
 		JButton btnNewButton_2 = new JButton("Edit Client");
-		panel.add(btnNewButton_2, "cell 9 0");
+		panel.add(btnNewButton_2, "cell 10 0");
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		panel.add(separator_1, "cell 10 0,grow");
+		panel.add(separator_1, "cell 11 0,grow");
 		
 		JButton btnNewButton_3 = new JButton("Refresh");
-		panel.add(btnNewButton_3, "cell 11 0");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				createTable();
+			}
+		});
+		panel.add(btnNewButton_3, "cell 12 0");
+		
+		lblError = new JLabel("");
+		lblError.setForeground(Color.RED);
+		panel.add(lblError, "cell 7 0,grow");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 59, 1039, 510);
