@@ -125,12 +125,12 @@ public class MyQueries {
 				+ "values('"+data[0]+"','"+data[1]+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Float.parseFloat(data[4])+"')";
 	}
 	else if(tbName.equals("Iloansetting")) {
-		query = "insert into loansetting(ID,Duration,Intervall,InterestRate,ServiceRate,Date) "
-				+ "values('"+"Ls-1"+"','"+24+"','"+3+"','"+2.33+"','"+1.00+"','"+data[0]+"')";
+		query = "insert into loansetting(ID,MinAmount,MaxAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval,InterestRate,ServiceRate,Date,Type,OfficerID) "
+				+ "values('"+data[0]+"','"+Integer.parseInt(data[1])+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Integer.parseInt(data[4])+"','"+Integer.parseInt(data[5])+"','"+Integer.parseInt(data[6])+"','"+Float.parseFloat(data[7])+"','"+Float.parseFloat(data[8])+"','"+data[9]+"','"+data[10]+"','"+data[11]+"')";
 	}
 	else if(tbName.equals("Gloansetting")) {
-		query = "insert into loansetting(ID,Duration,Intervall,InterestRate,ServiceRate,Date) "
-				+ "values('"+"Ls-2"+"','"+24+"','"+3+"','"+2.33+"','"+1.00+"','"+data[0]+"')";
+		query = "insert into loansetting(ID,MinAmount,MaxAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval,InterestRate,ServiceRate,Date,Type,OfficerID) "
+				+ "values('"+data[0]+"','"+Integer.parseInt(data[1])+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Integer.parseInt(data[4])+"','"+Integer.parseInt(data[5])+"','"+Integer.parseInt(data[6])+"','"+Float.parseFloat(data[7])+"','"+Float.parseFloat(data[8])+"','"+data[9]+"','"+data[10]+"','"+data[11]+"')";
 	}
 	
 	try {
@@ -174,37 +174,87 @@ public class MyQueries {
 	}
 	
 /////////////////Get Loan Setting////////////////////////////////////
+	public String GetIndividualLoanSettingID() throws ClassNotFoundException {
+		try {
+			con=DBConnection.GetMySQLConnection();
+			stmt = con.createStatement();
+			String str ="select * from loansetting where Type='"+"Individual"+"' order by ID desc limit 1 ";
+			ResultSet rs = stmt.executeQuery(str);
+			rs.next();
+			String ID = rs.getString(1);
+			return ID;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public String GetGroupLoanSettingID() throws ClassNotFoundException {
+		try {
+			con=DBConnection.GetMySQLConnection();
+			stmt = con.createStatement();
+			String str ="select * from loansetting where Type='"+"Group"+"' order by ID desc limit 1 ";
+			ResultSet rs = stmt.executeQuery(str);
+			rs.next();
+			String ID = rs.getString(1);
+			return ID;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public String[] GetIndividualLoanSetting() {
 		try {
-			String data[] = new String[4];
+			String ID = GetIndividualLoanSettingID();
+			String data[] = new String[11];
 			stmt = con.createStatement();
-			query = "select * from loansetting where ID='"+"Ls-1"+"'";
+			query = "select * from loansetting where ID='"+ID+"'";
 			rs = stmt.executeQuery(query);
 			rs.next();
 			data[0] = rs.getString(2);
 			data[1] = rs.getString(3);
 			data[2] = rs.getString(4);
 			data[3] = rs.getString(5);
+			data[4] = rs.getString(6);
+			data[5] = rs.getString(7);
+			data[6] = rs.getString(8);
+			data[7] = rs.getString(9);
+			data[8] = rs.getString(10);
+			data[9] = rs.getString(11);
+			data[10] = rs.getString(12);
 			return data;
-		}
+			}
 		catch(SQLException e) {
+			return null;
+		}
+		catch(ClassNotFoundException e) {
 			return null;
 		}
 	}
 	public String[] GetGroupLoanSetting() {
 		try {
-			String data[] = new String[4];
+			String ID = GetGroupLoanSettingID();
+			String data[] = new String[11];
 			stmt = con.createStatement();
-			query = "select * from loansetting where ID='"+"Ls-2"+"'";
+			query = "select * from loansetting where ID='"+ID+"'";
 			rs = stmt.executeQuery(query);
 			rs.next();
 			data[0] = rs.getString(2);
 			data[1] = rs.getString(3);
 			data[2] = rs.getString(4);
 			data[3] = rs.getString(5);
+			data[4] = rs.getString(6);
+			data[5] = rs.getString(7);
+			data[6] = rs.getString(8);
+			data[7] = rs.getString(9);
+			data[8] = rs.getString(10);
+			data[9] = rs.getString(11);
+			data[10] = rs.getString(12);
 			return data;
 		}
 		catch(SQLException e) {
+			return null;
+		}
+		catch(ClassNotFoundException e) {
 			return null;
 		}
 	}
