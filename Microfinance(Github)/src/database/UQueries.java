@@ -43,13 +43,20 @@ public class UQueries {
 		}
 	}
 ///////////////////// Client Query Start ///////////////////////
-	public DefaultTableModel getAllClient() {
-		
+	public DefaultTableModel getClient(String data, String type) {
+		dtm= new DefaultTableModel();
 		String strdataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
-			String str ="Select * from Client";
-			ResultSet rs = stmt.executeQuery(str);
+			if (MyString.All.equals(type)) {
+				query ="Select * from Client";
+			}else if (MyString.ID.equals(type)) {
+				query="Select * from client where clientID= '"+data+"'";
+			}else if (MyString.Name.equals(type)) {
+				query="Select * from client where Name like '"+data+"%'";
+			}
+			
+			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
 				dtm.addColumn("ClientID");
@@ -95,43 +102,7 @@ public class UQueries {
 			return null;
 		}
 	}
-	public DefaultTableModel getClientFormID(String Id) {
-		dtm= new DefaultTableModel();
-		query="Select * from client where clientID= '"+Id+"'";
-		String strdataitem[]= new String[9];
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			int count = dtm.getRowCount();
-				dtm.addColumn("ClientID");
-				dtm.addColumn("Name");
-				dtm.addColumn("NRC");
-				dtm.addColumn("Address");
-				dtm.addColumn("Phone");
-				dtm.addColumn("DateOfBirth");
-				dtm.addColumn("Home");
-				dtm.addColumn("Job");
-				dtm.addColumn("Salary");
-			while (rs.next()) {
-				strdataitem[0] = rs.getString("ClientID");
-				strdataitem[1] = rs.getString("Name");
-				strdataitem[2] = rs.getString("NRC");
-				strdataitem[3] = rs.getString("Address");
-				strdataitem[4] = rs.getString("Phone");
-				strdataitem[5] = rs.getString("DateOfBirth");
-				strdataitem[6] = rs.getString("Home");
-				strdataitem[7] = rs.getString("Job");
-				strdataitem[8] = rs.getString("Salary");
-				dtm.addRow(strdataitem);
-			}
-			return dtm;
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		
-		return dtm;
-	}
-	
+
 ///////////////////// Client Query End /////////////////////////
 		//Duplicate Method
 	public boolean IsDuplicate(String tbName, String[] data) {
@@ -177,8 +148,8 @@ public class UQueries {
 		query = "insert into client(ClientID,Name,NRC,Address,Phone,DateofBirth,Home,Job,Salary) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+Integer.parseInt(data[4])+"','"+data[5]+"','"+Integer.parseInt(data[6])+"','"+data[7]+"','"+Integer.parseInt(data[8])+"')";
 	}else if (tbName.equals(MyString.GroupEntry)) {
-		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4) "
-				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"')";
+		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4, leaderName, M1Name, M2Name, M3Name, M4Name) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+data[6]+"','"+data[7]+"','"+data[8]+"','"+data[9]+"','"+data[10]+"')";
 	}
 	
 	try {
@@ -198,13 +169,20 @@ public class UQueries {
 	
 ///////////////////// Group Query Start ////////////////////////
 	
-	public DefaultTableModel getAllGroup() {
+	public DefaultTableModel getGroup(String data, String type) {
+		dtm = new DefaultTableModel();
 		String strdataitem[]= new String[6];
 		try {
 			con=DBConnection.GetMySQLConnection();
 			stmt = con.createStatement();
-			String str ="Select * from ClientGroup";
-			ResultSet rs = stmt.executeQuery(str);
+			if (MyString.All.equals(type)) {
+				query ="Select * from Clientgroup";
+			}else if (MyString.ID.equals(type)) {
+				query="Select * from clientgroup where groupID= '"+data+"'";
+			}else if (MyString.Name.equals(type)) {
+				query="Select * from clientgroup where leaderName like '"+data+"%'";
+			}
+			ResultSet rs = stmt.executeQuery(query);
 			dtm.addColumn("GroupId");
 			dtm.addColumn("Leader");
 			dtm.addColumn("Member_1");

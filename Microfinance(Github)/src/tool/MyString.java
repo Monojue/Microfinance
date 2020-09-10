@@ -2,6 +2,10 @@ package tool;
 
 public class MyString {
 	
+	public static String All = "All";
+	public static String Name = "Name";
+	public static String ID = "ID";
+	
 	public static String ClientEntry = "Client";
 	
 	public static String leader="leader";
