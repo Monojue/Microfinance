@@ -93,6 +93,7 @@ public class GroupEntry extends JFrame {
 	}
 	
 	public void chooseClient() {
+		lblAlert.setVisible(false);
 		new Select(MyString.One,MyString.GroupEntry).setVisible(true);
 	}
 	
@@ -178,6 +179,7 @@ public class GroupEntry extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				selplus = MyString.leader;
 				chooseClient();
+				
 			}
 		});
 		panel.add(btnled, "cell 3 1,alignx center,aligny center");
@@ -295,15 +297,22 @@ public class GroupEntry extends JFrame {
 		button_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (leadID.getText().isEmpty()||M1ID.getText().isEmpty()||M2ID.getText().isEmpty()||M3ID.getText().isEmpty()||M4ID.getText().isEmpty()) {
+					lblAlert.setText("Please Fill All Member!");
 					lblAlert.setVisible(true);
 				}else {
-					String[] data = new String[9];
+					String[] data = new String[11];
 					data[0] = textGID.getText();
 					data[1] = leadID.getText();
 					data[2] = M1ID.getText();
 					data[3] = M2ID.getText();
 					data[4] = M3ID.getText();
 					data[5] = M4ID.getText();
+					
+					data[6] = leadName.getText();
+					data[7] = M1Name.getText();
+					data[8] = M2Name.getText();
+					data[9] = M3Name.getText();
+					data[10] = M4Name.getText();
 					
 					boolean save = msql.InsertData(MyString.GroupEntry, data);
 					if (save) {
