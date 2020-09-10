@@ -315,7 +315,6 @@ public class GroupEntry extends JFrame {
 					
 					boolean save = msql.InsertData(MyString.GroupEntry, data);
 					if (save) {
-						
 						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 						Clear();
 						AutoID();

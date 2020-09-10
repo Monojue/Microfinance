@@ -40,7 +40,7 @@ public class ClientPanel extends JPanel {
 	}
 	
 	public void createTable() {
-			table.setModel(msql.getAllClient());
+			table.setModel(msql.getClient(null, MyString.All));
 			table.getColumnModel().getColumn(0).setPreferredWidth(100);
 			table.getColumnModel().getColumn(1).setPreferredWidth(150);
 			table.getColumnModel().getColumn(2).setPreferredWidth(200);

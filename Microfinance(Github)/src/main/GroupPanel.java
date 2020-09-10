@@ -42,7 +42,7 @@ public class GroupPanel extends JPanel {
 	}
 	
 	public void createTable() {
-		table.setModel(msql.getAllGroup());
+		table.setModel(msql.getGroup(null, MyString.All));
 		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 		table.getColumnModel().getColumn(1).setPreferredWidth(200);
 		table.getColumnModel().getColumn(2).setPreferredWidth(200);
