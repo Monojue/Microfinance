@@ -148,15 +148,15 @@ public class GroupRequestForm extends JFrame{
 		panel_4.add(LoanAmount, "cell 1 0,growx,aligny center");
 		LoanAmount.setColumns(10);
 		
-		JSlider slider_1 = new JSlider();
-		slider_1.setBackground(Color.WHITE);
-		slider_1.setToolTipText("");
-		slider_1.setPaintTicks(true);
-		slider_1.setSnapToTicks(true);
-		slider_1.setMinimum(100000);
-		slider_1.setMaximum(1000000);
-		slider_1.setMajorTickSpacing(50000);
-		panel_4.add(slider_1, "cell 2 0,growx,aligny center");
+		JSlider sliderAmoumnt = new JSlider();
+		sliderAmoumnt.setBackground(Color.WHITE);
+		sliderAmoumnt.setToolTipText("");
+		sliderAmoumnt.setPaintTicks(true);
+		sliderAmoumnt.setSnapToTicks(true);
+		sliderAmoumnt.setMinimum(100000);
+		sliderAmoumnt.setMaximum(1000000);
+		sliderAmoumnt.setMajorTickSpacing(50000);
+		panel_4.add(sliderAmoumnt, "cell 2 0,growx,aligny center");
 		
 		JLabel label_9 = new JLabel("* Require");
 		label_9.setForeground(Color.RED);
@@ -169,15 +169,15 @@ public class GroupRequestForm extends JFrame{
 		panel_4.add(LoanDuration, "cell 1 1,growx,aligny center");
 		LoanDuration.setColumns(10);
 		
-		JSlider slider = new JSlider();
-		slider.setBackground(Color.WHITE);
-		slider.setMajorTickSpacing(3);
-		slider.setPaintLabels(true);
-		slider.setSnapToTicks(true);
-		slider.setMinimum(6);
-		slider.setMaximum(24);
-		slider.setMinorTickSpacing(3);
-		panel_4.add(slider, "cell 2 1,growx,aligny center");
+		JSlider sliderDuration = new JSlider();
+		sliderDuration.setBackground(Color.WHITE);
+		sliderDuration.setMajorTickSpacing(3);
+		sliderDuration.setPaintLabels(true);
+		sliderDuration.setSnapToTicks(true);
+		sliderDuration.setMinimum(6);
+		sliderDuration.setMaximum(24);
+		sliderDuration.setMinorTickSpacing(3);
+		panel_4.add(sliderDuration, "cell 2 1,growx,aligny center");
 		
 		JLabel label_10 = new JLabel("* Require");
 		label_10.setForeground(Color.RED);

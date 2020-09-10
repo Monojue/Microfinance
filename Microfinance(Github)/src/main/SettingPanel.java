@@ -47,6 +47,12 @@ public class SettingPanel extends JPanel {
 	private JLabel noteGSetting;
 	
 	MyQueries msql = new MyQueries();
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
 	/**
 	 * Create the panel.
 	 */
@@ -270,7 +276,7 @@ public class SettingPanel extends JPanel {
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Loan Setting", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel.setBounds(10, 11, 690, 558);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][20][][][][][][][][grow][][20][][][][][][][]", "[10][][][30][30][30][30][30][]"));
+		panel.setLayout(new MigLayout("", "[][][20][65.00][][65][][][][][grow][][20][65][][65][][][][]", "[10][][][30][30][30][30][30][30][]"));
 		
 		JLabel lblNewLabel = new JLabel("Individual");
 		panel.add(lblNewLabel, "cell 1 1");
@@ -284,8 +290,46 @@ public class SettingPanel extends JPanel {
 		JSeparator separator = new JSeparator();
 		panel.add(separator, "cell 1 2 9 1,grow");
 		
+		JLabel lblNewLabel_16 = new JLabel("Amount");
+		panel.add(lblNewLabel_16, "cell 1 3");
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		panel.add(textField, "cell 3 3,growx");
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_17 = new JLabel("-");
+		panel.add(lblNewLabel_17, "cell 4 3");
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		panel.add(textField_1, "cell 5 3,growx");
+		
+		JLabel lblKyats = new JLabel("Kyats");
+		panel.add(lblKyats, "cell 6 3");
+		
+		JLabel label_9 = new JLabel("Amount");
+		panel.add(label_9, "cell 11 3");
+		
+		textField_3 = new JTextField();
+		textField_3.setEditable(false);
+		textField_3.setColumns(10);
+		panel.add(textField_3, "cell 13 3,growx");
+		
+		JLabel label_13 = new JLabel("-");
+		panel.add(label_13, "cell 14 3,alignx trailing");
+		
+		textField_5 = new JTextField();
+		textField_5.setEditable(false);
+		textField_5.setColumns(10);
+		panel.add(textField_5, "cell 15 3,growx");
+		
+		JLabel lblKyats_1 = new JLabel("Kyats");
+		panel.add(lblKyats_1, "cell 16 3");
+		
 		JLabel lblNewLabel_2 = new JLabel("Duration");
-		panel.add(lblNewLabel_2, "cell 1 3");
+		panel.add(lblNewLabel_2, "cell 1 4");
 		
 		Iduration = new JTextField();
 		Iduration.addFocusListener(new FocusAdapter() {
@@ -295,25 +339,43 @@ public class SettingPanel extends JPanel {
 			}
 		});
 		Iduration.setEditable(false);
-		panel.add(Iduration, "cell 3 3 5 1,growx,aligny center");
+		panel.add(Iduration, "cell 3 4,growx,aligny center");
 		Iduration.setColumns(10);
 		
+		JLabel label_8 = new JLabel("-");
+		panel.add(label_8, "cell 4 4");
+		
+		textField_2 = new JTextField();
+		textField_2.setText("24");
+		textField_2.setEditable(false);
+		textField_2.setColumns(10);
+		panel.add(textField_2, "cell 5 4,growx");
+		
 		JLabel lblNewLabel_6 = new JLabel("Month");
-		panel.add(lblNewLabel_6, "cell 8 3");
+		panel.add(lblNewLabel_6, "cell 6 4 2 1");
 		
 		JLabel label = new JLabel("Duration");
-		panel.add(label, "cell 11 3");
+		panel.add(label, "cell 11 4");
 		
 		Gduration = new JTextField();
 		Gduration.setEditable(false);
 		Gduration.setColumns(10);
-		panel.add(Gduration, "cell 13 3 5 1,growx");
+		panel.add(Gduration, "cell 13 4,growx");
 		
-		JLabel label_4 = new JLabel("Month");
-		panel.add(label_4, "cell 18 3");
+		JLabel label_14 = new JLabel("-");
+		panel.add(label_14, "cell 14 4");
+		
+		textField_4 = new JTextField();
+		textField_4.setText("24");
+		textField_4.setEditable(false);
+		textField_4.setColumns(10);
+		panel.add(textField_4, "cell 15 4,growx");
+		
+		JLabel label_11 = new JLabel("Month");
+		panel.add(label_11, "cell 16 4");
 		
 		JLabel lblNewLabel_5 = new JLabel("Interval");
-		panel.add(lblNewLabel_5, "cell 1 4");
+		panel.add(lblNewLabel_5, "cell 1 5");
 		
 		Iinterval = new JTextField();
 		Iinterval.addFocusListener(new FocusAdapter() {
@@ -323,25 +385,25 @@ public class SettingPanel extends JPanel {
 			}
 		});
 		Iinterval.setEditable(false);
-		panel.add(Iinterval, "cell 3 4 5 1,growx");
+		panel.add(Iinterval, "cell 3 5,growx");
 		Iinterval.setColumns(10);
 		
 		JLabel lblNewLabel_7 = new JLabel("Month");
-		panel.add(lblNewLabel_7, "cell 8 4");
+		panel.add(lblNewLabel_7, "cell 5 5");
 		
 		JLabel label_1 = new JLabel("Interval");
-		panel.add(label_1, "cell 11 4");
+		panel.add(label_1, "cell 11 5");
 		
 		Ginterval = new JTextField();
 		Ginterval.setEditable(false);
 		Ginterval.setColumns(10);
-		panel.add(Ginterval, "cell 13 4 5 1,growx");
+		panel.add(Ginterval, "cell 13 5,growx");
 		
-		JLabel label_5 = new JLabel("Month");
-		panel.add(label_5, "cell 18 4");
+		JLabel label_12 = new JLabel("Month");
+		panel.add(label_12, "cell 15 5");
 		
 		JLabel lblNewLabel_3 = new JLabel("Intrest Rate");
-		panel.add(lblNewLabel_3, "cell 1 5");
+		panel.add(lblNewLabel_3, "cell 1 6");
 		
 		Irate = new JTextField();
 		Irate.addFocusListener(new FocusAdapter() {
@@ -351,25 +413,25 @@ public class SettingPanel extends JPanel {
 			}
 		});
 		Irate.setEditable(false);
-		panel.add(Irate, "cell 3 5 5 1,growx");
+		panel.add(Irate, "cell 3 6,growx");
 		Irate.setColumns(10);
 		
 		JLabel lblNewLabel_8 = new JLabel("%");
-		panel.add(lblNewLabel_8, "cell 8 5");
+		panel.add(lblNewLabel_8, "cell 4 6");
 		
 		JLabel label_2 = new JLabel("Intrest Rate");
-		panel.add(label_2, "cell 11 5");
+		panel.add(label_2, "cell 11 6");
 		
 		Grate = new JTextField();
 		Grate.setEditable(false);
 		Grate.setColumns(10);
-		panel.add(Grate, "cell 13 5 5 1,growx");
+		panel.add(Grate, "cell 13 6,growx");
 		
 		JLabel label_6 = new JLabel("%");
-		panel.add(label_6, "cell 18 5");
+		panel.add(label_6, "cell 14 6 5 1");
 		
 		JLabel lblNewLabel_4 = new JLabel("Service Fees");
-		panel.add(lblNewLabel_4, "cell 1 6");
+		panel.add(lblNewLabel_4, "cell 1 7");
 		
 		Ifees = new JTextField();
 		Ifees.addFocusListener(new FocusAdapter() {
@@ -379,22 +441,22 @@ public class SettingPanel extends JPanel {
 			}
 		});
 		Ifees.setEditable(false);
-		panel.add(Ifees, "cell 3 6 5 1,growx");
+		panel.add(Ifees, "cell 3 7,growx");
 		Ifees.setColumns(10);
 		
 		JLabel lblNewLabel_9 = new JLabel("%");
-		panel.add(lblNewLabel_9, "cell 8 6");
+		panel.add(lblNewLabel_9, "cell 4 7");
 		
 		JLabel label_3 = new JLabel("Service Fees");
-		panel.add(label_3, "cell 11 6");
+		panel.add(label_3, "cell 11 7");
 		
 		Gfees = new JTextField();
 		Gfees.setEditable(false);
 		Gfees.setColumns(10);
-		panel.add(Gfees, "cell 13 6 5 1,growx");
+		panel.add(Gfees, "cell 13 7,growx");
 		
 		JLabel label_7 = new JLabel("%");
-		panel.add(label_7, "cell 18 6");
+		panel.add(label_7, "cell 14 7 5 1");
 		
 		IEdit = new JButton("Edit");
 		IEdit.addActionListener(new ActionListener() {
@@ -430,15 +492,15 @@ public class SettingPanel extends JPanel {
 		
 		noteISetting = new JLabel("* Error");
 		noteISetting.setForeground(Color.RED);
-		panel.add(noteISetting, "cell 1 7 7 1");
+		panel.add(noteISetting, "cell 1 8 7 1");
 		noteISetting.setVisible(false);
 		
 		noteGSetting = new JLabel("* Error");
 		noteGSetting.setForeground(Color.RED);
-		panel.add(noteGSetting, "cell 11 7 7 1");
+		panel.add(noteGSetting, "cell 11 8 7 1");
 		noteGSetting.setVisible(false);
 		
-		panel.add(IEdit, "cell 1 8,growx");
+		panel.add(IEdit, "cell 1 9,growx");
 		
 		Icancel = new JButton("Cancel");
 		Icancel.addActionListener(new ActionListener() {
@@ -447,7 +509,7 @@ public class SettingPanel extends JPanel {
 				GetIData();
 			}
 		});
-		panel.add(Icancel, "cell 2 8 3 1");
+		panel.add(Icancel, "cell 2 9 3 1");
 		
 		GEdit = new JButton("Edit");
 		GEdit.addActionListener(new ActionListener() {
@@ -480,7 +542,7 @@ public class SettingPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(GEdit, "cell 11 8,growx");
+		panel.add(GEdit, "cell 11 9,growx");
 		
 		Gcancel = new JButton("Cancel");
 		Gcancel.addActionListener(new ActionListener() {
@@ -489,7 +551,7 @@ public class SettingPanel extends JPanel {
 				GetGData();
 			}
 		});
-		panel.add(Gcancel, "cell 12 8 3 1");
+		panel.add(Gcancel, "cell 12 9 3 1");
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.ORANGE);

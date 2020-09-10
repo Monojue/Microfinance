@@ -117,6 +117,7 @@ public class LoanRequestForm extends JFrame {
 		});
 	}
 
+
 	public void SetNRCcodeData() {
 		Vector<String> code = new Vector<>();
 		code.clear();
