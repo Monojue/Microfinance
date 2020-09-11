@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -20,10 +24,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 import database.DBConnection;
+import database.MyQueries;
 import database.UQueries;
 import net.miginfocom.swing.MigLayout;
+import tool.Calculation;
+import tool.Checking;
 import tool.MyDate;
 import tool.MyString;
 import tool.Select;
@@ -31,13 +39,12 @@ import tool.Select;
 import java.awt.Label;
 import java.awt.Choice;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Button;
 import java.awt.Font;
 
 public class GroupRequestForm extends JFrame{
-
-	private JTextField LoanAmount;
-	private JTextField LoanDuration;
 	private JTable table;
 	private JTextField textID;
 
@@ -52,13 +59,24 @@ public class GroupRequestForm extends JFrame{
 	public static JTextField txtM4ID; 
 	LoanRequest loanRequest = new LoanRequest();
 	MyDate myDate = new MyDate();
-	static UQueries msql = new UQueries();
+	static UQueries usql = new UQueries();
 	private static JTextField txtM3Name;
 	private static JTextField txtLName;
 	private static JTextField txtM2Name;
 	private static JTextField txtM1Name;
 	private static JTextField txtM4Name;
-	
+	DBConnection myDbConnection = new DBConnection();
+	MyQueries msql = new MyQueries();
+	DefaultTableModel dtm = new DefaultTableModel();
+	private int MaxAmount,MinAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval;
+	private float Rate,Fees;
+	private JLabel noteDuration;
+	private JLabel noteAmount;
+	private JLabel noteClientError;
+	private JLabel lblFees;
+	private JLabel lblRate;
+	private JTextField textAmount;
+	private JTextField textDuration;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -77,9 +95,11 @@ public class GroupRequestForm extends JFrame{
 	
 	
 	public GroupRequestForm() {
+		GetILoanSetting();
 		initialize();
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
+		
 	}
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
@@ -89,32 +109,112 @@ public class GroupRequestForm extends JFrame{
 		txtM2Name.setText(mem2);
 		txtM3Name.setText(mem3);
 		txtM4Name.setText(mem4);
-		Vector<String> clientID = msql.getClientIDFormGroupID(id);
+		Vector<String> clientID = usql.getClientIDFormGroupID(id);
 		txtLID.setText(clientID.get(0));
 		txtM1ID.setText(clientID.get(1));
 		txtM2ID.setText(clientID.get(2));
 		txtM3ID.setText(clientID.get(3));
 		txtM4ID.setText(clientID.get(4));
 	}
+	
+	//Get Individual Loan Setting
+	public void GetILoanSetting() {
+		try {
+			String[] IData = msql.GetIndividualLoanSetting();
+			MinAmount = Integer.parseInt(IData[0]);
+			MaxAmount = Integer.parseInt(IData[1]);
+			MinDuration = Integer.parseInt(IData[2]);
+			MaxDuration = Integer.parseInt(IData[3]);
+			AmountInterval = Integer.parseInt(IData[4]);
+			DurationInterval = Integer.parseInt(IData[5]);
+			Rate = Float.parseFloat(IData[6]);
+			Fees = Float.parseFloat(IData[7]);
+			}
+			catch(NullPointerException e) {
+				String[] data = new String[12];
+				data[0] =  myDbConnection.getAutoID("ID", "loansetting", "Ls-");
+				data[1] = "100000";
+				data[2] = "1000000";
+				data[3] = "6";
+				data[4] = "24";
+				data[5] = "100000";
+				data[6] = "3";
+				data[7] = "2.33";
+				data[8] = "1";
+				data[9] = java.time.LocalDate.now().toString();
+				data[10] = "Group";
+				data[11] = "1";
+				msql.InsertData("Iloansetting", data);
+				GetILoanSetting();
+			}
+	}
+	
+	public void createTable() {
+		if(Checking.IsNull(textAmount.getText())) {
+			noteAmount.setVisible(true);
+		}
+		else if (Checking.IsNull(textDuration.getText())) {
+			noteDuration.setVisible(true);
+		}
+		else {
+		DefaultTableModel dtm = new DefaultTableModel(Integer.parseInt(textDuration.getText())+2,5);
+		dtm = Calculation.calculator(Integer.parseInt(Calculation.removecomma(textAmount.getText())),Integer.parseInt(textDuration.getText()),Rate);
+		table.setModel(dtm);
+		table.getColumnModel().getColumn(0).setPreferredWidth(40);
+		table.getColumnModel().getColumn(1).setPreferredWidth(130);
+		table.getColumnModel().getColumn(2).setPreferredWidth(130);
+		table.getColumnModel().getColumn(3).setPreferredWidth(130);
+		table.getColumnModel().getColumn(4).setPreferredWidth(130);
+		table.getColumnModel().getColumn(0).setHeaderValue("No");
+		table.getColumnModel().getColumn(1).setHeaderValue("Principal Outstanding");
+		table.getColumnModel().getColumn(2).setHeaderValue("Principal");
+		table.getColumnModel().getColumn(3).setHeaderValue("Interest");
+		table.getColumnModel().getColumn(4).setHeaderValue("Installment");
+		}
+	}
+	
+	
+	public boolean check() {
+		//Client ID
+		if (Checking.IsNull(txtGroupID.getText())) {
+			noteClientError.setText("* Required");
+			noteClientError.setVisible(true);
+			return false;	
+	    }
+		//Check Amount
+		if(Checking.IsNull(textAmount.getText())) {
+			noteAmount.setVisible(true);
+			return false;
+		}
+		//Check Duration
+		if (Checking.IsNull(textDuration.getText())) {
+			noteDuration.setVisible(true);
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	private void initialize() {
 		this.getContentPane().setBackground(Color.LIGHT_GRAY);
 		this.setTitle("Group Registration Form");
-		this.setBounds(260, 30, 857, 649);
+		this.setBounds(200, 30, 1001, 730);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.getContentPane().setLayout(null);
 		this.setResizable(false);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.LIGHT_GRAY);
-		panel.setBounds(10, 0, 821, 563);
+		panel.setBounds(10, 0, 973, 643);
 		this.getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(new Rectangle(0, 0, 5, 0));
-		panel_2.setBounds(10, 11, 811, 40);
+		panel_2.setBounds(10, 11, 960, 40);
 		panel.add(panel_2);
-		panel_2.setLayout(new MigLayout("", "[96.00px][120.00px,grow][436.00][40px][118.00px,grow]", "[26px]"));
+		panel_2.setLayout(new MigLayout("", "[96.00px][120.00px,grow][436.00][40px][118.00px]", "[26px]"));
 		
 		JLabel lblGroupId = new JLabel("Loan Request ID");
 		lblGroupId.setBackground(Color.RED);
@@ -137,69 +237,130 @@ public class GroupRequestForm extends JFrame{
 		JPanel panel_4 = new JPanel();
 		panel_4.setBackground(Color.WHITE);
 		panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "LOAN INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_4.setBounds(10, 368, 394, 185);
+		panel_4.setBounds(10, 368, 394, 265);
 		panel.add(panel_4);
-		panel_4.setLayout(new MigLayout("", "[65px][56px][159px][77px]", "[26px][20px][][][14px][23px][]"));
+		panel_4.setLayout(new MigLayout("", "[72.00][53.00px][62.00px][62.00][94.00px]", "[50][26px][30][10.00][31.00px][30][][][14px][23px][]"));
 		
 		JLabel lblNewLabel_2 = new JLabel("Amount");
-		panel_4.add(lblNewLabel_2, "cell 0 0,alignx left,aligny center");
+		panel_4.add(lblNewLabel_2, "cell 0 2,alignx left,aligny center");
 		
-		LoanAmount = new JTextField();
-		panel_4.add(LoanAmount, "cell 1 0,growx,aligny center");
-		LoanAmount.setColumns(10);
+		JSlider sliderAmount = new JSlider();
+		sliderAmount.setBackground(Color.WHITE);
+		sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				noteAmount.setVisible(false);
+				textAmount.setText(Calculation.addcomma(Integer.toString(sliderAmount.getValue())));
+			}
+		});
+		sliderAmount.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				noteAmount.setVisible(false);
+				textAmount.setText(Calculation.addcomma(Integer.toString(sliderAmount.getValue())));
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				noteAmount.setVisible(false);
+				textAmount.setText(Calculation.addcomma(Integer.toString(sliderAmount.getValue())));
+			}
+		});
+		sliderAmount.setSnapToTicks(true);
+		sliderAmount.setPaintTicks(true);
+		//sliderAmount.setPaintLabels(true);
+		sliderAmount.setMinorTickSpacing(AmountInterval);
+		sliderAmount.setMinimum(MinAmount);
+		sliderAmount.setMaximum(MaxAmount);
+		sliderAmount.setMajorTickSpacing(AmountInterval);
+		Hashtable labelTable = new Hashtable();
+		labelTable.put( new Integer(MinAmount), new JLabel(Calculation.addcomma(Integer.toString(MinAmount))));
+		labelTable.put( new Integer(MaxAmount), new JLabel(Calculation.addcomma(Integer.toString(MaxAmount))));
+		sliderAmount.setLabelTable( labelTable );
+
+		sliderAmount.setPaintLabels(true);
+		panel_4.add(sliderAmount, "cell 1 1 3 1,growx,aligny center");
 		
-		JSlider sliderAmoumnt = new JSlider();
-		sliderAmoumnt.setBackground(Color.WHITE);
-		sliderAmoumnt.setToolTipText("");
-		sliderAmoumnt.setPaintTicks(true);
-		sliderAmoumnt.setSnapToTicks(true);
-		sliderAmoumnt.setMinimum(100000);
-		sliderAmoumnt.setMaximum(1000000);
-		sliderAmoumnt.setMajorTickSpacing(50000);
-		panel_4.add(sliderAmoumnt, "cell 2 0,growx,aligny center");
+		noteAmount = new JLabel("* Require");
+		noteAmount.setForeground(Color.RED);
+		noteAmount.setVisible(false);
+		panel_4.add(noteAmount, "cell 4 1");
 		
-		JLabel label_9 = new JLabel("* Require");
-		label_9.setForeground(Color.RED);
-		panel_4.add(label_9, "cell 3 0");
+		textAmount = new JTextField();
+		textAmount.setColumns(10);
+		panel_4.add(textAmount, "cell 1 2 2 1,growx");
+		
+		JLabel lblNewLabel_6 = new JLabel("Kyats");
+		panel_4.add(lblNewLabel_6, "cell 3 2");
 		
 		JLabel lblNewLabel_3 = new JLabel("Duration");
-		panel_4.add(lblNewLabel_3, "cell 0 1,growx,aligny center");
-		
-		LoanDuration = new JTextField();
-		panel_4.add(LoanDuration, "cell 1 1,growx,aligny center");
-		LoanDuration.setColumns(10);
+		panel_4.add(lblNewLabel_3, "cell 0 5,growx,aligny center");
 		
 		JSlider sliderDuration = new JSlider();
 		sliderDuration.setBackground(Color.WHITE);
-		sliderDuration.setMajorTickSpacing(3);
-		sliderDuration.setPaintLabels(true);
+		sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				noteDuration.setVisible(false);
+				textDuration.setText(Integer.toString(sliderDuration.getValue()));
+			}
+		});
+		sliderDuration.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				noteDuration.setVisible(false);
+				textDuration.setText(Integer.toString(sliderDuration.getValue()));
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				noteDuration.setVisible(false);
+				textDuration.setText(Integer.toString(sliderDuration.getValue()));
+			}
+		});
 		sliderDuration.setSnapToTicks(true);
-		sliderDuration.setMinimum(6);
-		sliderDuration.setMaximum(24);
-		sliderDuration.setMinorTickSpacing(3);
-		panel_4.add(sliderDuration, "cell 2 1,growx,aligny center");
+		sliderDuration.setPaintTicks(true);
+		sliderDuration.setPaintLabels(true);
+		sliderDuration.setMinorTickSpacing(DurationInterval);
+		sliderDuration.setMinimum(MinDuration);
+		sliderDuration.setMaximum(MaxDuration);
+		sliderDuration.setMajorTickSpacing(DurationInterval);
+		panel_4.add(sliderDuration, "cell 1 4 3 1,growx,aligny center");
 		
-		JLabel label_10 = new JLabel("* Require");
-		label_10.setForeground(Color.RED);
-		panel_4.add(label_10, "cell 3 1");
+		noteDuration = new JLabel("* Require");
+		noteDuration.setForeground(Color.RED);
+		noteDuration.setVisible(false);
+		panel_4.add(noteDuration, "cell 4 4");
 		
-		JLabel lblNewLabel_5 = new JLabel("Service Fees");
-		panel_4.add(lblNewLabel_5, "cell 0 2");
+		textDuration = new JTextField();
+		textDuration.setColumns(10);
+		panel_4.add(textDuration, "cell 1 5 2 1,growx");
 		
-		JLabel label_3 = new JLabel("Rate%");
-		panel_4.add(label_3, "cell 1 2");
+		JLabel lblNewLabel_1 = new JLabel("Month");
+		panel_4.add(lblNewLabel_1, "cell 3 5");
 		
-		JLabel lblNewLabel_4 = new JLabel("Interest Rate");
-		panel_4.add(lblNewLabel_4, "cell 0 4,alignx left,aligny top");
+		JLabel lblNewLabel_5 = new JLabel("Interest Rate");
+		panel_4.add(lblNewLabel_5, "cell 0 6");
 		
-		JLabel lblRate = new JLabel("Rate%");
-		panel_4.add(lblRate, "cell 1 4,alignx left,aligny top");
+		lblRate = new JLabel(Rate + "%");
+		lblRate.setForeground(Color.BLUE);
+		panel_4.add(lblRate, "cell 1 6");
+		
+		JLabel lblNewLabel_4 = new JLabel("Service Fees");
+		panel_4.add(lblNewLabel_4, "cell 0 8,alignx left,aligny top");
+		
+		lblFees = new JLabel(Fees + "%");
+		lblFees.setForeground(Color.BLUE);
+		panel_4.add(lblFees, "cell 1 8,alignx left,aligny top");
 		
 		JButton btnCalculate = new JButton("Calculate");
-		panel_4.add(btnCalculate, "cell 3 6,alignx left,aligny top");
+		btnCalculate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createTable();
+			}
+		});
+		panel_4.add(btnCalculate, "cell 3 10 2 1,alignx right,aligny top");
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(414, 60, 407, 493);
+		scrollPane.setBounds(414, 60, 556, 573);
 		panel.add(scrollPane);
 		
 		table = new JTable();
@@ -309,8 +470,14 @@ public class GroupRequestForm extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				Select select = new Select(MyString.Group, MyString.GroupRequestForm);
 				select.setVisible(true);
+				noteClientError.setVisible(false);
 			}
 		});
+		
+		noteClientError = new JLabel("New label");
+		noteClientError.setForeground(Color.RED);
+		noteClientError.setVisible(false);
+		panel_1.add(noteClientError, "cell 1 8");
 		panel_1.add(btnNewButton, "cell 2 8,alignx right");
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -319,11 +486,32 @@ public class GroupRequestForm extends JFrame{
 				dispose();
 			}
 		});
-		btnCancel.setBounds(742, 574, 89, 23);
+		btnCancel.setBounds(894, 653, 89, 23);
 		this.getContentPane().add(btnCancel);
 		
 		JButton btnRequestLoan = new JButton("Request Loan");
-		btnRequestLoan.setBounds(610, 574, 122, 23);
+		btnRequestLoan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean check = check();
+				if(check) {
+						
+						String[] LoanRequest = new String[5];
+						LoanRequest[0] = textID.getText();
+						LoanRequest[1] = "Group";
+						LoanRequest[2] = Calculation.removecomma(textAmount.getText());
+						LoanRequest[3] = textDuration.getText();
+						LoanRequest[4] = lblRate.getText().replace("%", "");
+						boolean insert = msql.InsertData("loanrequest", LoanRequest);
+						if (insert) {
+							JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
+						}
+						else if (!insert){
+							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+			}
+		});
+		btnRequestLoan.setBounds(762, 653, 122, 23);
 		this.getContentPane().add(btnRequestLoan);
 	}
 }

@@ -190,7 +190,7 @@ public class LoanRequestForm extends JFrame {
 		table.getColumnModel().getColumn(3).setHeaderValue("Interest");
 		table.getColumnModel().getColumn(4).setHeaderValue("Installment");
 		}
-		}
+	}
 	
 	public static void setClientData(String id,String name,String NRC,String address,String phno,String DOB,String home,String job,String salary) {
 		textCID.setText(id);
@@ -691,7 +691,7 @@ public class LoanRequestForm extends JFrame {
 
 	sliderAmount.setPaintLabels(true);
 	
-	panel_4.add(sliderAmount, "cell 1 0 3 1");
+	panel_4.add(sliderAmount, "cell 0 0 4 1,growx");
 	
 	noteAmount = new JLabel("* Require");
 	noteAmount.setForeground(Color.RED);
