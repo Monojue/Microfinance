@@ -48,11 +48,6 @@ public class ClientPanel extends JPanel {
 		createTable();
 	}
 	
-	public String[] ImportClientID() {
-		String[] ClientData = msql1.getClientDetailsFormID(ClientID);
-		return ClientData;
-	}
-	
 	public void createTable() {
 			table.setModel(msql.getClient(null, MyString.All));
 			table.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -163,7 +158,6 @@ public class ClientPanel extends JPanel {
 				}
 				else {
 					ClientID = (String) table.getValueAt(table.getSelectedRow(),0);
-					ImportClientID();
 					new ClientEntry(ClientID).setVisible(true);
 				}
 			}
