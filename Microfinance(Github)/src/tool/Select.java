@@ -237,7 +237,7 @@ public class Select extends JFrame {
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (FormType.equals(MyString.One)) {
-					ClientEntry clientEntry = new ClientEntry();
+					ClientEntry clientEntry = new ClientEntry(null);
 					clientEntry.setVisible(true);
 				}else if (FormType.equals(MyString.Group)) {
 					GroupEntry groupEntry = new GroupEntry();

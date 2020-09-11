@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -31,18 +33,24 @@ public class ClientPanel extends JPanel {
 	private JTable table;
 	private JTextField test;
 	UQueries msql = new UQueries();
+	MyQueries msql1 = new MyQueries();
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private JLabel lblPrefix;
 	private JLabel lblError;
+	public String ClientID;
 	/**
 	 * Create the panel.
 	 */
-	
 	
 
 	public ClientPanel() {
 		Initialize();
 		createTable();
+	}
+	
+	public String[] ImportClientID() {
+		String[] ClientData = msql1.getClientDetailsFormID(ClientID);
+		return ClientData;
 	}
 	
 	public void createTable() {
@@ -142,12 +150,24 @@ public class ClientPanel extends JPanel {
 		JButton btnNewButton_1 = new JButton("New Client");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new ClientEntry().setVisible(true);
+				new ClientEntry(null).setVisible(true);
 			}
 		});
 		panel.add(btnNewButton_1, "cell 8 0,alignx center");
 		
 		JButton btnNewButton_2 = new JButton("Edit Client");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Client to Edit!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					ClientID = (String) table.getValueAt(table.getSelectedRow(),0);
+					ImportClientID();
+					new ClientEntry(ClientID).setVisible(true);
+				}
+			}
+		});
 		panel.add(btnNewButton_2, "cell 10 0");
 		
 		JSeparator separator_1 = new JSeparator();

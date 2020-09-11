@@ -21,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import tool.Checking;
 import tool.MyDate;
 import tool.MyString;
+import main.ClientPanel;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -91,6 +92,7 @@ public class ClientEntry extends JFrame {
 	int TodayYear = Integer.parseInt(String.valueOf(date).substring(24));
 	private JTextField textField;
 	private JLabel lblNewLabel_1;
+	private JButton btnSave;
 	/**
 	 * Launch the application.
 	 */
@@ -98,7 +100,7 @@ public class ClientEntry extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientEntry frame = new ClientEntry();
+					ClientEntry frame = new ClientEntry(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -221,10 +223,27 @@ public class ClientEntry extends JFrame {
 	
 	/**
 	 * Create the frame.
+	 * @param ClientID 
 	 */
-	public ClientEntry() {
+	public ClientEntry(String ClientID) {
 		initialize();
+		if(ClientID == null) {		
 		AutoID();
+		btnSave.setText("Save");
+		}
+		else {
+			String[] ClientDetails = msql.getClientDetailsFormID(ClientID);
+			textCID.setText(ClientDetails[0]);
+			textName.setText(ClientDetails[1]);
+			//textAddress.setText(ClientDetails[4]);
+			textPh.setText(ClientDetails[4]);
+			if(Integer.parseInt(ClientDetails[6])==1) {
+				checkHome.setSelected(true);
+			}
+			textJob.setText(ClientDetails[7]);
+			textSalary.setText(ClientDetails[8]);
+			btnSave.setText("Update");
+		}
 		SetNRCcodeData();
 	}
 	
@@ -605,12 +624,12 @@ public class ClientEntry extends JFrame {
 		contentPane.add(panel_2, "cell 0 2,grow");
 		panel_2.setLayout(new MigLayout("", "[496.00][][]", "[77.00]"));
 		
-		JButton button_1 = new JButton("Save");
-		button_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		button_1.setForeground(Color.BLACK);
-		button_1.setBackground(Color.WHITE);
-		button_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		button_1.addActionListener(new ActionListener() {
+		btnSave = new JButton("Save");
+		btnSave.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnSave.setForeground(Color.BLACK);
+		btnSave.setBackground(Color.WHITE);
+		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean check = check();
 				if(check) {
@@ -641,6 +660,7 @@ public class ClientEntry extends JFrame {
 						data[6] = home;
 						data[7] = textJob.getText();
 						data[8] = textSalary.getText();
+						if(btnSave.getText()=="Save") {
 						boolean save = msql.InsertData(MyString.ClientEntry, data);
 						if (save) {
 							JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
@@ -650,10 +670,23 @@ public class ClientEntry extends JFrame {
 							JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 							AutoID();
 						}
+						}
+						
+						else if(btnSave.getText()=="Update") {
+							boolean update = msql.UpdateData("client", data);
+							if (update) {
+								JOptionPane.showMessageDialog(null, "Updated Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+								Clear();
+								AutoID();
+							} else {
+								JOptionPane.showMessageDialog(null, "Failed to Update new Data!","Cannot Updated",JOptionPane.INFORMATION_MESSAGE);
+								AutoID();
+							}
+						}
 					}
 			}
 		}});
-		panel_2.add(button_1, "cell 1 0");
+		panel_2.add(btnSave, "cell 1 0");
 		
 		JButton button = new JButton("Cancel");
 		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

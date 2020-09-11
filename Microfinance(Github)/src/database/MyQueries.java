@@ -31,7 +31,6 @@ public class MyQueries {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 ///////////////////// Client Query Start ///////////////////////
@@ -73,6 +72,29 @@ public class MyQueries {
 		return null;
 		
 	}
+	//Get Client Details from ClientID
+	public String[] getClientDetailsFormID(String id) {
+		String[] ClientDetails = new String[9];
+		query = "Select * from client where clientID = '"+id+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			rs.next();
+			ClientDetails[0] = rs.getString(1); //ClientID
+			ClientDetails[1] = rs.getString(2); //Name
+			ClientDetails[2] = rs.getString(3); //NRC
+			ClientDetails[3] = rs.getString(4);	//Address
+			ClientDetails[4] = rs.getString(5);	//Phone
+			ClientDetails[5] = rs.getString(6); //Date of Birth
+			ClientDetails[6] = rs.getString(7); //Home
+			ClientDetails[7] = rs.getString(8); //Job
+			ClientDetails[8] = rs.getString(9); //Salary
+			return ClientDetails;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;	
+	}
 
 ///////////////////// Client Query End /////////////////////////
 	//Duplicate Method
@@ -84,9 +106,9 @@ public class MyQueries {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
-				return true;	
+				return false;	
 			} else {
-				return false;
+				return true;
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),"SQL Exception", JOptionPane.ERROR_MESSAGE);
@@ -148,16 +170,13 @@ public class MyQueries {
 	}
 	}
 	
-	//Guarantor Update!!!
+	//Client And Guarantor Update!!!
 	public static boolean UpdateData(String tbName, String[] data) {
 	if(tbName.equals("guarantor")) {
 		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
 	}
-	else if(tbName.equals("Iloansetting")) {
-		query = "update loansetting set Duration= '"+Integer.parseInt(data[0])+"',Intervall= '"+Integer.parseInt(data[1])+"' ,InterestRate= '"+Float.parseFloat(data[2])+"' ,ServiceRate= '"+Float.parseFloat(data[3])+"' ,Date= '"+data[4]+"' where ID= '"+"Ls-1"+"'";
-	}
-	else if(tbName.equals("Gloansetting")) {
-		query = "update loansetting set Duration= '"+Integer.parseInt(data[0])+"',Intervall= '"+Integer.parseInt(data[1])+"' ,InterestRate= '"+Float.parseFloat(data[2])+"' ,ServiceRate= '"+Float.parseFloat(data[3])+"' ,Date= '"+data[4]+"' where ID= '"+"Ls-2"+"'";
+	if(tbName.equals("client")) {
+		query = "update client set Name= '"+data[1]+"',NRC= '"+data[2]+"',Address= '"+data[3]+"' ,Phone= '"+Integer.parseInt(data[4])+"' ,DateOfBirth= '"+data[5]+"' ,Home= '"+Integer.parseInt(data[6])+"' ,Job= '"+data[7]+"',Salary= '"+Integer.parseInt(data[8])+"' where ClientID= '"+data[0]+"'";
 	}
 	try {
 		stmt = con.createStatement();
