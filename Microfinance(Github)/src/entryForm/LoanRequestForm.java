@@ -176,7 +176,7 @@ public class LoanRequestForm extends JFrame {
 		}
 		else {
 		DefaultTableModel dtm = new DefaultTableModel(Integer.parseInt(textDuration.getText())+2,5);
-		dtm = Calculation.calculator(Integer.parseInt(textAmount.getText()),Integer.parseInt(textDuration.getText()),Rate);
+		dtm = Calculation.calculator(Integer.parseInt(Calculation.removecomma(textAmount.getText())),Integer.parseInt(textDuration.getText()),Rate);
 		table.setModel(dtm);
 		table.getColumnModel().getColumn(0).setPreferredWidth(40);
 		table.getColumnModel().getColumn(1).setPreferredWidth(130);
@@ -659,19 +659,19 @@ public class LoanRequestForm extends JFrame {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			noteAmount.setVisible(false);
-			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+			textAmount.setText(Calculation.addcomma(Integer.toString(sliderAmount.getValue())));
 		}
 	});
 	sliderAmount.addMouseListener(new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			noteAmount.setVisible(false);
-			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+			textAmount.setText(Calculation.addcomma(Integer.toString(sliderAmount.getValue())));
 		}
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			noteAmount.setVisible(false);
-			textAmount.setText(Integer.toString(sliderAmount.getValue()));
+			textAmount.setText(Calculation.addcomma(Integer.toString(sliderAmount.getValue())));
 		}
 	});
 	sliderAmount.setSnapToTicks(true);

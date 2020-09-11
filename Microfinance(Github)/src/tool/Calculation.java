@@ -14,10 +14,10 @@ public class Calculation {
 		for (int i = 0; i < duration; i++) {
 			interest = (int) Math.round((amount*rate)/100);
 			dtm.setValueAt(String.valueOf(i+1), i, 0);
-			dtm.setValueAt(String.valueOf(amount), i, 1);
-			dtm.setValueAt(String.valueOf(principal), i, 2);
-			dtm.setValueAt(String.valueOf(interest), i, 3);
-			dtm.setValueAt(String.valueOf(principal+interest), i, 4);
+			dtm.setValueAt(addcomma(String.valueOf(amount)), i, 1);
+			dtm.setValueAt(addcomma(String.valueOf(principal)), i, 2);
+			dtm.setValueAt(addcomma(String.valueOf(interest)), i, 3);
+			dtm.setValueAt(addcomma(String.valueOf(principal+interest)), i, 4);
 			amount = amount - principal;
 			TotalPrincipal = TotalPrincipal + principal;
 			TotalInterest = TotalInterest + interest;
@@ -25,13 +25,35 @@ public class Calculation {
 		}
 		int TotalRows = dtm.getRowCount()-1;
 		dtm.setValueAt("Total", TotalRows, 1);
-		dtm.setValueAt(String.valueOf(TotalPrincipal), TotalRows, 2);
-		dtm.setValueAt(String.valueOf(TotalInterest), TotalRows, 3);
-		dtm.setValueAt(String.valueOf(TotalInstallment), TotalRows, 4);
+		dtm.setValueAt(addcomma(String.valueOf(TotalPrincipal)), TotalRows, 2);
+		dtm.setValueAt(addcomma(String.valueOf(TotalInterest)), TotalRows, 3);
+		dtm.setValueAt(addcomma(String.valueOf(TotalInstallment)), TotalRows, 4);
 		return dtm;
 	}
 	
+	public static String addcomma(String amount) {
+		String value = "";
+		String reverse="";
+		for (int i = amount.length(); i >=1; i--) {
+			reverse += amount.substring(i-1,i);
+		}
+		for (int i = reverse.length(); i >= 1; i--) {
+			
+			if (i%3==0 && i!=reverse.length()) {
+				value+=",";
+			}
+			value += reverse.substring(i-1,i);
+		}
+		return value;
+	}
+	
+	public static String removecomma(String amount) {
+		return amount.replaceAll(",", "");
+	}
+	
 	public static void main(String[] args) {
+		System.out.println(removecomma("100,000,000"));
+		
 		//calculator(1000000, 12, 2.33);
 //		interest = (int) Math.round((amount*rate)/100);
 //		System.out.print(String.valueOf(i+1)+"\t");
