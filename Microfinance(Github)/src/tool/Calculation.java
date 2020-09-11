@@ -51,8 +51,17 @@ public class Calculation {
 		return amount.replaceAll(",", "");
 	}
 	
+	
+	public static String[] splitNRC(String str) {
+		
+		return str.replace("/", "").replaceAll("\\(", "").replaceAll("\\)", "").split("-");
+	}
+	
+	public static String[] splitAddress(String str) {
+		return str.split("\\|");
+	}
 	public static void main(String[] args) {
-		System.out.println(removecomma("100,000,000"));
+		System.out.println(splitAddress("HOme|Yangon|Myanmar")[2]);
 		
 		//calculator(1000000, 12, 2.33);
 //		interest = (int) Math.round((amount*rate)/100);

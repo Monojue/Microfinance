@@ -634,7 +634,7 @@ public class ClientEntry extends JFrame {
 				boolean check = check();
 				if(check) {
 					
-					String NRC = boxN1.getSelectedItem().toString()+"\\"+boxN2.getSelectedItem().toString()
+					String NRC = boxN1.getSelectedItem().toString()+"/"+boxN2.getSelectedItem().toString()
 								 +"("+ boxN3.getSelectedItem().toString()+")" + boxNo.getText();
 					String DateOfBirth = boxDay.getSelectedItem().toString()+"-"+boxMonth.getSelectedItem().toString()+"-"+boxYear.getSelectedItem().toString();
 					String home = "0";

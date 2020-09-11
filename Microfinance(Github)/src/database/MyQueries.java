@@ -80,15 +80,15 @@ public class MyQueries {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
 			rs.next();
-			ClientDetails[0] = rs.getString(1); //ClientID
-			ClientDetails[1] = rs.getString(2); //Name
-			ClientDetails[2] = rs.getString(3); //NRC
-			ClientDetails[3] = rs.getString(4);	//Address
-			ClientDetails[4] = rs.getString(5);	//Phone
-			ClientDetails[5] = rs.getString(6); //Date of Birth
-			ClientDetails[6] = rs.getString(7); //Home
-			ClientDetails[7] = rs.getString(8); //Job
-			ClientDetails[8] = rs.getString(9); //Salary
+			ClientDetails[0] = rs.getString("ClientID");
+			ClientDetails[1] = rs.getString("Name");
+			ClientDetails[2] = rs.getString("NRC");
+			ClientDetails[3] = rs.getString("Address");
+			ClientDetails[4] = rs.getString("Phone");
+			ClientDetails[5] = rs.getString("DateOfBirth");
+			ClientDetails[6] = rs.getString("Home");
+			ClientDetails[7] = rs.getString("Job");
+			ClientDetails[8] = rs.getString("Salary");
 			return ClientDetails;
 		} catch (SQLException e) {
 			e.printStackTrace();
