@@ -170,13 +170,16 @@ public class MyQueries {
 	}
 	}
 	
-	//Client And Guarantor Update!!!
+	//Client And Guarantor And Group Update!!!
 	public static boolean UpdateData(String tbName, String[] data) {
 	if(tbName.equals("guarantor")) {
 		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
 	}
 	if(tbName.equals("client")) {
 		query = "update client set Name= '"+data[1]+"',NRC= '"+data[2]+"',Address= '"+data[3]+"' ,Phone= '"+Integer.parseInt(data[4])+"' ,DateOfBirth= '"+data[5]+"' ,Home= '"+Integer.parseInt(data[6])+"' ,Job= '"+data[7]+"',Salary= '"+Integer.parseInt(data[8])+"' where ClientID= '"+data[0]+"'";
+	}
+	if(tbName.equals("clientgroup")) {
+		query = "update clientgroup set leader= '"+data[1]+"',Member_1= '"+data[2]+"',Member_2= '"+data[3]+"' ,Member_3= '"+data[4]+"' ,Member_4= '"+data[5]+"' ,leaderName= '"+data[6]+"' ,M1Name= '"+data[7]+"',M2Name= '"+data[8]+"',M3Name= '"+data[8]+"',M4Name= '"+data[8]+"' where GroupID= '"+data[0]+"'";
 	}
 	try {
 		stmt = con.createStatement();
@@ -280,7 +283,31 @@ public class MyQueries {
 ///////////////////// Get Loan Setting End ////////////////////////
 	
 ///////////////////// Group Query Start ////////////////////////
-	
+	//Get Client Details from ClientID
+	public String[] getGroupDetailsFormID(String id) {
+		String[] GroupDetails = new String[11];
+		query = "Select * from clientgroup where GroupID = '"+id+"';";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			rs.next();
+			GroupDetails[0] = rs.getString(1); //ID
+			GroupDetails[1] = rs.getString(2); //l1 id
+			GroupDetails[2] = rs.getString(3); //M1 ID
+			GroupDetails[3] = rs.getString(4); //M2 ID
+			GroupDetails[4] = rs.getString(5); //M3 ID
+			GroupDetails[5] = rs.getString(6); //M4 ID
+			GroupDetails[6] = rs.getString(7); //L Name
+			GroupDetails[7] = rs.getString(8); //M1 Name
+			GroupDetails[8] = rs.getString(9); //M2 Name
+			GroupDetails[9] = rs.getString(10); //M3 Name
+			GroupDetails[10] = rs.getString(11); //M4 Name
+			return GroupDetails;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;	
+	}	
 	
 	
 	

@@ -59,13 +59,14 @@ public class GroupEntry extends JFrame {
 	private Button btn3;
 	private Button btn4;
 	private JPanel panel_2;
-	private JButton button_5;
+	private JButton btnSave;
 	private JButton button_6;
 	DBConnection myDbConnection = new DBConnection();
 	MyDate myDate = new MyDate();
 	private static JLabel lblAlert;
 	public static String selplus = ""; 
 	UQueries msql = new UQueries();
+	MyQueries msql1 = new MyQueries();
 	/**
 	 * Launch the application.
 	 */
@@ -73,7 +74,7 @@ public class GroupEntry extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GroupEntry frame = new GroupEntry();
+					GroupEntry frame = new GroupEntry(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -87,9 +88,27 @@ public class GroupEntry extends JFrame {
 		textDate.setText(myDate.getdate());
 	}
 	
-	public GroupEntry() {
+	public GroupEntry(String GroupID) {
 		initialize();
-		AutoID();
+		if(GroupID == null) {
+			AutoID();
+			btnSave.setText("Save");
+		}
+		else {
+			String[] GroupDetails = msql1.getGroupDetailsFormID(GroupID);
+			textGID.setText(GroupDetails[0]);
+			leadID.setText(GroupDetails[1]);
+			M1ID.setText(GroupDetails[2]);
+			M2ID.setText(GroupDetails[3]);
+			M3ID.setText(GroupDetails[4]);
+			M4ID.setText(GroupDetails[5]);
+			leadName.setText(GroupDetails[6]);
+			M1Name.setText(GroupDetails[7]);
+			M2Name.setText(GroupDetails[8]);
+			M3Name.setText(GroupDetails[9]);
+			M4Name.setText(GroupDetails[10]);
+			btnSave.setText("Update");
+		}
 	}
 	
 	public void chooseClient() {
@@ -292,8 +311,8 @@ public class GroupEntry extends JFrame {
 		lblAlert.setVisible(false);
 		panel_2.add(lblAlert, "cell 0 0");
 		
-		button_5 = new JButton("Save");
-		button_5.addActionListener(new ActionListener() {
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (leadID.getText().isEmpty()||M1ID.getText().isEmpty()||M2ID.getText().isEmpty()||M3ID.getText().isEmpty()||M4ID.getText().isEmpty()) {
 					lblAlert.setText("Please Fill All Member!");
@@ -313,6 +332,7 @@ public class GroupEntry extends JFrame {
 					data[9] = M3Name.getText();
 					data[10] = M4Name.getText();
 					
+					if(btnSave.getText()=="Save") {
 					boolean save = msql.InsertData(MyString.GroupEntry, data);
 					if (save) {
 						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
@@ -322,10 +342,20 @@ public class GroupEntry extends JFrame {
 						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 						AutoID();
 					}
+					}
+					else if (btnSave.getText()=="Update") {
+						boolean update = msql1.UpdateData("clientgroup", data);
+						if (update) {
+							JOptionPane.showMessageDialog(null, "Updated Successfully!","Updated Record",JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} else {
+							JOptionPane.showMessageDialog(null, "Failed to Update new Record!","Cannot Updated",JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
 				}
 			}
 		});
-		panel_2.add(button_5, "cell 1 0");
+		panel_2.add(btnSave, "cell 1 0");
 		
 		button_6 = new JButton("Cancel");
 		button_6.addActionListener(new ActionListener() {

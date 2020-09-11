@@ -240,7 +240,7 @@ public class Select extends JFrame {
 					ClientEntry clientEntry = new ClientEntry(null);
 					clientEntry.setVisible(true);
 				}else if (FormType.equals(MyString.Group)) {
-					GroupEntry groupEntry = new GroupEntry();
+					GroupEntry groupEntry = new GroupEntry(null);
 					groupEntry.setVisible(true);
 				}
 			}

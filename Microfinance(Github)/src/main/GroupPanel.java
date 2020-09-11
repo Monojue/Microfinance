@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -10,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
+import entryForm.ClientEntry;
 import entryForm.GroupEntry;
 import net.miginfocom.swing.MigLayout;
 import tool.MyString;
@@ -136,7 +138,7 @@ public class GroupPanel extends JPanel {
 		JButton btnNewButton_1 = new JButton("New Group");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new GroupEntry().setVisible(true);
+				new GroupEntry(null).setVisible(true);
 			}
 		});
 		
@@ -146,6 +148,17 @@ public class GroupPanel extends JPanel {
 		panel.add(btnNewButton_1, "cell 8 0");
 		
 		JButton btnNewButton_2 = new JButton("Edit Group");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Group to Edit!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					String GroupID = (String) table.getValueAt(table.getSelectedRow(),0);
+					new GroupEntry(GroupID).setVisible(true);
+				}
+			}
+		});
 		panel.add(btnNewButton_2, "cell 10 0");
 		
 		JSeparator separator_1 = new JSeparator();
