@@ -39,6 +39,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.Font;
 
 import java.awt.event.ItemListener;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.awt.event.ItemEvent;
 
@@ -681,6 +682,15 @@ public class LoanRequestForm extends JFrame {
 	sliderAmount.setMinimum(MinAmount);
 	sliderAmount.setMaximum(MaxAmount);
 	sliderAmount.setMajorTickSpacing(AmountInterval);
+	
+	
+	Hashtable labelTable = new Hashtable();
+	labelTable.put( new Integer(MinAmount), new JLabel(Calculation.addcomma(Integer.toString(MinAmount))));
+	labelTable.put( new Integer(MaxAmount), new JLabel(Calculation.addcomma(Integer.toString(MaxAmount))));
+	sliderAmount.setLabelTable( labelTable );
+
+	sliderAmount.setPaintLabels(true);
+	
 	panel_4.add(sliderAmount, "cell 1 0 3 1");
 	
 	noteAmount = new JLabel("* Require");
