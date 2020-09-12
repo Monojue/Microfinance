@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import net.miginfocom.swing.MigLayout;
+import tool.Calculation;
 import tool.Checking;
 import tool.MyDate;
 import tool.MyString;
@@ -85,9 +86,9 @@ public class ClientEntry extends JFrame {
 	DBConnection myDbConnection = new DBConnection();
 	MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
-	private JComboBox boxDay;
-	private JComboBox<String> boxMonth;
-	private JComboBox boxYear;
+	private Choice boxDay;
+	private Choice boxMonth;
+	private Choice boxYear;
 	Date date=new Date();
 	int TodayYear = Integer.parseInt(String.valueOf(date).substring(24));
 	private JTextField textField;
@@ -235,19 +236,33 @@ public class ClientEntry extends JFrame {
 			String[] ClientDetails = msql.getClientDetailsFormID(ClientID);
 			textCID.setText(ClientDetails[0]);
 			textName.setText(ClientDetails[1]);
-			//textAddress.setText(ClientDetails[4]);
+			String[] NRC = Calculation.splitNRC(ClientDetails[2]);
+			boxN1.select(NRC[0]);
+			SetNRCcodeData();
+			boxN2.select(NRC[1]);
+			boxN3.select(NRC[2]);
+			boxNo.setText(NRC[3]);
+			String[] address = Calculation.splitAddress(ClientDetails[3]);
+			textAddress.setText(address[0]);
+			textCity.setText(address[1]);
+			textState.setText(address[2]);
+			
 			textPh.setText(ClientDetails[4]);
+			String[] birthday = Calculation.splitBirthday(ClientDetails[5]);
+			boxDay.select(birthday[0]);
+			boxMonth.select(birthday[1]);
+			boxYear.select(birthday[2]);
 			if(Integer.parseInt(ClientDetails[6])==1) {
 				checkHome.setSelected(true);
 			}
 			textJob.setText(ClientDetails[7]);
 			textSalary.setText(ClientDetails[8]);
 			btnSave.setText("Update");
+			
 		}
-		SetNRCcodeData();
 	}
 	
-	public void SetNRCcodeData() {
+	public boolean SetNRCcodeData() {
 		Vector<String> code = new Vector<>();
 		code.clear();
 		boxN2.removeAll();
@@ -255,6 +270,7 @@ public class ClientEntry extends JFrame {
 		for (String data : code) {
 			boxN2.add(data);
 		}
+		return true;
 	}
 	
 	public void Clear() {
@@ -263,9 +279,9 @@ public class ClientEntry extends JFrame {
 		boxN2.select(0);
 		boxN3.select(0);
 		boxNo.setText("");
-		boxDay.setSelectedIndex(0);
-		boxMonth.setSelectedIndex(0);
-		boxYear.setSelectedIndex(0);
+		boxDay.select(0);
+		boxMonth.select(0);
+		boxYear.select(0);
 		textAddress.setText("");
 		textCity.setText("");
 		textState.setText("");
@@ -354,7 +370,7 @@ public class ClientEntry extends JFrame {
 				noteNRC.setVisible(false);
 			}
 		});
-		boxN3.addItem("N");
+		boxN3.addItem("(N)");
 		panel.add(boxN3, "cell 10 2,growx,aligny top");
 		
 		boxNo = new JTextField();
@@ -385,7 +401,7 @@ public class ClientEntry extends JFrame {
 		noteAge.setBackground(Color.WHITE);
 		noteAge.setVisible(false);
 		
-		boxDay = new JComboBox();
+		boxDay = new Choice();
 		boxDay.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxDay.addFocusListener(new FocusAdapter() {
 			@Override
@@ -396,10 +412,10 @@ public class ClientEntry extends JFrame {
 		panel.add(boxDay, "cell 2 3 4 1,growx");
 		boxDay.addItem("");
 		for(int i=1;i<=31;i++) {
-			boxDay.addItem(i);
+			boxDay.addItem(String.valueOf(i));
 		}
 		
-		boxMonth = new JComboBox();
+		boxMonth = new Choice();
 		boxMonth.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxMonth.addFocusListener(new FocusAdapter() {
 			@Override
@@ -422,7 +438,7 @@ public class ClientEntry extends JFrame {
 		boxMonth.addItem("NOVEMBER");
 		boxMonth.addItem("DECEMBER");
 		
-		boxYear = new JComboBox();
+		boxYear = new Choice();
 		boxYear.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		boxYear.addFocusListener(new FocusAdapter() {
 			@Override
@@ -434,7 +450,7 @@ public class ClientEntry extends JFrame {
 		panel.add(noteAge, "cell 20 3 3 1,alignx left,growy");
 		boxYear.addItem("");
 		for(int i=TodayYear-70;i<=TodayYear;i++) {
-			boxYear.addItem(i);
+			boxYear.addItem(String.valueOf(i));
 		}
 		
 		JLabel label_4 = new JLabel("ADDRESS");
@@ -634,11 +650,11 @@ public class ClientEntry extends JFrame {
 				boolean check = check();
 				if(check) {
 					
-					String NRC = boxN1.getSelectedItem().toString()+"/"+boxN2.getSelectedItem().toString()
-								 +"("+ boxN3.getSelectedItem().toString()+")" + boxNo.getText();
+					String NRC = boxN1.getSelectedItem().toString()+"/-"+boxN2.getSelectedItem().toString()
+								 +"-"+ boxN3.getSelectedItem().toString()+"-" + boxNo.getText();
 					String DateOfBirth = boxDay.getSelectedItem().toString()+"-"+boxMonth.getSelectedItem().toString()+"-"+boxYear.getSelectedItem().toString();
 					String home = "0";
-					String Address = textAddress.getText()+","+ textCity.getText() + "," + textState.getText();
+					String Address = textAddress.getText()+"\\|"+ textCity.getText() + "\\|" + textState.getText();
 					if(checkHome.isSelected()) {
 						home = "1";
 					}

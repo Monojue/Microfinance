@@ -51,17 +51,24 @@ public class Calculation {
 		return amount.replaceAll(",", "");
 	}
 	
+	public static String customRemove(String str, String oldChar, String newChar) {
+		return str.replaceAll(oldChar, newChar);
+	}
 	
 	public static String[] splitNRC(String str) {
 		
-		return str.replace("/", "").replaceAll("\\(", "").replaceAll("\\)", "").split("-");
+		return str.replace("/", "").split("-");
 	}
 	
 	public static String[] splitAddress(String str) {
 		return str.split("\\|");
 	}
+	
+	public static String[] splitBirthday(String str) {
+		return str.split("-");
+	}
 	public static void main(String[] args) {
-		System.out.println(splitAddress("HOme|Yangon|Myanmar")[2]);
+		System.out.println(splitNRC("12/-DAGARA-(N)-654321")[1]);
 		
 		//calculator(1000000, 12, 2.33);
 //		interest = (int) Math.round((amount*rate)/100);

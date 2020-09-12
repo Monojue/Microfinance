@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 
 import database.DBConnection;
+import tool.Calculation;
 import tool.MyString;
 
 public class UQueries {
@@ -72,8 +73,8 @@ public class UQueries {
 			while (rs.next()) {
 				strdataitem[0] = rs.getString("ClientID");
 				strdataitem[1] = rs.getString("Name");
-				strdataitem[2] = rs.getString("NRC");
-				strdataitem[3] = rs.getString("Address");
+				strdataitem[2] = Calculation.customRemove(rs.getString("NRC"), "-","");
+				strdataitem[3] = Calculation.customRemove(rs.getString("Address"), "\\|",",");
 				strdataitem[4] = rs.getString("Phone");
 				strdataitem[5] = rs.getString("DateOfBirth");
 				strdataitem[6] = rs.getString("Home");
