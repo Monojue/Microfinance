@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 
 import database.DBConnection;
+import tool.Calculation;
 import tool.MyString;
 
 public class MyQueries {
@@ -145,6 +146,10 @@ public class MyQueries {
 	else if(tbName.equals("loanrequest")) {
 		query = "insert into loanrequest(LoanRequestID,LoanType,Amount,Duration,InterestRate) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Float.parseFloat(data[4])+"')";
+	}
+	else if(tbName.equals("clientdetails")) {
+		query = "insert into clientdetails(ClientID,LoanRequestID,RequestDate) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"')";
 	}
 	else if(tbName.equals("Iloansetting")) {
 		query = "insert into loansetting(ID,MinAmount,MaxAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval,InterestRate,ServiceRate,Date,Type,OfficerID) "
@@ -315,7 +320,43 @@ public class MyQueries {
 ///////////////////// Group Query End //////////////////////////
 	
 ///////////////////// LoanRequest Query Start //////////////////
-	
+	public DefaultTableModel getLoanRequest(String data, String type) {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String strdataitem[]= new String[9];
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("No");
+				dtm.addColumn("");
+				dtm.addColumn("NRC");
+				dtm.addColumn("Address");
+				dtm.addColumn("Phone");
+				dtm.addColumn("DateOfBirth");
+				dtm.addColumn("Home");
+				dtm.addColumn("Job");
+				dtm.addColumn("Salary");
+			}
+			while (rs.next()) {
+				strdataitem[0] = rs.getString("ClientID");
+				strdataitem[1] = rs.getString("Name");
+				strdataitem[2] = Calculation.customRemove(rs.getString("NRC"), "-","");
+				strdataitem[3] = Calculation.customRemove(rs.getString("Address"), "\\|",",");
+				strdataitem[4] = rs.getString("Phone");
+				strdataitem[5] = rs.getString("DateOfBirth");
+				strdataitem[6] = rs.getString("Home");
+				strdataitem[7] = rs.getString("Job");
+				strdataitem[8] = rs.getString("Salary");
+				dtm.addRow(strdataitem);
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		
+		return dtm;
+	}
 	
 	
 	
