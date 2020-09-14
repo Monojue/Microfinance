@@ -819,7 +819,7 @@ public class LoanRequestForm extends JFrame {
 					String[] LoanRequest = new String[5];
 					LoanRequest[0] = textID.getText();
 					LoanRequest[1] = "Individual";
-					LoanRequest[2] = textAmount.getText();
+					LoanRequest[2] = Calculation.removecomma(textAmount.getText());
 					LoanRequest[3] = textDuration.getText();
 					LoanRequest[4] = "2.33";
 					boolean insert = msql.InsertData("loanrequest", LoanRequest);
