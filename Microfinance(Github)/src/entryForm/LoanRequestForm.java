@@ -821,9 +821,15 @@ public class LoanRequestForm extends JFrame {
 					LoanRequest[1] = "Individual";
 					LoanRequest[2] = Calculation.removecomma(textAmount.getText());
 					LoanRequest[3] = textDuration.getText();
-					LoanRequest[4] = "2.33";
+					LoanRequest[4] = lblRate.getText().replaceAll("%", "");
 					boolean insert = msql.InsertData("loanrequest", LoanRequest);
-					if (update && insert) {
+					
+					String[] ClientDetails = new String[3];
+					ClientDetails[0] = textCID.getText();
+					ClientDetails[1] = textID.getText();
+					ClientDetails[2] = textDate.getText();
+					boolean insert2 = msql.InsertData("clientdetails", ClientDetails);
+					if (update && insert && insert2) {
 						JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else if(!update) {
@@ -831,6 +837,9 @@ public class LoanRequestForm extends JFrame {
 					}
 					else if (!insert){
 						JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else if (!insert2){
+						JOptionPane.showMessageDialog(null, "Failed to Save Client Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 		}
