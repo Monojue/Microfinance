@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
+import database.MyQueries;
 import entryForm.GroupRequestForm;
 import entryForm.LoanRequestForm;
 import net.miginfocom.swing.MigLayout;
@@ -28,14 +29,33 @@ public class LoanPanel extends JPanel {
 
 	private JTextField textField;
 	private JTable table;
-	private JTable table_1;
+	private JTable tableIndividual;
 	private JTextField textField_1;
 	private JTextField textField_2;
 
+	MyQueries msql = new MyQueries();
 	/**
 	 * Create the panel.
 	 */
+	
 	public LoanPanel() {
+		Initialize();
+		createITable();
+		//createGTable();
+	}
+	
+	public void createITable() {
+		tableIndividual.setModel(msql.getApprovedLoanRequest());
+		tableIndividual.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tableIndividual.getColumnModel().getColumn(1).setMinWidth(0);
+		tableIndividual.getColumnModel().getColumn(1).setMaxWidth(0);
+		tableIndividual.getColumnModel().getColumn(1).setWidth(0);
+		tableIndividual.getColumnModel().getColumn(2).setPreferredWidth(200);
+		tableIndividual.getColumnModel().getColumn(3).setPreferredWidth(200);
+		tableIndividual.getColumnModel().getColumn(4).setPreferredWidth(100);
+	}
+	
+	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -53,8 +73,8 @@ public class LoanPanel extends JPanel {
 		scrollPane.setBounds(10, 56, 1034, 497);
 		panel.add(scrollPane);
 		
-		table_1 = new JTable();
-		scrollPane.setViewportView(table_1);
+		tableIndividual = new JTable();
+		scrollPane.setViewportView(tableIndividual);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Color.LIGHT_GRAY);

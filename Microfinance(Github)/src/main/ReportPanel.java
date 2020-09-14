@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
 
 public class ReportPanel extends JPanel {
 	private JTable table;
-	private JTable table_1;
+	private JTable tableApproved;
 	private String ClientID, LoanRequestID, Amount, Duration;
 	
 	MyQueries msql = new MyQueries();
@@ -34,6 +34,7 @@ public class ReportPanel extends JPanel {
 	public ReportPanel() {
 		Initialize();
 		createTable();
+		createApprovedTable();
 	}
 	
 	public void createTable() {
@@ -46,8 +47,18 @@ public class ReportPanel extends JPanel {
 		table.getColumnModel().getColumn(3).setPreferredWidth(200);
 		table.getColumnModel().getColumn(4).setPreferredWidth(200);
 		table.getColumnModel().getColumn(5).setPreferredWidth(100);
-		table.getColumnModel().getColumn(6).setPreferredWidth(100);
-}
+	}
+	
+	public void createApprovedTable() {
+		tableApproved.setModel(msql.getApprovedLoanRequest());
+		tableApproved.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tableApproved.getColumnModel().getColumn(1).setMinWidth(0);
+		tableApproved.getColumnModel().getColumn(1).setMaxWidth(0);
+		tableApproved.getColumnModel().getColumn(1).setWidth(0);
+		tableApproved.getColumnModel().getColumn(2).setPreferredWidth(200);
+		tableApproved.getColumnModel().getColumn(3).setPreferredWidth(200);
+		tableApproved.getColumnModel().getColumn(4).setPreferredWidth(100);
+	}
 	
 	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
@@ -78,8 +89,8 @@ public class ReportPanel extends JPanel {
 		scrollPane_1.setBounds(10, 26, 1019, 231);
 		panel_1.add(scrollPane_1);
 		
-		table_1 = new JTable();
-		scrollPane_1.setViewportView(table_1);
+		tableApproved = new JTable();
+		scrollPane_1.setViewportView(tableApproved);
 		
 		JButton btnNewButton = new JButton("View Details");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -103,6 +114,7 @@ public class ReportPanel extends JPanel {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				createTable();
+				createApprovedTable();
 			}
 		});
 		btnNewButton_1.setBounds(913, 280, 122, 25);

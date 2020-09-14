@@ -360,7 +360,45 @@ public class MyQueries {
 				
 				String approave = LoanRequestDetails[5];
 				if(approave ==null) {
-				dtm.addRow(dataitem);}
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public DefaultTableModel getApprovedLoanRequest() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[7];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from clientdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Client ID");
+				dtm.addColumn("Client Name");
+				dtm.addColumn("Amount");
+				dtm.addColumn("Duration");
+				dtm.addColumn("Date");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("ClientID");
+				dataitem[2] = msql.getClientNameFormID(rs.getString("ClientID"));
+				dataitem[3] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[4] = LoanRequestDetails[2];
+				dataitem[5] = rs.getString("RequestDate");
+				
+				String approave = LoanRequestDetails[5];
+				if(approave !=null) {
+					dtm.addRow(dataitem);
+				}
 			}
 			return dtm;
 		} catch (SQLException e) {
