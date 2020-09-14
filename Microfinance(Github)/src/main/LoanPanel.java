@@ -65,7 +65,7 @@ public class LoanPanel extends JPanel {
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new LoanRequestForm().setVisible(true);
+				new LoanRequestForm(null,null,null,null).setVisible(true);
 			}
 		});
 		

@@ -60,35 +60,40 @@ public class LoanRequestForm extends JFrame {
 	private static JTextField textPJob;
 	private static JTextField textPSalary;
 	private JLabel noteClientError;
-	private JTextField textGName;
-	private JTextField textGNRC;
-	private JTextField textGAddress;
-	private JTextField textGCity;
-	private JTextField textGState;
-	private JTextField textGPhone;
-	private JTextField textGJob;
-	private JTextField textGSalary;
+	private static JTextField textGName;
+	private static JTextField textGNRC;
+	private static JTextField textGAddress;
+	private static JTextField textGCity;
+	private static JTextField textGState;
+	private static JTextField textGPhone;
+	private static JTextField textGJob;
+	private static JTextField textGSalary;
 	private JTextField textID;
 	private JTextField textDate;
 	private JScrollPane scrollPane;
 	private static JTextField textCID;
 	private JLabel noteGName;
-	private Choice boxGNRC1;
+	private static Choice boxGNRC1;
 	private JLabel noteNRC;
-	private Choice boxGNRC2;
-	private Choice boxGNRC3;
+	private static Choice boxGNRC2;
+	private static Choice boxGNRC3;
 	private JLabel noteGAddress;
 	private JLabel noteGCity;
 	private JLabel noteGState;
 	private JLabel noteGPhone;
 	private JLabel noteGJob;
 	private JLabel noteGSalary;
-	private JTextField textGRelationship;
+	private static JTextField textGRelationship;
 	private JLabel noteGRelationship;
 	private JLabel noteAmount;
 	private JLabel noteDuration;
 	private JLabel lblRate;
 	private JLabel lblFees;
+	private JButton btnSelectClientButton;
+	private JSlider sliderDuration;
+	private JSlider sliderAmount;
+	private JButton btnRequestLoan;
+	private JButton btnCancel;
 	
 	LoanRequest loanRequest = new LoanRequest();
 	DBConnection myDbConnection = new DBConnection();
@@ -102,6 +107,7 @@ public class LoanRequestForm extends JFrame {
 	private JLabel lblMonth;
 	private int MaxAmount,MinAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval;
 	private float Rate,Fees;
+	private String ClientID,RequestedAmount,RequestedDuration;
 	/**
 	 * Launch the application.
 	 */
@@ -109,7 +115,7 @@ public class LoanRequestForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoanRequestForm window = new LoanRequestForm();
+					LoanRequestForm window = new LoanRequestForm(null,null,null,null);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -128,12 +134,35 @@ public class LoanRequestForm extends JFrame {
 			boxGNRC2.add(data);
 		}
 	}
-	public LoanRequestForm() {
+	public LoanRequestForm(String loanRequestID, String clientID, String amount, String duration) {
 		GetILoanSetting();
 		initialize();
+		if(loanRequestID == null && clientID == null) 
+		{
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
+		}
+		else {
+			textID.setText(loanRequestID);
+			ClientID = clientID;
+			RequestedAmount = amount;
+			RequestedDuration = duration;
+			SetDataForEverything();
+		}
 		SetNRCcodeData();
+	}
+	
+	public void SetDataForEverything() {
+		String[] ClientDetails = msql.getClientDetailsFormID(ClientID);
+		setClientData(ClientDetails[0],ClientDetails[1],ClientDetails[2],ClientDetails[3],ClientDetails[4],ClientDetails[5],ClientDetails[6],ClientDetails[7],ClientDetails[8]);
+		btnSelectClientButton.setEnabled(false);
+		setGuarantorData(ClientDetails[9],ClientDetails[15],ClientDetails[13],ClientDetails[14],ClientDetails[10],ClientDetails[11],ClientDetails[12]);
+		textAmount.setText(RequestedAmount);
+		sliderAmount.setEnabled(false);
+		textDuration.setText(RequestedDuration);
+		sliderDuration.setEnabled(false);
+		btnRequestLoan.setText("Approve");
+		btnCancel.setText("Decline");
 	}
 	
 	//Get Individual Loan Setting
@@ -207,6 +236,35 @@ public class LoanRequestForm extends JFrame {
 		else {
 			checkPHome.setSelected(false);
 		}
+	}
+	
+	public static void setGuarantorData(String name,String NRC,String address,String phno,String job,String salary,String rs) {
+		textGName.setText(name);
+		String[] GNRC = Calculation.splitNRC(NRC);
+		boxGNRC1.select(GNRC[0]);
+		boxGNRC2.select(GNRC[1]);
+		boxGNRC3.select(GNRC[2]);
+		textGNRC.setText(GNRC[3]);
+		String[] Gaddress = Calculation.splitAddress(address);
+		textGAddress.setText(Gaddress[0]);
+		textGCity.setText(Gaddress[1]);
+		textGState.setText(Gaddress[2]);
+		textGPhone.setText(phno);
+		textGJob.setText(job);
+		textGSalary.setText(salary);
+		textGRelationship.setText(rs);
+		textGName.setEditable(false);
+		boxGNRC1.setEnabled(false);
+		boxGNRC2.setEnabled(false);
+		boxGNRC3.setEnabled(false);
+		textGNRC.setEditable(false);
+		textGAddress.setEditable(false);
+		textGCity.setEditable(false);
+		textGState.setEditable(false);
+		textGPhone.setEditable(false);
+		textGJob.setEditable(false);
+		textGSalary.setEditable(false);
+		textGRelationship.setEditable(false);
 	}
 	
 	public boolean check() {
@@ -419,8 +477,8 @@ public class LoanRequestForm extends JFrame {
 	panel_1.add(textPSalary, "cell 3 9 5 1,alignx left,aligny top");
 	textPSalary.setColumns(10);
 	
-	JButton btnNewButton = new JButton("Select Client");
-	btnNewButton.addActionListener(new ActionListener() {
+	btnSelectClientButton = new JButton("Select Client");
+	btnSelectClientButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			Select select = new Select(MyString.One,MyString.LoanRequestForm);
 			select.setVisible(true);
@@ -431,7 +489,7 @@ public class LoanRequestForm extends JFrame {
 	noteClientError = new JLabel("* Choose Client");
 	noteClientError.setForeground(Color.RED);
 	panel_1.add(noteClientError, "cell 1 10 6 1");
-	panel_1.add(btnNewButton, "cell 13 10");
+	panel_1.add(btnSelectClientButton, "cell 13 10");
 	noteClientError.setVisible(false);
 	
 	JPanel panel_2 = new JPanel();
@@ -655,7 +713,7 @@ public class LoanRequestForm extends JFrame {
 	panel_4.setLayout(new MigLayout("", "[21.00][65px][81.00px][20.00px][77px]", "[26px][20px][14px][][38.00][][][][23px]"));
 
 	
-	JSlider sliderAmount = new JSlider();
+	sliderAmount = new JSlider();
 	sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
 		@Override
 		public void mouseDragged(MouseEvent e) {
@@ -708,7 +766,7 @@ public class LoanRequestForm extends JFrame {
 	textAmount.setColumns(10);
 	panel_4.add(textAmount, "cell 2 1 2 2,growx");
 	
-	JSlider sliderDuration = new JSlider();
+	sliderDuration = new JSlider();
 	sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
 		@Override
 		public void mouseDragged(MouseEvent e) {
@@ -786,25 +844,31 @@ public class LoanRequestForm extends JFrame {
 	scrollPane.setColumnHeaderView(table);
 	scrollPane.setViewportView(table);
 	
-	JButton btnCancel = new JButton("Cancel");
+	btnCancel = new JButton("Cancel");
 	btnCancel.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
+			if(btnCancel.getText() == "Cancel") {
 			dispose();
+			}
+			if(btnCancel.getText() == "Decline") {
+				
+			}
 		}
 	});
 	btnCancel.setBounds(1209, 674, 89, 23);
 	this.getContentPane().add(btnCancel);
 	
-	JButton btnRequestLoan = new JButton("Request Loan");
+	btnRequestLoan = new JButton("Request Loan");
 	btnRequestLoan.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
+			
+			if(btnRequestLoan.getText() == "Request Loan") {
 			boolean check = check();
 			if(check) {
 				
-				String NRC = boxGNRC1.getSelectedItem().toString()+"\\"+boxGNRC2.getSelectedItem().toString()
-							 +"("+ boxGNRC3.getSelectedItem().toString()+")" + textGNRC.getText();
-				String Address = textGAddress.getText()+","+textGCity.getText()+","+textGState.getText();
-				
+				String NRC = boxGNRC1.getSelectedItem().toString()+"/-"+boxGNRC2.getSelectedItem().toString()
+							 +"-"+ boxGNRC3.getSelectedItem().toString()+"-" + textGNRC.getText();
+				String Address = textGAddress.getText()+"\\|"+textGCity.getText()+"\\|"+textGState.getText();
 					String[] GDetails = new String[8];
 					GDetails[0] = textCID.getText();
 					GDetails[1] = textGName.getText();
@@ -841,7 +905,20 @@ public class LoanRequestForm extends JFrame {
 					else if (!insert2){
 						JOptionPane.showMessageDialog(null, "Failed to Save Client Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
+			}
 				}
+			if(btnRequestLoan.getText() == "Approve") {
+				String[] Approve = new String[2];
+				Approve[0] = textID.getText();
+				Approve[1] = "1";
+				boolean update = msql.UpdateData("loanrequest", Approve);
+				if (update) {
+					JOptionPane.showMessageDialog(null, "New Loan Request is Approved Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else if(!update) {
+					JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
 		}
 	});
 	btnRequestLoan.setBounds(1078, 674, 122, 23);

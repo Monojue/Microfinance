@@ -21,6 +21,7 @@ public class MyQueries {
 	static String query,query1;
 	ResultSet rs;
 	DBConnection connect = new DBConnection();
+	UQueries msql = new UQueries();
 	
 	public MyQueries() {
 		try {
@@ -75,7 +76,7 @@ public class MyQueries {
 	}
 	//Get Client Details from ClientID
 	public String[] getClientDetailsFormID(String id) {
-		String[] ClientDetails = new String[9];
+		String[] ClientDetails = new String[16];
 		query = "Select * from client where clientID = '"+id+"';";
 		try {
 			stmt = con.createStatement();
@@ -90,6 +91,13 @@ public class MyQueries {
 			ClientDetails[6] = rs.getString("Home");
 			ClientDetails[7] = rs.getString("Job");
 			ClientDetails[8] = rs.getString("Salary");
+			ClientDetails[9] = rs.getString("GName");
+			ClientDetails[10] = rs.getString("GJob");
+			ClientDetails[11] = rs.getString("GSalary");
+			ClientDetails[12] = rs.getString("Relationship");
+			ClientDetails[13] = rs.getString("GAddress");
+			ClientDetails[14] = rs.getString("GPhone");
+			ClientDetails[15] = rs.getString("GNRC");
 			return ClientDetails;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -185,6 +193,9 @@ public class MyQueries {
 	}
 	if(tbName.equals("clientgroup")) {
 		query = "update clientgroup set leader= '"+data[1]+"',Member_1= '"+data[2]+"',Member_2= '"+data[3]+"' ,Member_3= '"+data[4]+"' ,Member_4= '"+data[5]+"' ,leaderName= '"+data[6]+"' ,M1Name= '"+data[7]+"',M2Name= '"+data[8]+"',M3Name= '"+data[8]+"',M4Name= '"+data[8]+"' where GroupID= '"+data[0]+"'";
+	}
+	if(tbName.equals("loanrequest")) {
+		query = "update loanrequest set Approved= '"+data[1]+"' where LoanrequestID= '"+data[0]+"'";
 	}
 	try {
 		stmt = con.createStatement();
@@ -320,42 +331,63 @@ public class MyQueries {
 ///////////////////// Group Query End //////////////////////////
 	
 ///////////////////// LoanRequest Query Start //////////////////
-	public DefaultTableModel getLoanRequest(String data, String type) {
+	public DefaultTableModel getLoanRequest() {
 		DefaultTableModel dtm = new DefaultTableModel();
-		String strdataitem[]= new String[9];
+		String dataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
+			query ="Select * from clientdetails";
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
-				dtm.addColumn("No");
-				dtm.addColumn("");
-				dtm.addColumn("NRC");
-				dtm.addColumn("Address");
-				dtm.addColumn("Phone");
-				dtm.addColumn("DateOfBirth");
-				dtm.addColumn("Home");
-				dtm.addColumn("Job");
-				dtm.addColumn("Salary");
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Loan Type");
+				dtm.addColumn("Client ID");
+				dtm.addColumn("Client/Leader Name");
+				dtm.addColumn("Amount");
+				dtm.addColumn("Duration");
+				dtm.addColumn("Date");
 			}
 			while (rs.next()) {
-				strdataitem[0] = rs.getString("ClientID");
-				strdataitem[1] = rs.getString("Name");
-				strdataitem[2] = Calculation.customRemove(rs.getString("NRC"), "-","");
-				strdataitem[3] = Calculation.customRemove(rs.getString("Address"), "\\|",",");
-				strdataitem[4] = rs.getString("Phone");
-				strdataitem[5] = rs.getString("DateOfBirth");
-				strdataitem[6] = rs.getString("Home");
-				strdataitem[7] = rs.getString("Job");
-				strdataitem[8] = rs.getString("Salary");
-				dtm.addRow(strdataitem);
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = LoanRequestDetails[0];
+				dataitem[2] = rs.getString("ClientID");
+				dataitem[3] = msql.getClientNameFormID(rs.getString("ClientID"));
+				dataitem[4] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[5] = LoanRequestDetails[2];
+				dataitem[6] = rs.getString("RequestDate");
+				
+				String approave = LoanRequestDetails[5];
+				if(approave ==null) {
+				dtm.addRow(dataitem);}
 			}
 			return dtm;
 		} catch (SQLException e) {
 			System.out.println(e);
+			return null;
 		}
-		
-		return dtm;
+	}
+	
+	public String[] GetLoanRequestData(String id) {
+		String[] data = new String[6];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from loanrequest where LoanRequestID = '"+id+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			rs.next();
+			data[0] = rs.getString(2); //Type
+			data[1] = rs.getString(3); //Amount
+			data[2] = rs.getString(4); //Duration
+			data[3] = rs.getString(5); //Rate
+			data[4] = rs.getString(6); //PayDay
+			data[5] = rs.getString(7); //Approved
+			return data;
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+			return null;
+		}
 	}
 	
 	
