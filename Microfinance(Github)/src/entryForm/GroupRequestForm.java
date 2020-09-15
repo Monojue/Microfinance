@@ -502,11 +502,20 @@ public class GroupRequestForm extends JFrame{
 						LoanRequest[3] = textDuration.getText();
 						LoanRequest[4] = lblRate.getText().replace("%", "");
 						boolean insert = msql.InsertData("loanrequest", LoanRequest);
-						if (insert) {
+						
+						String[] GroupDetails = new String[3];
+						GroupDetails[0] = txtGroupID.getText();
+						GroupDetails[1] = textID.getText();
+						GroupDetails[2] = textDate.getText();
+						boolean insert2 = msql.InsertData("groupdetails", GroupDetails);
+						if (insert && insert2) {
 							JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
 						}
 						else if (!insert){
 							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+						}
+						else if (!insert2){
+							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request2!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 			}

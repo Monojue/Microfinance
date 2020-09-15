@@ -159,6 +159,10 @@ public class MyQueries {
 		query = "insert into clientdetails(ClientID,LoanRequestID,RequestDate) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"')";
 	}
+	else if(tbName.equals("groupdetails")) {
+		query = "insert into groupdetails(GroupID,LoanRequestID,RequestDate) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"')";
+	}
 	else if(tbName.equals("Iloansetting")) {
 		query = "insert into loansetting(ID,MinAmount,MaxAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval,InterestRate,ServiceRate,Date,Type,OfficerID) "
 				+ "values('"+data[0]+"','"+Integer.parseInt(data[1])+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Integer.parseInt(data[4])+"','"+Integer.parseInt(data[5])+"','"+Integer.parseInt(data[6])+"','"+Float.parseFloat(data[7])+"','"+Float.parseFloat(data[8])+"','"+data[9]+"','"+data[10]+"','"+data[11]+"')";
