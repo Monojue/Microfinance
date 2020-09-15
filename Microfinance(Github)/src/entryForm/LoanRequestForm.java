@@ -850,8 +850,7 @@ public class LoanRequestForm extends JFrame {
 			if(btnCancel.getText() == "Cancel") {
 			dispose();
 			}
-			if(btnCancel.getText() == "Decline") {
-				
+			if(btnCancel.getText() == "Decline") {				
 			}
 		}
 	});

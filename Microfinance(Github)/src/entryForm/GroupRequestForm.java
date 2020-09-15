@@ -77,12 +77,18 @@ public class GroupRequestForm extends JFrame{
 	private JLabel lblRate;
 	private JTextField textAmount;
 	private JTextField textDuration;
+	private JButton btnSelect;
+	private JSlider sliderAmount;
+	private JSlider sliderDuration;
+	private JButton btnRequestLoan;
+	private JButton btnCancel;
+	private String GroupID,RequestedAmount,RequestedDuration;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GroupRequestForm window = new GroupRequestForm();
+					GroupRequestForm window = new GroupRequestForm(null,null,null,null);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -94,12 +100,35 @@ public class GroupRequestForm extends JFrame{
 
 	
 	
-	public GroupRequestForm() {
+	public GroupRequestForm(String loanRequestID, String groupID, String amount, String duration) {
 		GetILoanSetting();
 		initialize();
+		if(loanRequestID == null && groupID == null) 
+		{
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
+		}
+		else 
+		{
+			textID.setText(loanRequestID);
+			GroupID = groupID;
+			RequestedAmount = amount;
+			RequestedDuration = duration;
+			SetDataForEverything();
+		}
 		
+	}
+	
+	public void SetDataForEverything() {
+		String[] GroupDetails = msql.getGroupDetailsFormID(GroupID);
+		setGroupData(GroupDetails[0],GroupDetails[6],GroupDetails[7],GroupDetails[8],GroupDetails[9],GroupDetails[10]);
+		btnSelect.setEnabled(false);
+		textAmount.setText(RequestedAmount);
+		sliderAmount.setEnabled(false);
+		textDuration.setText(RequestedDuration);
+		sliderDuration.setEnabled(false);
+		btnRequestLoan.setText("Approve");
+		btnCancel.setText("Decline");
 	}
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
@@ -244,7 +273,7 @@ public class GroupRequestForm extends JFrame{
 		JLabel lblNewLabel_2 = new JLabel("Amount");
 		panel_4.add(lblNewLabel_2, "cell 0 2,alignx left,aligny center");
 		
-		JSlider sliderAmount = new JSlider();
+		sliderAmount = new JSlider();
 		sliderAmount.setBackground(Color.WHITE);
 		sliderAmount.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -295,7 +324,7 @@ public class GroupRequestForm extends JFrame{
 		JLabel lblNewLabel_3 = new JLabel("Duration");
 		panel_4.add(lblNewLabel_3, "cell 0 5,growx,aligny center");
 		
-		JSlider sliderDuration = new JSlider();
+		sliderDuration = new JSlider();
 		sliderDuration.setBackground(Color.WHITE);
 		sliderDuration.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -465,8 +494,8 @@ public class GroupRequestForm extends JFrame{
 		Label label_8 = new Label("Member 4");
 		panel_1.add(label_8, "cell 0 6,alignx left,growy");
 		
-		JButton btnNewButton = new JButton("Select Group");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnSelect = new JButton("Select Group");
+		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Select select = new Select(MyString.Group, MyString.GroupRequestForm);
 				select.setVisible(true);
@@ -478,20 +507,26 @@ public class GroupRequestForm extends JFrame{
 		noteClientError.setForeground(Color.RED);
 		noteClientError.setVisible(false);
 		panel_1.add(noteClientError, "cell 1 8");
-		panel_1.add(btnNewButton, "cell 2 8,alignx right");
+		panel_1.add(btnSelect, "cell 2 8,alignx right");
 		
-		JButton btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
+				if(btnCancel.getText() == "Cancel") {
+					dispose();
+					}
+					if(btnCancel.getText() == "Decline") {
+						
+					}
 			}
 		});
 		btnCancel.setBounds(894, 653, 89, 23);
 		this.getContentPane().add(btnCancel);
 		
-		JButton btnRequestLoan = new JButton("Request Loan");
+		btnRequestLoan = new JButton("Request Loan");
 		btnRequestLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(btnRequestLoan.getText() == "Request Loan") {
 				boolean check = check();
 				if(check) {
 						
@@ -517,7 +552,19 @@ public class GroupRequestForm extends JFrame{
 						else if (!insert2){
 							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request2!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 						}
+					}}
+				else if(btnRequestLoan.getText() == "Approve") {
+					String[] Approve = new String[2];
+					Approve[0] = textID.getText();
+					Approve[1] = "1";
+					boolean update = msql.UpdateData("loanrequest", Approve);
+					if (update) {
+						JOptionPane.showMessageDialog(null, "New Loan Request is Approved Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
 					}
+					else if(!update) {
+						JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
 			}
 		});
 		btnRequestLoan.setBounds(762, 653, 122, 23);
