@@ -30,18 +30,21 @@ import javax.swing.SwingConstants;
 public class LoanPanel extends JPanel {
 
 	private JTextField textField;
-	private JTable table;
+	//private JTable table;
 	private JTable tableIndividual;
 	private JTextField textField_1;
 	private JTextField textField_2;
 
 	MyQueries msql = new MyQueries();
+
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
 	private JScrollPane scrollPane;
 	private JPanel panel_2;
 	private JScrollPane scrollPane_1;
 	private JPanel panel_4;
+	private JTable tableGroup;
+
 	/**
 	 * Create the panel.
 	 */
@@ -49,11 +52,11 @@ public class LoanPanel extends JPanel {
 	public LoanPanel() {
 		Initialize();
 		createITable();
-		//createGTable();
+		createGTable();
 	}
 	
 	public void createITable() {
-		tableIndividual.setModel(msql.getApprovedLoanRequest());
+		tableIndividual.setModel(msql.getIndividualApprovedLoanRequest());
 		tableIndividual.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tableIndividual.getColumnModel().getColumn(1).setMinWidth(0);
 		tableIndividual.getColumnModel().getColumn(1).setMaxWidth(0);
@@ -63,6 +66,7 @@ public class LoanPanel extends JPanel {
 		tableIndividual.getColumnModel().getColumn(4).setPreferredWidth(100);
 	}
 	
+
 	 public void updatePanelSize() {
 
 //	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
@@ -103,6 +107,23 @@ public class LoanPanel extends JPanel {
 	        System.out.println("GroupResut: " + resultWidth + "x" + resultHeight);
 //	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
 	    }
+
+	public void createGTable() {
+		tableGroup.setModel(msql.getGroupApprovedLoanRequest());
+		tableGroup.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(1).setMinWidth(0);
+		tableGroup.getColumnModel().getColumn(1).setMaxWidth(0);
+		tableGroup.getColumnModel().getColumn(1).setWidth(0);
+		tableGroup.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(5).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(6).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(7).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(8).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(9).setPreferredWidth(100);
+	}
+
 	
 	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
@@ -162,6 +183,11 @@ public class LoanPanel extends JPanel {
 		panel_2.add(btnNewButton, "cell 6 0,growx,aligny center");
 		
 		JButton button = new JButton("Refresh");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				createITable();
+			}
+		});
 		panel_2.add(button, "cell 8 0,growx,aligny center");
 		
 		JPanel panel_1 = new JPanel();
@@ -172,7 +198,14 @@ public class LoanPanel extends JPanel {
 		scrollPane_1.setBounds(10, 56, 1034, 497);
 		panel_1.add(scrollPane_1);
 		
+
 		panel_4 = new JPanel();
+
+		tableGroup = new JTable();
+		scrollPane_1.setColumnHeaderView(tableGroup);
+		
+		
+
 		panel_4.setBackground(Color.LIGHT_GRAY);
 		panel_4.setBounds(10, 11, 1034, 34);
 		panel_1.add(panel_4);
@@ -204,12 +237,17 @@ public class LoanPanel extends JPanel {
 		JButton btnNewGroupLoan = new JButton("New Group Loan");
 		btnNewGroupLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new GroupRequestForm().setVisible(true);
+				new GroupRequestForm(null,null,null,null).setVisible(true);
 			}
 		});
 		panel_4.add(btnNewGroupLoan, "cell 6 0,growx,aligny center");
 		
 		JButton button_3 = new JButton("Refresh");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createGTable();
+			}
+		});
 		panel_4.add(button_3, "cell 8 0,growx,aligny center");
 		
 

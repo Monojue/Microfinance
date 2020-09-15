@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 
 import database.MyQueries;
 import entryForm.ClientEntry;
+import entryForm.GroupRequestForm;
 import entryForm.LoanRequestForm;
 import tool.MyString;
 
@@ -25,8 +26,8 @@ import net.miginfocom.swing.MigLayout;
 
 public class ReportPanel extends JPanel {
 	private JTable table;
-	private JTable tableApproved;
-	private String ClientID, LoanRequestID, Amount, Duration;
+	private JTable tableGroup;
+	private String ClientID, LoanRequestID, Amount, Duration,GroupID;
 	
 	MyQueries msql = new MyQueries();
 	private JPanel panel;
@@ -40,22 +41,22 @@ public class ReportPanel extends JPanel {
 	 */
 	public ReportPanel() {
 		Initialize();
-		createTable();
-		createApprovedTable();
+		createIndividualTable();
+		createGroupTable();
 	}
 	
-	public void createTable() {
-		table.setModel(msql.getLoanRequest());
+	public void createIndividualTable() {
+		table.setModel(msql.getIndividualLoanRequest());
 		table.getColumnModel().getColumn(0).setPreferredWidth(100);
-		table.getColumnModel().getColumn(1).setPreferredWidth(150);
-		table.getColumnModel().getColumn(2).setMinWidth(0);
-		table.getColumnModel().getColumn(2).setMaxWidth(0);
-		table.getColumnModel().getColumn(2).setWidth(0);
+		table.getColumnModel().getColumn(1).setMinWidth(0);
+		table.getColumnModel().getColumn(1).setMaxWidth(0);
+		table.getColumnModel().getColumn(1).setWidth(0);
+		table.getColumnModel().getColumn(2).setPreferredWidth(200);
 		table.getColumnModel().getColumn(3).setPreferredWidth(200);
-		table.getColumnModel().getColumn(4).setPreferredWidth(200);
-		table.getColumnModel().getColumn(5).setPreferredWidth(100);
+		table.getColumnModel().getColumn(4).setPreferredWidth(100);
 	}
 	
+
 	 public void updatePanelSize() {
 
 //	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
@@ -97,15 +98,31 @@ public class ReportPanel extends JPanel {
 //	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
 	    }
 	
-	public void createApprovedTable() {
-		tableApproved.setModel(msql.getApprovedLoanRequest());
-		tableApproved.getColumnModel().getColumn(0).setPreferredWidth(100);
-		tableApproved.getColumnModel().getColumn(1).setMinWidth(0);
-		tableApproved.getColumnModel().getColumn(1).setMaxWidth(0);
-		tableApproved.getColumnModel().getColumn(1).setWidth(0);
-		tableApproved.getColumnModel().getColumn(2).setPreferredWidth(200);
-		tableApproved.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tableApproved.getColumnModel().getColumn(4).setPreferredWidth(100);
+	// public void createApprovedTable() {
+	// 	tableApproved.setModel(msql.getApprovedLoanRequest());
+	// 	tableApproved.getColumnModel().getColumn(0).setPreferredWidth(100);
+	// 	tableApproved.getColumnModel().getColumn(1).setMinWidth(0);
+	// 	tableApproved.getColumnModel().getColumn(1).setMaxWidth(0);
+	// 	tableApproved.getColumnModel().getColumn(1).setWidth(0);
+	// 	tableApproved.getColumnModel().getColumn(2).setPreferredWidth(200);
+	// 	tableApproved.getColumnModel().getColumn(3).setPreferredWidth(200);
+	// 	tableApproved.getColumnModel().getColumn(4).setPreferredWidth(100);
+
+	public void createGroupTable() {
+		tableGroup.setModel(msql.getGroupLoanRequest());
+		tableGroup.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(1).setMinWidth(0);
+		tableGroup.getColumnModel().getColumn(1).setMaxWidth(0);
+		tableGroup.getColumnModel().getColumn(1).setWidth(0);
+		tableGroup.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(5).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(6).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(7).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(8).setPreferredWidth(100);
+		tableGroup.getColumnModel().getColumn(9).setPreferredWidth(100);
+
 	}
 	
 	public void Initialize() {
@@ -114,9 +131,11 @@ public class ReportPanel extends JPanel {
 		setLayout(null);
 		setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
 		
+
 		panel = new JPanel();
-		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Pending Request", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Individual Pending Request", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel.setBounds(10, 57, 1039, 268);
+
 		add(panel);
 		panel.setLayout(null);
 		
@@ -126,10 +145,15 @@ public class ReportPanel extends JPanel {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		if(table.getSelectedRow()>=0) {
+			createGroupTable();
+		}
 		
+
 		panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Approved Request", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Group Pending Request", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel_1.setBounds(10, 347, 1039, 335);
+
 		add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -137,9 +161,14 @@ public class ReportPanel extends JPanel {
 		scrollPane_1.setBounds(10, 26, 1019, 231);
 		panel_1.add(scrollPane_1);
 		
+
 		
-		tableApproved = new JTable();
-		scrollPane_1.setViewportView(tableApproved);
+		// tableApproved = new JTable();
+		// scrollPane_1.setViewportView(tableApproved);
+
+		tableGroup = new JTable();
+		scrollPane_1.setViewportView(tableGroup);
+
 		
 		panel_2 = new JPanel();
 		panel_2.setBounds(10, 11, 1308, 35);
@@ -150,15 +179,22 @@ public class ReportPanel extends JPanel {
 		panel_2.add(btnNewButton, "cell 1 0,grow");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(table.getSelectedRow()<0) {
+				if(table.getSelectedRow()<0 && tableGroup.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Request to Approve or Delete","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
-				else {
+				else if(table.getSelectedRow()>=0) {
 					LoanRequestID = (String) table.getValueAt(table.getSelectedRow(),0);
-					ClientID = (String) table.getValueAt(table.getSelectedRow(),2);
-					Amount = (String) table.getValueAt(table.getSelectedRow(),4);
-					Duration = (String) table.getValueAt(table.getSelectedRow(),5);
+					ClientID = (String) table.getValueAt(table.getSelectedRow(),1);
+					Amount = (String) table.getValueAt(table.getSelectedRow(),3);
+					Duration = (String) table.getValueAt(table.getSelectedRow(),4);
 					new LoanRequestForm(LoanRequestID,ClientID,Amount,Duration).setVisible(true);
+				}
+				else if(tableGroup.getSelectedRow()>=0) {
+					LoanRequestID = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),0);
+					GroupID = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),1);
+					Amount = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),7);
+					Duration = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),8);
+					new GroupRequestForm(LoanRequestID,GroupID,Amount,Duration).setVisible(true);
 				}
 			}
 		});
@@ -167,8 +203,8 @@ public class ReportPanel extends JPanel {
 		panel_2.add(btnNewButton_1, "cell 3 0,grow");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				createTable();
-				createApprovedTable();
+				createIndividualTable();
+				createGroupTable();
 			}
 		});
 	}

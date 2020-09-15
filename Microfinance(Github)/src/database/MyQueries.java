@@ -148,8 +148,8 @@ public class MyQueries {
 		query = "insert into client(ClientID,Name,NRC,Address,Phone,DateofBirth,Home,Job,Salary) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+Integer.parseInt(data[4])+"','"+data[5]+"','"+Integer.parseInt(data[6])+"','"+data[7]+"','"+Integer.parseInt(data[8])+"')";
 	}else if (tbName.equals(MyString.GroupEntry)) {
-		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4) "
-				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"')";
+		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4, leaderName, M1Name, M2Name, M3Name, M4Name) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+data[6]+"','"+data[7]+"','"+data[8]+"','"+data[9]+"','"+data[10]+"')";
 	}
 	else if(tbName.equals("loanrequest")) {
 		query = "insert into loanrequest(LoanRequestID,LoanType,Amount,Duration,InterestRate) "
@@ -157,6 +157,10 @@ public class MyQueries {
 	}
 	else if(tbName.equals("clientdetails")) {
 		query = "insert into clientdetails(ClientID,LoanRequestID,RequestDate) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"')";
+	}
+	else if(tbName.equals("groupdetails")) {
+		query = "insert into groupdetails(GroupID,LoanRequestID,RequestDate) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"')";
 	}
 	else if(tbName.equals("Iloansetting")) {
@@ -331,9 +335,9 @@ public class MyQueries {
 ///////////////////// Group Query End //////////////////////////
 	
 ///////////////////// LoanRequest Query Start //////////////////
-	public DefaultTableModel getLoanRequest() {
+	public DefaultTableModel getIndividualLoanRequest() {
 		DefaultTableModel dtm = new DefaultTableModel();
-		String dataitem[]= new String[9];
+		String dataitem[]= new String[6];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from clientdetails";
@@ -341,9 +345,8 @@ public class MyQueries {
 			int count = dtm.getRowCount();
 			if (count==0) {
 				dtm.addColumn("Loan Request ID");
-				dtm.addColumn("Loan Type");
 				dtm.addColumn("Client ID");
-				dtm.addColumn("Client/Leader Name");
+				dtm.addColumn("Client Name");
 				dtm.addColumn("Amount");
 				dtm.addColumn("Duration");
 				dtm.addColumn("Date");
@@ -351,12 +354,11 @@ public class MyQueries {
 			while (rs.next()) {
 				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
 				dataitem[0] = rs.getString("LoanRequestID");
-				dataitem[1] = LoanRequestDetails[0];
-				dataitem[2] = rs.getString("ClientID");
-				dataitem[3] = msql.getClientNameFormID(rs.getString("ClientID"));
-				dataitem[4] = Calculation.addcomma(LoanRequestDetails[1]);
-				dataitem[5] = LoanRequestDetails[2];
-				dataitem[6] = rs.getString("RequestDate");
+				dataitem[1] = rs.getString("ClientID");
+				dataitem[2] = msql.getClientNameFormID(rs.getString("ClientID"));
+				dataitem[3] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[4] = LoanRequestDetails[2];
+				dataitem[5] = rs.getString("RequestDate");
 				
 				String approave = LoanRequestDetails[5];
 				if(approave ==null) {
@@ -370,7 +372,56 @@ public class MyQueries {
 		}
 	}
 	
-	public DefaultTableModel getApprovedLoanRequest() {
+	public DefaultTableModel getGroupLoanRequest() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[10];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from groupdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Group ID");
+				dtm.addColumn("Leader Name");
+				dtm.addColumn("Member1 Name");
+				dtm.addColumn("Member2 Name");
+				dtm.addColumn("Member3 Name");
+				dtm.addColumn("Member4 Name");
+				dtm.addColumn("Amount");
+				dtm.addColumn("Duration");
+				dtm.addColumn("Date");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				String data = rs.getString("GroupID");
+				String query2 = "Select * from clientgroup where groupID= '"+data+"'";
+				ResultSet rs2 = stmt.executeQuery(query2);
+				rs2.next();
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("GroupID");
+				dataitem[2] = rs2.getString("leadername");
+				dataitem[3] = rs2.getString("M1Name");
+				dataitem[4] = rs2.getString("M2Name");
+				dataitem[5] = rs2.getString("M3Name");
+				dataitem[6] = rs2.getString("M4Name");
+				dataitem[7] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[8] = LoanRequestDetails[2];
+				dataitem[9] = rs.getString("RequestDate");
+				
+				String approave = LoanRequestDetails[5];
+				if(approave ==null) {
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public DefaultTableModel getIndividualApprovedLoanRequest() {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[7];
 		try {
@@ -394,6 +445,55 @@ public class MyQueries {
 				dataitem[3] = Calculation.addcomma(LoanRequestDetails[1]);
 				dataitem[4] = LoanRequestDetails[2];
 				dataitem[5] = rs.getString("RequestDate");
+				
+				String approave = LoanRequestDetails[5];
+				if(approave !=null) {
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public DefaultTableModel getGroupApprovedLoanRequest() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[10];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from groupdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Group ID");
+				dtm.addColumn("Leader Name");
+				dtm.addColumn("Member1 Name");
+				dtm.addColumn("Member2 Name");
+				dtm.addColumn("Member3 Name");
+				dtm.addColumn("Member4 Name");
+				dtm.addColumn("Amount");
+				dtm.addColumn("Duration");
+				dtm.addColumn("Date");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				String data = rs.getString("GroupID");
+				String query2 = "Select * from clientgroup where groupID= '"+data+"'";
+				ResultSet rs2 = stmt.executeQuery(query2);
+				rs2.next();
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("GroupID");
+				dataitem[2] = rs2.getString("leadername");
+				dataitem[3] = rs2.getString("M1Name");
+				dataitem[4] = rs2.getString("M2Name");
+				dataitem[5] = rs2.getString("M3Name");
+				dataitem[6] = rs2.getString("M4Name");
+				dataitem[7] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[8] = LoanRequestDetails[2];
+				dataitem[9] = rs.getString("RequestDate");
 				
 				String approave = LoanRequestDetails[5];
 				if(approave !=null) {
