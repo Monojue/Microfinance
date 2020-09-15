@@ -120,7 +120,7 @@ public class GroupRequestForm extends JFrame{
 	//Get Individual Loan Setting
 	public void GetILoanSetting() {
 		try {
-			String[] IData = msql.GetIndividualLoanSetting();
+			String[] IData = msql.GetGroupLoanSetting();
 			MinAmount = Integer.parseInt(IData[0]);
 			MaxAmount = Integer.parseInt(IData[1]);
 			MinDuration = Integer.parseInt(IData[2]);
