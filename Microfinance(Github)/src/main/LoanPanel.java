@@ -16,6 +16,8 @@ import database.MyQueries;
 import entryForm.GroupRequestForm;
 import entryForm.LoanRequestForm;
 import net.miginfocom.swing.MigLayout;
+import tool.MyString;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
@@ -34,6 +36,12 @@ public class LoanPanel extends JPanel {
 	private JTextField textField_2;
 
 	MyQueries msql = new MyQueries();
+	private JTabbedPane tabbedPane;
+	private JPanel panel;
+	private JScrollPane scrollPane;
+	private JPanel panel_2;
+	private JScrollPane scrollPane_1;
+	private JPanel panel_4;
 	/**
 	 * Create the panel.
 	 */
@@ -55,32 +63,73 @@ public class LoanPanel extends JPanel {
 		tableIndividual.getColumnModel().getColumn(4).setPreferredWidth(100);
 	}
 	
+	 public void updatePanelSize() {
+
+//	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+//	                .getDefaultScreenDevice();
+//	        float monitorWidth = gd.getDisplayMode().getWidth();
+//	        float monitorHeight = gd.getDisplayMode().getHeight();
+	//
+//	        // Aspect ratio of the monitor in decimal form.
+//	        float monitorRatio = monitorWidth / monitorHeight;
+
+//	        JComponent parent = (JComponent) getParent();
+	        float width = getWidth();
+	        float height = getHeight();
+
+//	        width = Math.min(width, height * monitorRatio);
+//	        height = width / monitorRatio;
+
+	        // I am subtracting the width and height by their respective aspect ratio...
+	        int paddedWidth = (int) width - 20;
+	        int paddedHeight = (int) height - 70;
+//	        setPreferredSize(new Dimension(paddedWidth, paddedHeight));
+	        setBounds(0,0,paddedWidth,paddedHeight);
+//	        panel.setBounds(10,11,paddedWidth+50,37);
+	        panel_2.setBounds(10,11,paddedWidth-20,37);
+	        panel_4.setBounds(10,11,paddedWidth-20,37);
+	        tabbedPane.setBounds(10,10,paddedWidth,paddedHeight+40);
+	        scrollPane.setBounds(10,59,paddedWidth-25,paddedHeight);
+	        scrollPane_1.setBounds(10,59,paddedWidth-25,paddedHeight);
+	        
+	        int resultWidth = getWidth();
+	        int resultHeight = getHeight();
+	        if (paddedWidth != resultWidth && paddedHeight != resultHeight) {
+	            revalidate(); // preferred dimensions not applied, so force them
+	        }
+
+	        System.out.println("GroupFrame: " + width + "x" + height);
+	        System.out.println("GroupChangeSize: " + paddedWidth + "x" + paddedHeight);
+	        System.out.println("GroupResut: " + resultWidth + "x" + resultHeight);
+//	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
+	    }
+	
 	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
 		setLayout(null);
-		setBounds(0, 0, 1059, 580);
+		setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 1059, 596);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
 		add(tabbedPane);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		tabbedPane.addTab("Individual", new ImageIcon(LoanPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")), panel, null);
 		panel.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 56, 1034, 497);
 		panel.add(scrollPane);
 		
 		tableIndividual = new JTable();
 		scrollPane.setViewportView(tableIndividual);
 		
-		JPanel panel_2 = new JPanel();
+		panel_2 = new JPanel();
 		panel_2.setBackground(Color.LIGHT_GRAY);
 		panel_2.setBounds(10, 11, 1034, 34);
 		panel.add(panel_2);
-		panel_2.setLayout(new MigLayout("", "[][][][159.00][][][][][][][]", "[]"));
+		panel_2.setLayout(new MigLayout("", "[][][][159.00][][grow][][][][]", "[]"));
 		
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -119,15 +168,16 @@ public class LoanPanel extends JPanel {
 		tabbedPane.addTab("Group", new ImageIcon(LoanPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")), panel_1, "");
 		panel_1.setLayout(null);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 56, 1034, 497);
 		panel_1.add(scrollPane_1);
 		
-		JPanel panel_4 = new JPanel();
+		panel_4 = new JPanel();
 		panel_4.setBackground(Color.LIGHT_GRAY);
 		panel_4.setBounds(10, 11, 1034, 34);
 		panel_1.add(panel_4);
-		panel_4.setLayout(new MigLayout("", "[58px][105px][85px][159px][65px][][129px][][71px]", "[23px]"));
+//		panel_4.setLayout(new MigLayout("", "[58px][105px][85px][159px][65px][][129px][][71px]", "[23px]"));
+		panel_4.setLayout(new MigLayout("", "[][][][159.00][][grow][][][][]", "[]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel_4.add(label, "cell 0 0,growx,aligny center");

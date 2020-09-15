@@ -2,6 +2,14 @@ package tool;
 
 public class MyString {
 	
+	
+	
+	public static int frameWidth = 1366;//1095
+	public static int frameHeight = 768;//656
+	
+	public static int panelWidth = frameWidth-36;//1059
+	public static int panelHeight = frameHeight-76;//580
+	
 	public static String All = "All";
 	public static String Name = "Name";
 	public static String ID = "ID";

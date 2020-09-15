@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 import tool.Checking;
 import tool.MyDate;
+import tool.MyString;
 import database.DBConnection;
 
 import javax.swing.JLabel;
@@ -58,6 +59,8 @@ public class SettingPanel extends JPanel {
 	
 	MyQueries msql = new MyQueries();
 	DBConnection myDbConnection = new DBConnection();
+	private JPanel panel;
+	private JPanel panel_1;
 	
 	/**
 	 * Create the panel.
@@ -69,7 +72,45 @@ public class SettingPanel extends JPanel {
 		GetGData();
 	}
 	
-	
+	 public void updatePanelSize() {
+
+//	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+//	                .getDefaultScreenDevice();
+//	        float monitorWidth = gd.getDisplayMode().getWidth();
+//	        float monitorHeight = gd.getDisplayMode().getHeight();
+	//
+//	        // Aspect ratio of the monitor in decimal form.
+//	        float monitorRatio = monitorWidth / monitorHeight;
+
+//	        JComponent parent = (JComponent) getParent();
+	        float width = getWidth();
+	        float height = getHeight();
+
+//	        width = Math.min(width, height * monitorRatio);
+//	        height = width / monitorRatio;
+
+	        // I am subtracting the width and height by their respective aspect ratio...
+	        int leftWidth = (int) width-430;
+	        int rightWidth = (int) width-700;
+	        int paddedWidth = (int) width - 30;
+	        int paddedHeight = (int) height - 20;
+//	        setPreferredSize(new Dimension(paddedWidth, paddedHeight));
+	        setBounds(0,0,paddedWidth,paddedHeight);
+	        panel.setBounds(10,11,leftWidth,paddedHeight);
+	        panel_1.setBounds(leftWidth+20,11,400,paddedHeight);
+//	        panel_1.setBounds(710, 11, 339, 558);
+	        
+	        int resultWidth = getWidth();
+	        int resultHeight = getHeight();
+	        if (paddedWidth != resultWidth && paddedHeight != resultHeight) {
+	            revalidate(); // preferred dimensions not applied, so force them
+	        }
+
+	        System.out.println("Frame: " + width + "x" + height);
+	        System.out.println("ChangeSize: " + paddedWidth + "x" + paddedHeight);
+	        System.out.println("Resutl: " + resultWidth + "x" + resultHeight);
+//	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
+	    }
 	public void GetIData() {
 		try {
 		String[] IData = msql.GetIndividualLoanSetting();
@@ -415,13 +456,13 @@ public class SettingPanel extends JPanel {
 		setBorder(new LineBorder(Color.ORANGE));
 		setBackground(Color.WHITE);
 		setLayout(null);
-		setBounds(0, 0, 1059, 580);
+		setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Loan Setting", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel.setBounds(10, 11, 690, 558);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][20][65.00,grow][][65][][][][][grow][][20][65,grow][][65][][][][]", "[10][][][30][30][][30][30][30][30][]"));
+		panel.setLayout(new MigLayout("", "[][][20][65.00][][65][][][][][35:65.00,grow][][20][65][][65][][][][]", "[10][][][30][30][][30][30][30][30][]"));
 		
 		JLabel lblNewLabel = new JLabel("Individual");
 		panel.add(lblNewLabel, "cell 1 1");
@@ -736,11 +777,11 @@ public class SettingPanel extends JPanel {
 		});
 		panel.add(Gcancel, "cell 12 10 3 1");
 		
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		panel_1.setBackground(Color.ORANGE);
 		panel_1.setBounds(710, 11, 339, 558);
 		add(panel_1);
-		panel_1.setLayout(new MigLayout("", "[134.00][grow][]", "[20][][][50,grow][][][][][][][][][]"));
+		panel_1.setLayout(new MigLayout("", "[134.00:134.00:134.00][100px:100px:100px][134.00:134.00:134.00]", "[20][][][50,grow][][][][][][][][][]"));
 		
 		JLabel lblNewLabel_10 = new JLabel("MICROFINANCE");
 		lblNewLabel_10.setFont(new Font("Yu Gothic UI Light", Font.PLAIN, 32));

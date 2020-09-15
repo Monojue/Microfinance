@@ -11,13 +11,18 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import net.miginfocom.swing.MigLayout;
+import tool.Checking;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class LoginForm extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtName;
 	private JTextField txtPassword;
-
+	Checking check = new Checking();
+	private JLabel lblError;
 	/**
 	 * Launch the application.
 	 */
@@ -34,10 +39,32 @@ public class LoginForm extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	public boolean check() {
+		if (check.IsNull(txtName.getText().trim())) {
+			showError("UserName Requierd!");
+		}else if (check.IsNull(txtPassword.getText().trim())) {
+			showError("Password Required!");
+		}else {
+			hideError();
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void showError(String str) {
+		lblError.setText(str);
+		lblError.setVisible(true);
+	}
+	
+	public void hideError() {
+		lblError.setVisible(false);
+	}
 	public LoginForm() {
+		Initialize();
+		
+	}
+	public void Initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 441);
 		contentPane = new JPanel();
@@ -48,7 +75,7 @@ public class LoginForm extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBounds(12, 10, 410, 382);
 		contentPane.add(panel);
-		panel.setLayout(new MigLayout("", "[30][60][60][181px][56.00px][60][30]", "[45.00][43px][20px][62.00][29px][16.00][29px][15.00][21px]"));
+		panel.setLayout(new MigLayout("", "[30][60][60][181px][56.00px][60][30]", "[45.00][43px][20px][51.00][29px][16.00][29px][25.00][21px]"));
 		
 		JLabel label = new JLabel("MICROFINANCE");
 		label.setFont(new Font("Yu Gothic UI Light", Font.PLAIN, 32));
@@ -72,7 +99,19 @@ public class LoginForm extends JFrame {
 		txtPassword.setColumns(10);
 		panel.add(txtPassword, "cell 3 6 2 1,grow");
 		
-		JButton btnNewButton = new JButton("Login");
-		panel.add(btnNewButton, "cell 2 8 3 1,alignx center,aligny top");
+		lblError = new JLabel("");
+		lblError.setForeground(Color.RED);
+		lblError.setVisible(false);
+		panel.add(lblError, "cell 1 7 5 1,alignx center,growy");
+		
+		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (check()) {
+					
+				}
+			}
+		});
+		panel.add(btnLogin, "cell 2 8 3 1,alignx center,aligny top");
 	}
 }
