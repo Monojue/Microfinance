@@ -20,6 +20,7 @@ import tool.MyString;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
@@ -123,7 +124,20 @@ public class LoanPanel extends JPanel {
 		tableGroup.getColumnModel().getColumn(8).setPreferredWidth(100);
 		tableGroup.getColumnModel().getColumn(9).setPreferredWidth(100);
 	}
-
+	
+	public void PaidDay(String ID,String Amount) {
+		String[] PayDay = new String[2];
+		PayDay[0] = ID;
+		PayDay[1] = java.time.LocalDate.now().toString();
+		boolean update = msql.UpdateData("paidday", PayDay);
+		
+		if (update) {
+			JOptionPane.showMessageDialog(null, Amount +" is Paid Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if(!update) {
+			JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
 	
 	public void Initialize() {
 		setBorder(new LineBorder(Color.ORANGE));
@@ -182,6 +196,14 @@ public class LoanPanel extends JPanel {
 		panel_2.add(separator, "cell 5 0,grow");
 		panel_2.add(btnNewButton, "cell 6 0,growx,aligny center");
 		
+		JButton btnIPaid = new JButton("Paid");
+		btnIPaid.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//PaidDay("Individual");
+			}
+		});
+		panel_2.add(btnIPaid, "cell 6 0,growx,aligny center");
+		
 		JButton button = new JButton("Refresh");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -234,6 +256,8 @@ public class LoanPanel extends JPanel {
 		separator_1.setOrientation(SwingConstants.VERTICAL);
 		panel_4.add(separator_1, "cell 5 0,grow");
 		
+		
+		
 		JButton btnNewGroupLoan = new JButton("New Group Loan");
 		btnNewGroupLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -241,6 +265,19 @@ public class LoanPanel extends JPanel {
 			}
 		});
 		panel_4.add(btnNewGroupLoan, "cell 6 0,growx,aligny center");
+		
+		JButton btnGPaid = new JButton("Paid");
+		btnGPaid.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tableGroup.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Group Request","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					PaidDay((String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),7));
+				}
+			}
+		});
+		panel_4.add(btnGPaid, "cell 6 0,growx,aligny center");
 		
 		JButton button_3 = new JButton("Refresh");
 		button_3.addActionListener(new ActionListener() {

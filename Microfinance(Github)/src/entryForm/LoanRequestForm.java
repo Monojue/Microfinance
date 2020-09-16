@@ -162,7 +162,7 @@ public class LoanRequestForm extends JFrame {
 		textDuration.setText(RequestedDuration);
 		sliderDuration.setEnabled(false);
 		btnRequestLoan.setText("Approve");
-		btnCancel.setText("Decline");
+		btnCancel.setText("Reject");
 	}
 	
 	//Get Individual Loan Setting
@@ -850,7 +850,7 @@ public class LoanRequestForm extends JFrame {
 			if(btnCancel.getText() == "Cancel") {
 			dispose();
 			}
-			if(btnCancel.getText() == "Decline") {				
+			if(btnCancel.getText() == "Reject") {			
 			}
 		}
 	});
