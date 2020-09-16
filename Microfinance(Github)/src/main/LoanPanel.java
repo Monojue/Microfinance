@@ -169,7 +169,7 @@ public class LoanPanel extends JPanel {
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new LoanRequestForm(null,null,null,null).setVisible(true);
+				new LoanRequestForm().setVisible(true);
 			}
 		});
 		
@@ -261,7 +261,7 @@ public class LoanPanel extends JPanel {
 		JButton btnNewGroupLoan = new JButton("New Group Loan");
 		btnNewGroupLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new GroupRequestForm(null,null,null,null).setVisible(true);
+				new GroupRequestForm().setVisible(true);
 			}
 		});
 		panel_4.add(btnNewGroupLoan, "cell 6 0,growx,aligny center");

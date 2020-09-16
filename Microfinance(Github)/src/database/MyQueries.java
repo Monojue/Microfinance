@@ -201,6 +201,9 @@ public class MyQueries {
 	if(tbName.equals("loanrequest")) {
 		query = "update loanrequest set Approved= '"+data[1]+"' where LoanrequestID= '"+data[0]+"'";
 	}
+	if(tbName.equals("loanrequestDecline")) {
+		query = "update loanrequest set Approved= '"+data[1]+"',Remark= '"+data[2]+"' where LoanrequestID= '"+data[0]+"'";
+	}
 	if(tbName.equals("paidday")) {
 		query = "update loanrequest set PayDay= '"+data[1]+"' where LoanrequestID= '"+data[0]+"'";
 	}
@@ -374,6 +377,30 @@ public class MyQueries {
 			return null;
 		}
 	}
+	
+	public String[] GetLoanRequestedDate(String Type,String LID) {
+		try {
+			stmt = con.createStatement();
+			if(Type.equals("Individual")) {
+			query ="Select * from clientdetails where LoanRequestID = '"+LID+"'";
+			}
+			else if(Type.equals("Group")) {
+			query ="Select * from groupdetails where LoanRequestID = '"+LID+"'";
+				}
+			ResultSet rs = stmt.executeQuery(query);
+			rs.next();
+			String[] data = new String[3];
+			data[0] = rs.getString(1);
+			data[1] = rs.getString(2);
+			data[2] = rs.getString(3);
+			return data;
+		}
+		catch(SQLException e){
+			System.out.println(e);
+			return null;
+		}
+	}
+	
 	
 	public DefaultTableModel getGroupLoanRequest() {
 		DefaultTableModel dtm = new DefaultTableModel();

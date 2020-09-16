@@ -12,6 +12,7 @@ import database.MyQueries;
 import entryForm.ClientEntry;
 import entryForm.GroupRequestForm;
 import entryForm.LoanRequestForm;
+import entryForm.ViewDetails;
 import tool.MyString;
 
 import javax.swing.JTable;
@@ -187,14 +188,14 @@ public class ReportPanel extends JPanel {
 					ClientID = (String) table.getValueAt(table.getSelectedRow(),1);
 					Amount = (String) table.getValueAt(table.getSelectedRow(),3);
 					Duration = (String) table.getValueAt(table.getSelectedRow(),4);
-					new LoanRequestForm(LoanRequestID,ClientID,Amount,Duration).setVisible(true);
+					new ViewDetails("Individual",LoanRequestID,ClientID,Amount,Duration).setVisible(true);
 				}
 				else if(tableGroup.getSelectedRow()>=0) {
 					LoanRequestID = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),0);
 					GroupID = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),1);
 					Amount = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),7);
 					Duration = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),8);
-					new GroupRequestForm(LoanRequestID,GroupID,Amount,Duration).setVisible(true);
+					new ViewDetails("Group",LoanRequestID,GroupID,Amount,Duration).setVisible(true);
 				}
 			}
 		});

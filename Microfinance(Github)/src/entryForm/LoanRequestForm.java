@@ -115,7 +115,7 @@ public class LoanRequestForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoanRequestForm window = new LoanRequestForm(null,null,null,null);
+					LoanRequestForm window = new LoanRequestForm();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -134,36 +134,14 @@ public class LoanRequestForm extends JFrame {
 			boxGNRC2.add(data);
 		}
 	}
-	public LoanRequestForm(String loanRequestID, String clientID, String amount, String duration) {
+	public LoanRequestForm() {
 		GetILoanSetting();
 		initialize();
-		if(loanRequestID == null && clientID == null) 
-		{
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
-		}
-		else {
-			textID.setText(loanRequestID);
-			ClientID = clientID;
-			RequestedAmount = amount;
-			RequestedDuration = duration;
-			SetDataForEverything();
-		}
 		SetNRCcodeData();
 	}
 	
-	public void SetDataForEverything() {
-		String[] ClientDetails = msql.getClientDetailsFormID(ClientID);
-		setClientData(ClientDetails[0],ClientDetails[1],ClientDetails[2],ClientDetails[3],ClientDetails[4],ClientDetails[5],ClientDetails[6],ClientDetails[7],ClientDetails[8]);
-		btnSelectClientButton.setEnabled(false);
-		setGuarantorData(ClientDetails[9],ClientDetails[15],ClientDetails[13],ClientDetails[14],ClientDetails[10],ClientDetails[11],ClientDetails[12]);
-		textAmount.setText(RequestedAmount);
-		sliderAmount.setEnabled(false);
-		textDuration.setText(RequestedDuration);
-		sliderDuration.setEnabled(false);
-		btnRequestLoan.setText("Approve");
-		btnCancel.setText("Reject");
-	}
 	
 	//Get Individual Loan Setting
 	public void GetILoanSetting() {
@@ -861,7 +839,6 @@ public class LoanRequestForm extends JFrame {
 	btnRequestLoan.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			
-			if(btnRequestLoan.getText() == "Request Loan") {
 			boolean check = check();
 			if(check) {
 				
@@ -906,19 +883,6 @@ public class LoanRequestForm extends JFrame {
 					}
 			}
 				}
-			if(btnRequestLoan.getText() == "Approve") {
-				String[] Approve = new String[2];
-				Approve[0] = textID.getText();
-				Approve[1] = "1";
-				boolean update = msql.UpdateData("loanrequest", Approve);
-				if (update) {
-					JOptionPane.showMessageDialog(null, "New Loan Request is Approved Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
-				}
-				else if(!update) {
-					JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
-				}
-			}
-		}
 	});
 	btnRequestLoan.setBounds(1078, 674, 122, 23);
 	this.getContentPane().add(btnRequestLoan);

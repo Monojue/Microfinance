@@ -88,7 +88,7 @@ public class GroupRequestForm extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GroupRequestForm window = new GroupRequestForm(null,null,null,null);
+					GroupRequestForm window = new GroupRequestForm();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,35 +100,11 @@ public class GroupRequestForm extends JFrame{
 
 	
 	
-	public GroupRequestForm(String loanRequestID, String groupID, String amount, String duration) {
+	public GroupRequestForm() {
 		GetILoanSetting();
 		initialize();
-		if(loanRequestID == null && groupID == null) 
-		{
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
-		}
-		else 
-		{
-			textID.setText(loanRequestID);
-			GroupID = groupID;
-			RequestedAmount = amount;
-			RequestedDuration = duration;
-			SetDataForEverything();
-		}
-		
-	}
-	
-	public void SetDataForEverything() {
-		String[] GroupDetails = msql.getGroupDetailsFormID(GroupID);
-		setGroupData(GroupDetails[0],GroupDetails[6],GroupDetails[7],GroupDetails[8],GroupDetails[9],GroupDetails[10]);
-		btnSelect.setEnabled(false);
-		textAmount.setText(RequestedAmount);
-		sliderAmount.setEnabled(false);
-		textDuration.setText(RequestedDuration);
-		sliderDuration.setEnabled(false);
-		btnRequestLoan.setText("Approve");
-		btnCancel.setText("Reject");
 	}
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
@@ -526,7 +502,6 @@ public class GroupRequestForm extends JFrame{
 		btnRequestLoan = new JButton("Request Loan");
 		btnRequestLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(btnRequestLoan.getText() == "Request Loan") {
 				boolean check = check();
 				if(check) {
 						
@@ -552,19 +527,7 @@ public class GroupRequestForm extends JFrame{
 						else if (!insert2){
 							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request2!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 						}
-					}}
-				else if(btnRequestLoan.getText() == "Approve") {
-					String[] Approve = new String[2];
-					Approve[0] = textID.getText();
-					Approve[1] = "1";
-					boolean update = msql.UpdateData("loanrequest", Approve);
-					if (update) {
-						JOptionPane.showMessageDialog(null, "New Loan Request is Approved Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
 					}
-					else if(!update) {
-						JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
-					}
-				}
 			}
 		});
 		btnRequestLoan.setBounds(762, 653, 122, 23);

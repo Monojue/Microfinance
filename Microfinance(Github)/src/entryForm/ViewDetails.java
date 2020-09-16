@@ -11,12 +11,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -25,6 +27,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
+import database.MyQueries;
+import database.UQueries;
 import net.miginfocom.swing.MigLayout;
 import tool.Calculation;
 import tool.MyString;
@@ -66,7 +70,12 @@ public class ViewDetails extends JFrame {
 	private String Fees;
 	private JLabel lblFees;
 	private JLabel lblKyats;
-	private JTextField textField;
+	private JTextField textDuration;
+	private TextArea textRemark;
+	private String LoanRequestID, ID, Amount, Duration;
+	
+	MyQueries msql = new MyQueries();
+	static UQueries usql = new UQueries();
 
 	/**
 	 * Launch the application.
@@ -75,7 +84,7 @@ public class ViewDetails extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ViewDetails frame = new ViewDetails("Group");
+					ViewDetails frame = new ViewDetails(null,null,null,null,null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -86,17 +95,92 @@ public class ViewDetails extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param duration 
+	 * @param amount 
+	 * @param groupID 
+	 * @param loanRequestID 
 	 */
-	public ViewDetails(String form) {
+	public ViewDetails(String form, String loanRequestID, String groupID, String amount, String duration) {
 		Initialize();
 		if (form.equals("Group")) {
 			GPanel.setVisible(true);
 			CPanel.setVisible(false);
-		}else if (form.equals("Individual")) {
-			GPanel.setVisible(false);
-			CPanel.setVisible(true);
+			LoanRequestID = loanRequestID;
+			ID = groupID;
+			Amount = amount;
+			Duration = duration;
+			GroupSetData();
 		}
 		
+		else if (form.equals("Individual")) {
+			GPanel.setVisible(false);
+			CPanel.setVisible(true);
+			textID.setText(loanRequestID);
+			LoanRequestID = loanRequestID;
+			ID = groupID;
+			Amount = amount;
+			Duration = duration;
+			ClientSetData();
+		}
+		
+	}
+	
+	public boolean check() {
+		if(textRemark.getText()=="") {
+				JOptionPane.showMessageDialog(null, "Please fill a Remark!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	public void ClientSetData() {
+		String[] ClientDetails = msql.getClientDetailsFormID(ID);
+		String[] LoanDetails = msql.GetLoanRequestData(LoanRequestID);
+		String[] Date = msql.GetLoanRequestedDate("Individual",LoanRequestID);
+		textDate.setText(Date[2]);
+		textID.setText(LoanRequestID);
+		lblRate.setText(LoanDetails[3]+" %");
+		textCID.setText(ID);
+		textPName.setText(ClientDetails[1]);
+		textPNRC.setText(ClientDetails[2]);
+		textPAddress.setText(ClientDetails[3]);
+		textPPhone.setText(ClientDetails[4]);
+		textPDOB.setText(ClientDetails[5]);
+		textPJob.setText(ClientDetails[7]);
+		textPSalary.setText(ClientDetails[8]);
+		String home = ClientDetails[6];
+		if (home.equals("1")) {
+			checkPHome.setSelected(true);
+		}
+		else {
+			checkPHome.setSelected(false);
+		}
+		textAmount.setText(Amount);
+		textDuration.setText(Duration);;
+	}
+	
+	public void GroupSetData() {
+		String[] GroupDetails = msql.getGroupDetailsFormID(ID);
+		String[] LoanDetails = msql.GetLoanRequestData(LoanRequestID);
+		String[] Date = msql.GetLoanRequestedDate("Group",LoanRequestID);
+		textDate.setText(Date[2]);
+		textID.setText(LoanRequestID);
+		lblRate.setText(LoanDetails[3]+" %");
+		txtGroupID.setText(GroupDetails[0]);
+		txtLName.setText(GroupDetails[6]);
+		txtM1Name.setText(GroupDetails[7]);
+		txtM2Name.setText(GroupDetails[8]);
+		txtM3Name.setText(GroupDetails[9]);
+		txtM4Name.setText(GroupDetails[10]);
+		txtLID.setText(GroupDetails[1]);
+		txtM1ID.setText(GroupDetails[2]);
+		txtM2ID.setText(GroupDetails[3]);
+		txtM3ID.setText(GroupDetails[4]);
+		txtM4ID.setText(GroupDetails[5]);
+		textAmount.setText(Amount);
+		textDuration.setText(Duration);
 	}
 	
 	public void Initialize() {
@@ -131,8 +215,8 @@ public class ViewDetails extends JFrame {
 		panel_2.add(textID, "cell 1 0,growx");
 		textID.setColumns(10);
 		
-		JLabel label_5 = new JLabel("Date :");
-		panel_2.add(label_5, "cell 3 0,alignx trailing,growy");
+		JLabel lblRequestDate = new JLabel("Request Date :");
+		panel_2.add(lblRequestDate, "cell 3 0,alignx trailing,growy");
 		
 		textDate = new JTextField();
 		textDate.setEditable(false);
@@ -353,10 +437,10 @@ public class ViewDetails extends JFrame {
 		label = new JLabel("Duration");
 		panel_4.add(label, "cell 5 0 1 2,alignx trailing");
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setColumns(10);
-		panel_4.add(textField, "cell 6 0 1 2,growx");
+		textDuration = new JTextField();
+		textDuration.setEditable(false);
+		textDuration.setColumns(10);
+		panel_4.add(textDuration, "cell 6 0 1 2,growx");
 		
 		label_1 = new JLabel("Month");
 		panel_4.add(label_1, "cell 7 0 1 2");
@@ -376,9 +460,9 @@ public class ViewDetails extends JFrame {
 		lblFees.setForeground(Color.BLUE);
 		panel_4.add(lblFees, "cell 2 3");
 		
-		TextArea textArea = new TextArea();
-		textArea.setBounds(10, 489, 536, 154);
-		panel.add(textArea);
+		textRemark = new TextArea();
+		textRemark.setBounds(10, 489, 536, 154);
+		panel.add(textRemark);
 		
 		Panel panel_1 = new Panel();
 		panel_1.setBounds(10, 649, 533, 33);
@@ -386,9 +470,42 @@ public class ViewDetails extends JFrame {
 		panel_1.setLayout(new MigLayout("", "[grow][][][]", "[]"));
 		
 		JButton btnNewButton_1 = new JButton("Accept");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String[] Approve = new String[2];
+				Approve[0] = textID.getText();
+				Approve[1] = "1";
+				boolean update = msql.UpdateData("loanrequest", Approve);
+				if (update) {
+					JOptionPane.showMessageDialog(null, "New Loan Request is Approved Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				}
+				else if(!update) {
+					JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
 		panel_1.add(btnNewButton_1, "cell 1 0");
 		
 		JButton btnNewButton = new JButton("Decline");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(check()) {
+				String[] Decline = new String[3];
+				Decline[0] = textID.getText();
+				Decline[1] = "2";
+				Decline[2] = textRemark.getText();
+				boolean update = msql.UpdateData("loanrequestDecline", Decline);
+				if (update) {
+					JOptionPane.showMessageDialog(null, "New Loan Request is Rejected Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				}
+				else if(!update) {
+					JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+				}
+		});
 		panel_1.add(btnNewButton, "cell 3 0");
 		
 		JLabel lblNewLabel_3 = new JLabel("Remarks:");
