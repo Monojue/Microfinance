@@ -128,7 +128,7 @@ public class GroupRequestForm extends JFrame{
 		textDuration.setText(RequestedDuration);
 		sliderDuration.setEnabled(false);
 		btnRequestLoan.setText("Approve");
-		btnCancel.setText("Decline");
+		btnCancel.setText("Reject");
 	}
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
@@ -515,7 +515,7 @@ public class GroupRequestForm extends JFrame{
 				if(btnCancel.getText() == "Cancel") {
 					dispose();
 					}
-					if(btnCancel.getText() == "Decline") {
+					if(btnCancel.getText() == "Reject") {
 						
 					}
 			}

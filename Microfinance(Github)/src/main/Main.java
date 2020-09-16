@@ -150,9 +150,9 @@ public class Main extends JFrame {
 	            revalidate(); // preferred dimensions not applied, so force them
 	        }
 
-	        System.out.println("Frame: " + width + "x" + height);
-	        System.out.println("ChangeSize: " + paddedWidth + "x" + paddedHeight);
-	        System.out.println("Resutl: " + resultWidth + "x" + resultHeight);
+//	        System.out.println("Frame: " + width + "x" + height);
+//	        System.out.println("ChangeSize: " + paddedWidth + "x" + paddedHeight);
+//	        System.out.println("Resutl: " + resultWidth + "x" + resultHeight);
 //	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
 	    }
 }

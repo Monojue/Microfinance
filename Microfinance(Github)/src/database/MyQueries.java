@@ -201,6 +201,9 @@ public class MyQueries {
 	if(tbName.equals("loanrequest")) {
 		query = "update loanrequest set Approved= '"+data[1]+"' where LoanrequestID= '"+data[0]+"'";
 	}
+	if(tbName.equals("paidday")) {
+		query = "update loanrequest set PayDay= '"+data[1]+"' where LoanrequestID= '"+data[0]+"'";
+	}
 	try {
 		stmt = con.createStatement();
 		if(stmt.executeUpdate(query)==1) {
@@ -447,7 +450,8 @@ public class MyQueries {
 				dataitem[5] = rs.getString("RequestDate");
 				
 				String approave = LoanRequestDetails[5];
-				if(approave !=null) {
+				String PayDay = LoanRequestDetails[4];
+				if(approave !=null && PayDay == null) {
 					dtm.addRow(dataitem);
 				}
 			}
@@ -496,7 +500,8 @@ public class MyQueries {
 				dataitem[9] = rs.getString("RequestDate");
 				
 				String approave = LoanRequestDetails[5];
-				if(approave !=null) {
+				String PayDay = LoanRequestDetails[4];
+				if(approave !=null && PayDay == null) {
 					dtm.addRow(dataitem);
 				}
 			}
