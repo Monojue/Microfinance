@@ -152,7 +152,7 @@ public class LoanPanel extends JPanel {
 		add(tabbedPane);
 		
 		panel = new JPanel();
-		tabbedPane.addTab("Individual", new ImageIcon(LoanPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")), panel, null);
+		tabbedPane.addTab("Individual", panel);
 		panel.setLayout(null);
 		
 		scrollPane = new JScrollPane();
@@ -228,7 +228,7 @@ public class LoanPanel extends JPanel {
 		panel_2.add(button, "cell 12 0,growx,aligny center");
 		
 		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Group", new ImageIcon(LoanPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")), panel_1, "");
+		tabbedPane.addTab("Group", panel_1);
 		panel_1.setLayout(null);
 		
 		scrollPane_1 = new JScrollPane();

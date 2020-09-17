@@ -182,6 +182,24 @@ public class ViewDetails extends JFrame {
 		textAmount.setText(Amount);
 		textDuration.setText(Duration);
 	}
+
+	public void ViewClientDetails(String Ctype){
+		if(Ctype == "Leader") {
+			new ClientEntry(txtLID.getText()).setVisible(true);
+		}
+		else if(Ctype == "M1") {
+			new ClientEntry(txtM1ID.getText()).setVisible(true);
+		}
+		else if(Ctype == "M2") {
+			new ClientEntry(txtM2ID.getText()).setVisible(true);
+		}
+		else if(Ctype == "M3") {
+			new ClientEntry(txtM3ID.getText()).setVisible(true);
+		}
+		else if(Ctype == "M4") {
+			new ClientEntry(txtM4ID.getText()).setVisible(true);
+		}
+	}
 	
 	public void Initialize() {
 		
@@ -333,6 +351,11 @@ public class ViewDetails extends JFrame {
 		GPanel.add(label_2, "cell 3 1,alignx center,aligny top");
 		
 		Button button = new Button("View");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ViewClientDetails("Leader");
+			}
+		});
 		GPanel.add(button, "cell 4 2");
 		
 		txtM1ID = new JTextField();
@@ -343,6 +366,11 @@ public class ViewDetails extends JFrame {
 		GPanel.add(txtM1ID, "cell 3 3,grow");
 		
 		Button button_1 = new Button("View");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ViewClientDetails("M1");
+			}
+		});
 		GPanel.add(button_1, "cell 4 3");
 		
 		txtM2ID = new JTextField();
@@ -352,6 +380,11 @@ public class ViewDetails extends JFrame {
 		GPanel.add(txtM2ID, "cell 3 4,grow");
 		
 		Button button_2 = new Button("View");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ViewClientDetails("M2");
+			}
+		});
 		GPanel.add(button_2, "cell 4 4");
 		
 		txtM3ID = new JTextField();
@@ -361,6 +394,11 @@ public class ViewDetails extends JFrame {
 		GPanel.add(txtM3ID, "cell 3 5,grow");
 		
 		Button button_3 = new Button("View");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ViewClientDetails("M3");
+			}
+		});
 		GPanel.add(button_3, "cell 4 5");
 		
 		txtM4ID = new JTextField();
@@ -412,6 +450,11 @@ public class ViewDetails extends JFrame {
 		GPanel.add(label_8, "cell 1 6,alignx left,growy");
 		
 		Button button_4 = new Button("View");
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ViewClientDetails("M4");
+			}
+		});
 		GPanel.add(button_4, "cell 4 6");
 /////////////////////////////////////////////
 		JPanel panel_4 = new JPanel();
