@@ -27,10 +27,14 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import database.MyQueries;
+import entryForm.OfficerEntry;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
 
 public class SettingPanel extends JPanel {
 	private JTextField textIMinDuration;
@@ -61,6 +65,11 @@ public class SettingPanel extends JPanel {
 	DBConnection myDbConnection = new DBConnection();
 	private JPanel panel;
 	private JPanel panel_1;
+	private JTable table;
+	private JTextField textField;
+	private JPanel panel_2;
+	private JPanel panel_3;
+	private JScrollPane scrollPane;
 	
 	/**
 	 * Create the panel.
@@ -96,7 +105,10 @@ public class SettingPanel extends JPanel {
 	        int paddedHeight = (int) height - 20;
 //	        setPreferredSize(new Dimension(paddedWidth, paddedHeight));
 	        setBounds(0,0,paddedWidth,paddedHeight);
-	        panel.setBounds(10,11,leftWidth,paddedHeight);
+	        panel.setBounds(10,11,leftWidth,paddedHeight/2);
+	        panel_2.setBounds(10, (paddedHeight/2)+15, leftWidth, paddedHeight/2);
+	    	panel_3.setBounds(12, 10, leftWidth-10, 40);
+	    	scrollPane.setBounds(12, 55, leftWidth-15, 256);
 	        panel_1.setBounds(leftWidth+20,11,400,paddedHeight);
 //	        panel_1.setBounds(710, 11, 339, 558);
 	        
@@ -460,7 +472,7 @@ public class SettingPanel extends JPanel {
 		
 		panel = new JPanel();
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Loan Setting", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.setBounds(10, 11, 690, 558);
+		panel.setBounds(10, 11, 690, 344);
 		add(panel);
 		panel.setLayout(new MigLayout("", "[][][20][65.00][][65][][][][][35:65.00,grow][][20][65][][65][][][][]", "[10][][][30][30][][30][30][30][30][]"));
 		
@@ -779,7 +791,7 @@ public class SettingPanel extends JPanel {
 		
 		panel_1 = new JPanel();
 		panel_1.setBackground(Color.ORANGE);
-		panel_1.setBounds(710, 11, 339, 558);
+		panel_1.setBounds(710, 11, 339, 671);
 		add(panel_1);
 		panel_1.setLayout(new MigLayout("", "[134.00:134.00:134.00][100px:100px:100px][134.00:134.00:134.00]", "[20][][][50,grow][][][][][][][][][]"));
 		
@@ -806,5 +818,47 @@ public class SettingPanel extends JPanel {
 		JLabel lblNewLabel_15 = new JLabel("KAUNG MYAT THET");
 		lblNewLabel_15.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		panel_1.add(lblNewLabel_15, "cell 2 12,alignx right");
+		
+		panel_2 = new JPanel();
+		panel_2.setBounds(12, 365, 688, 317);
+		add(panel_2);
+		panel_2.setLayout(null);
+		
+		panel_3 = new JPanel();
+		panel_3.setBounds(12, 10, 664, 35);
+		panel_2.add(panel_3);
+		panel_3.setLayout(new MigLayout("", "[][][][grow][][][][][]", "[]"));
+		
+		JLabel lblNewLabel_18 = new JLabel("");
+		panel_3.add(lblNewLabel_18, "cell 0 0,alignx trailing");
+		
+		textField = new JTextField();
+		textField.setToolTipText("Name");
+		panel_3.add(textField, "cell 1 0,growx");
+		textField.setColumns(10);
+		
+		JButton btnNewButton_1 = new JButton("Search");
+		panel_3.add(btnNewButton_1, "cell 2 0");
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new OfficerEntry().setVisible(true);
+			}
+		});
+		panel_3.add(btnAdd, "cell 4 0");
+		
+		JButton btnNew = new JButton("Delete");
+		panel_3.add(btnNew, "cell 6 0");
+		
+		JButton btnNewButton = new JButton("Refresh");
+		panel_3.add(btnNewButton, "cell 8 0");
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 59, 664, 248);
+		panel_2.add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
 	}
 }
