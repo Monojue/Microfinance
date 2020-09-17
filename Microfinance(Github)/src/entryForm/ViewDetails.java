@@ -186,7 +186,7 @@ public class ViewDetails extends JFrame {
 	public void Initialize() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 579, 741);
+		setBounds(400, 10, 579, 741);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

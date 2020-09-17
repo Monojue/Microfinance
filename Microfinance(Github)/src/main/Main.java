@@ -60,7 +60,7 @@ public class Main extends JFrame {
 	public Main() {
 		setTitle("MICROFINANACE");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(150, 30, MyString.frameWidth, MyString.frameHeight);
+		setBounds(10, 10, MyString.frameWidth, MyString.frameHeight);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

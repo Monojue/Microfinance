@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.ButtonGroup;
 
 public class LoanPanel extends JPanel {
 
@@ -45,6 +46,7 @@ public class LoanPanel extends JPanel {
 	private JScrollPane scrollPane_1;
 	private JPanel panel_4;
 	private JTable tableGroup;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Create the panel.
@@ -146,7 +148,7 @@ public class LoanPanel extends JPanel {
 		setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
+		tabbedPane.setBounds(0, 0, MyString.panelWidth, MyString.panelHeight);
 		add(tabbedPane);
 		
 		panel = new JPanel();
@@ -164,7 +166,7 @@ public class LoanPanel extends JPanel {
 		panel_2.setBackground(Color.LIGHT_GRAY);
 		panel_2.setBounds(10, 11, 1034, 34);
 		panel.add(panel_2);
-		panel_2.setLayout(new MigLayout("", "[][][][159.00][][grow][][][][]", "[]"));
+		panel_2.setLayout(new MigLayout("", "[][][][159.00][][][][][][27.00,grow][][][][]", "[]"));
 		
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -191,10 +193,23 @@ public class LoanPanel extends JPanel {
 		JButton btnNewButton_2 = new JButton("Search");
 		panel_2.add(btnNewButton_2, "cell 4 0,growx,aligny center");
 		
+		JLabel lblNewLabel_1 = new JLabel("View Table Of");
+		panel_2.add(lblNewLabel_1, "cell 6 0");
+		
+		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Accepted");
+		buttonGroup.add(rdbtnNewRadioButton_2);
+		rdbtnNewRadioButton_2.setBackground(Color.LIGHT_GRAY);
+		panel_2.add(rdbtnNewRadioButton_2, "cell 7 0");
+		
+		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Rejected");
+		buttonGroup.add(rdbtnNewRadioButton_3);
+		rdbtnNewRadioButton_3.setBackground(Color.LIGHT_GRAY);
+		panel_2.add(rdbtnNewRadioButton_3, "cell 8 0");
+		
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
 		panel_2.add(separator, "cell 5 0,grow");
-		panel_2.add(btnNewButton, "cell 6 0,growx,aligny center");
+		panel_2.add(btnNewButton, "cell 10 0,growx,aligny center");
 		
 		JButton btnIPaid = new JButton("Paid");
 		btnIPaid.addActionListener(new ActionListener() {
@@ -202,7 +217,7 @@ public class LoanPanel extends JPanel {
 				//PaidDay("Individual");
 			}
 		});
-		panel_2.add(btnIPaid, "cell 6 0,growx,aligny center");
+		panel_2.add(btnIPaid, "cell 10 0,growx,aligny center");
 		
 		JButton button = new JButton("Refresh");
 		button.addActionListener(new ActionListener() {
@@ -210,7 +225,7 @@ public class LoanPanel extends JPanel {
 				createITable();
 			}
 		});
-		panel_2.add(button, "cell 8 0,growx,aligny center");
+		panel_2.add(button, "cell 12 0,growx,aligny center");
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Group", new ImageIcon(LoanPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/TreeClosed.gif")), panel_1, "");
@@ -232,7 +247,7 @@ public class LoanPanel extends JPanel {
 		panel_4.setBounds(10, 11, 1034, 34);
 		panel_1.add(panel_4);
 //		panel_4.setLayout(new MigLayout("", "[58px][105px][85px][159px][65px][][129px][][71px]", "[23px]"));
-		panel_4.setLayout(new MigLayout("", "[][][][159.00][][grow][][][][]", "[]"));
+		panel_4.setLayout(new MigLayout("", "[][][][159.00][][][][][][grow][][][][]", "[]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel_4.add(label, "cell 0 0,growx,aligny center");
@@ -252,6 +267,17 @@ public class LoanPanel extends JPanel {
 		JButton button_1 = new JButton("Search");
 		panel_4.add(button_1, "cell 4 0,growx,aligny center");
 		
+		JLabel lblNewLabel_2 = new JLabel("View Table Of");
+		panel_4.add(lblNewLabel_2, "cell 6 0");
+		
+		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("Accepted");
+		rdbtnNewRadioButton_4.setBackground(Color.LIGHT_GRAY);
+		panel_4.add(rdbtnNewRadioButton_4, "cell 7 0");
+		
+		JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("Rejected");
+		rdbtnNewRadioButton_5.setBackground(Color.LIGHT_GRAY);
+		panel_4.add(rdbtnNewRadioButton_5, "cell 8 0");
+		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
 		panel_4.add(separator_1, "cell 5 0,grow");
@@ -264,7 +290,7 @@ public class LoanPanel extends JPanel {
 				new GroupRequestForm().setVisible(true);
 			}
 		});
-		panel_4.add(btnNewGroupLoan, "cell 6 0,growx,aligny center");
+		panel_4.add(btnNewGroupLoan, "cell 10 0,growx,aligny center");
 		
 		JButton btnGPaid = new JButton("Paid");
 		btnGPaid.addActionListener(new ActionListener() {
@@ -277,7 +303,7 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_4.add(btnGPaid, "cell 6 0,growx,aligny center");
+		panel_4.add(btnGPaid, "cell 10 0,growx,aligny center");
 		
 		JButton button_3 = new JButton("Refresh");
 		button_3.addActionListener(new ActionListener() {
@@ -285,7 +311,7 @@ public class LoanPanel extends JPanel {
 				createGTable();
 			}
 		});
-		panel_4.add(button_3, "cell 8 0,growx,aligny center");
+		panel_4.add(button_3, "cell 12 0,growx,aligny center");
 		
 
 	}
