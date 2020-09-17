@@ -101,7 +101,7 @@ public class ClientEntry extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientEntry frame = new ClientEntry(null);
+					ClientEntry frame = new ClientEntry(null,null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -226,7 +226,7 @@ public class ClientEntry extends JFrame {
 	 * Create the frame.
 	 * @param ClientID 
 	 */
-	public ClientEntry(String ClientID) {
+	public ClientEntry(String ClientID, String View) {
 		initialize();
 		if(ClientID == null) {		
 		AutoID();
@@ -260,6 +260,28 @@ public class ClientEntry extends JFrame {
 			btnSave.setText("Update");
 			
 		}
+		if(View == "View") {
+			Disable();
+		}
+	}
+	
+	public void Disable() {
+		textName.setEditable(false);
+		boxN1.setEnabled(false);
+		boxN2.setEnabled(false);
+		boxN3.setEnabled(false);
+		boxNo.setEditable(false);
+		boxDay.setEnabled(false);
+		boxMonth.setEnabled(false);
+		boxYear.setEnabled(false);
+		textAddress.setEditable(false);
+		textCity.setEditable(false);
+		textState.setEditable(false);
+		textPh.setEditable(false);
+		checkHome.setEnabled(false);
+		textJob.setEditable(false);
+		textSalary.setEditable(false);
+		btnSave.setEnabled(false);
 	}
 	
 	public boolean SetNRCcodeData() {

@@ -185,19 +185,19 @@ public class ViewDetails extends JFrame {
 
 	public void ViewClientDetails(String Ctype){
 		if(Ctype == "Leader") {
-			new ClientEntry(txtLID.getText()).setVisible(true);
+			new ClientEntry(txtLID.getText(),"View").setVisible(true);
 		}
 		else if(Ctype == "M1") {
-			new ClientEntry(txtM1ID.getText()).setVisible(true);
+			new ClientEntry(txtM1ID.getText(),"View").setVisible(true);
 		}
 		else if(Ctype == "M2") {
-			new ClientEntry(txtM2ID.getText()).setVisible(true);
+			new ClientEntry(txtM2ID.getText(),"View").setVisible(true);
 		}
 		else if(Ctype == "M3") {
-			new ClientEntry(txtM3ID.getText()).setVisible(true);
+			new ClientEntry(txtM3ID.getText(),"View").setVisible(true);
 		}
 		else if(Ctype == "M4") {
-			new ClientEntry(txtM4ID.getText()).setVisible(true);
+			new ClientEntry(txtM4ID.getText(),"View").setVisible(true);
 		}
 	}
 	

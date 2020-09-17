@@ -185,7 +185,7 @@ public class ClientPanel extends JPanel {
 		JButton btnNewButton_1 = new JButton("New Client");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new ClientEntry(null).setVisible(true);
+				new ClientEntry(null,null).setVisible(true);
 			}
 		});
 		panel.add(btnNewButton_1, "cell 8 0,alignx center");
@@ -198,7 +198,7 @@ public class ClientPanel extends JPanel {
 				}
 				else {
 					ClientID = (String) table.getValueAt(table.getSelectedRow(),0);
-					new ClientEntry(ClientID).setVisible(true);
+					new ClientEntry(ClientID,null).setVisible(true);
 				}
 			}
 		});
