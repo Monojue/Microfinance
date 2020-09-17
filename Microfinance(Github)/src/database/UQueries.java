@@ -105,6 +105,24 @@ public class UQueries {
 	}
 
 ///////////////////// Client Query End /////////////////////////
+	
+	public boolean CheckLogin(String username, String password) {
+		query = "Select * from officer where username ='"+username+"' and password='"+password+"'";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				return true;	
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),"SQL Exception", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	}
+	
+	
 		//Duplicate Method
 	public boolean IsDuplicate(String tbName, String[] data) {
 		if(tbName.equals(MyString.ClientEntry)) {

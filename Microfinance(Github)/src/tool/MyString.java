@@ -4,7 +4,7 @@ public class MyString {
 	
 	
 	
-	public static int frameWidth = 1366;//1095
+	public static int frameWidth = 1266;//1095
 	public static int frameHeight = 768;//656
 	
 	public static int panelWidth = frameWidth-36;//1059

@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import database.UQueries;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -15,14 +18,17 @@ import tool.Checking;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class LoginForm extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtName;
-	private JTextField txtPassword;
+	private JPasswordField txtPassword;
 	Checking check = new Checking();
 	private JLabel lblError;
+	protected UQueries msql;
+	private JPasswordField passwordField;
 	/**
 	 * Launch the application.
 	 */
@@ -66,7 +72,7 @@ public class LoginForm extends JFrame {
 	}
 	public void Initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 441);
+		setBounds(450, 150, 450, 441);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -75,7 +81,7 @@ public class LoginForm extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBounds(12, 10, 410, 382);
 		contentPane.add(panel);
-		panel.setLayout(new MigLayout("", "[30][60][60][181px][56.00px][60][30]", "[45.00][43px][20px][51.00][29px][16.00][29px][25.00][21px]"));
+		panel.setLayout(new MigLayout("", "[30][60][60][181px,grow][56.00px][60][30]", "[45.00][43px][20px][51.00][29px][16.00][29px:29px][25.00][21px]"));
 		
 		JLabel label = new JLabel("MICROFINANCE");
 		label.setFont(new Font("Yu Gothic UI Light", Font.PLAIN, 32));
@@ -84,6 +90,8 @@ public class LoginForm extends JFrame {
 		JLabel label_1 = new JLabel("Management Software");
 		label_1.setFont(new Font("Dialog", Font.PLAIN, 15));
 		panel.add(label_1, "cell 2 2 3 1,alignx center,aligny center");
+		
+		
 		
 		JLabel lblNewLabel = new JLabel("UserName");
 		panel.add(lblNewLabel, "cell 1 4 2 1,alignx center,aligny center");
@@ -95,7 +103,8 @@ public class LoginForm extends JFrame {
 		JLabel lblPassword = new JLabel("Password");
 		panel.add(lblPassword, "cell 1 6 2 1,alignx center,aligny center");
 		
-		txtPassword = new JTextField();
+		txtPassword = new JPasswordField();
+		txtPassword.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
 		txtPassword.setColumns(10);
 		panel.add(txtPassword, "cell 3 6 2 1,grow");
 		
@@ -108,7 +117,14 @@ public class LoginForm extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (check()) {
-					
+					msql = new UQueries();
+					boolean success = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
+					if (success) {
+						dispose();
+						new Main().setVisible(true);
+					}else {
+						showError("UserName or Password is Wrong!");
+					}
 				}
 			}
 		});
