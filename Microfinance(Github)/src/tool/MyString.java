@@ -2,7 +2,15 @@ package tool;
 
 public class MyString {
 	
+	//ErrorCode
 	
+	public static String ClientFoundInGroup = "ClientFoundInGroup";
+	public static String ClientFoundInGroupandLoan = "ClientFoundInGroupandLoan";
+	public static String ClientFoundInLoan = "ClientFoundInLoan";
+	
+	public static String GroupFoundInLoan = "GroupFoundInLoan";
+
+	public static String OkToDelete = "OkToDelete";
 	
 	public static int frameWidth = 1266;//1095
 	public static int frameHeight = 768;//656

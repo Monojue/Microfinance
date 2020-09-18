@@ -191,6 +191,85 @@ public class UQueries {
 	}
 	}
 	
+//	public static boolean DeleteData(String tbName, String ID) {
+//	
+//	query = "Delete "+tbName+" where "
+//	try {
+//		stmt = con.createStatement();
+//		System.out.println(query);
+//		if(stmt.executeUpdate(query)==1) {
+//			return true;
+//		}else {
+//			return false;
+//		}
+//	}catch (SQLException e) {
+//		JOptionPane.showMessageDialog(null, e.getMessage());// TODO: handle exception
+//		e.printStackTrace();
+//		return false;
+//	}
+//	}
+	
+	public String checkBeforeDelete(String tbName, String ID) {
+		if (tbName.equals("client")) {
+			if (checkInTable("group", ID)) {
+				String groupID = getGroupIDFormClientID(ID);
+				if (checkInTable("groupdetails", groupID)) {
+					return MyString.ClientFoundInGroupandLoan;
+				}else {
+					return MyString.ClientFoundInGroup;
+				}
+			}else if (checkInTable("clientdetails", ID)) {
+				return MyString.ClientFoundInLoan;
+			}
+		}else if (tbName.equals("group")) {
+			if (checkInTable("groupdetails", ID)) {
+				return MyString.GroupFoundInLoan;
+			}
+		}
+		return MyString.OkToDelete;
+	}
+	
+	
+	public boolean checkInTable(String tbName, String ID) {
+		if (tbName.equals("client")) {
+			query = "Select * from client where clientID="+ID+"'";
+		}else if (tbName.equals("group")) {
+			query = "SELECT * FROM clientgroup where Leader='"+ID+"' or Member_1='"+ID+"' or Member_2='"+ID+"' or Member_3='"+ID+"' or Member_4='"+ID+"'";
+		}else if (tbName.equals("groupdetails")) {
+			query = "Select * from groupdetails where GroupID='"+ID+"'";
+		}else if (tbName.equals("clientdetails")) {
+			query  = "Select * from clientdetails where ClientID='"+ID+"'";
+		}
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if(rs.next()) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public String getGroupIDFormClientID(String CID) {
+		query = "SELECT * FROM clientgroup where Leader='"+CID+"' or Member_1='"+CID+"' or Member_2='"+CID+"' or Member_3='"+CID+"' or Member_4='"+CID+"'";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				return rs.getString("GroupID");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 ///////////////////// Group Query Start ////////////////////////
 	
 	public DefaultTableModel getGroup(String data, String type) {
@@ -249,6 +328,8 @@ public class UQueries {
 		return clientID;
 	}
 	
+	
+
 	
 	
 ///////////////////// Group Query End //////////////////////////

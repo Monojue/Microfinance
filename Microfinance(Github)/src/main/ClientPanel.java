@@ -33,8 +33,9 @@ public class ClientPanel extends JPanel {
 	private JTextField textSearch;
 	private JTable table;
 	private JTextField test;
-	UQueries msql = new UQueries();
-	MyQueries msql1 = new MyQueries();
+	UQueries usql = new UQueries();
+	
+	MyQueries msql = new MyQueries();
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private JLabel lblPrefix;
 	private JLabel lblError;
@@ -89,7 +90,7 @@ public class ClientPanel extends JPanel {
 	    }
 	
 	public void createTable() {
-			table.setModel(msql.getClient(null, MyString.All));
+			table.setModel(usql.getClient(null, MyString.All));
 			table.getColumnModel().getColumn(0).setPreferredWidth(100);
 			table.getColumnModel().getColumn(1).setPreferredWidth(150);
 			table.getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -114,7 +115,7 @@ public class ClientPanel extends JPanel {
 		panel.setBackground(Color.LIGHT_GRAY);
 		panel.setBounds(10, 11, MyString.panelWidth, 37);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][][140:151.00:140][][224.00,grow][][][][][][6.00]", "[grow]"));
+		panel.setLayout(new MigLayout("", "[][][][][][140:151.00:140][][224.00,grow][][][][][][][][6.00]", "[grow]"));
 		
 		JLabel lblNewLabel = new JLabel("Search With");
 		panel.add(lblNewLabel, "cell 0 0");
@@ -155,13 +156,13 @@ public class ClientPanel extends JPanel {
 						if (textSearch.getText().equals("")) {
 							showError("Please Type Client ID To Search");
 						}else {
-							table.setModel(msql.getClient("CL-"+textSearch.getText().trim(),MyString.ID));;
+							table.setModel(usql.getClient("CL-"+textSearch.getText().trim(),MyString.ID));;
 						}
 					}else if (radioGroup.isSelected(RadioName.getModel())) {
 						if (textSearch.getText().equals("")) {
 							showError("Please Type Client Name To Search");
 						}else {
-							table.setModel(msql.getClient(textSearch.getText().trim(),MyString.Name));;
+							table.setModel(usql.getClient(textSearch.getText().trim(),MyString.Name));;
 						}
 					}
 					table.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -204,9 +205,24 @@ public class ClientPanel extends JPanel {
 		});
 		panel.add(btnNewButton_2, "cell 10 0");
 		
+		JButton btnDeleteClient = new JButton("Delete Client");
+		btnDeleteClient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Client to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					ClientID = (String) table.getValueAt(table.getSelectedRow(),0);
+					JOptionPane.showMessageDialog(null, usql.checkBeforeDelete("client",ClientID),"Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}
+		});
+		panel.add(btnDeleteClient, "cell 12 0");
+		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		panel.add(separator_1, "cell 11 0,grow");
+		panel.add(separator_1, "cell 13 0,grow");
 		
 		JButton btnNewButton_3 = new JButton("Refresh");
 		btnNewButton_3.addActionListener(new ActionListener() {
@@ -214,7 +230,7 @@ public class ClientPanel extends JPanel {
 				createTable();
 			}
 		});
-		panel.add(btnNewButton_3, "cell 12 0");
+		panel.add(btnNewButton_3, "cell 14 0");
 		
 		lblError = new JLabel("");
 		lblError.setForeground(Color.RED);

@@ -33,7 +33,7 @@ public class GroupPanel extends JPanel {
 
 	private JTextField textSearch;
 	private JTable table;
-	private UQueries msql = new UQueries();
+	private UQueries usql = new UQueries();
 	private final ButtonGroup radioGroup = new ButtonGroup();
 	private JLabel lblError;
 	private JPanel panel;
@@ -50,7 +50,7 @@ public class GroupPanel extends JPanel {
 	}
 	
 	public void createTable() {
-		table.setModel(msql.getGroup(null, MyString.All));
+		table.setModel(usql.getGroup(null, MyString.All));
 		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 		table.getColumnModel().getColumn(1).setPreferredWidth(200);
 		table.getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -112,7 +112,7 @@ public class GroupPanel extends JPanel {
 		panel.setBackground(Color.LIGHT_GRAY);
 		panel.setBounds(10, 11, MyString.panelWidth, 37);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][][140:151.00:140][][224,grow][][][][][][]", "[grow]"));
+		panel.setLayout(new MigLayout("", "[][][][][][140:151.00:140][][224,grow][][][][][][][][]", "[grow]"));
 		
 		JLabel lblNewLabel = new JLabel("Search With");
 		panel.add(lblNewLabel, "cell 0 0");
@@ -155,13 +155,13 @@ public class GroupPanel extends JPanel {
 					if (textSearch.getText().equals("")) {
 						showError("Please Type Group ID To Search");
 					}else {
-						table.setModel(msql.getGroup("GP-"+textSearch.getText().trim(),MyString.ID));;
+						table.setModel(usql.getGroup("GP-"+textSearch.getText().trim(),MyString.ID));;
 					}
 				}else if (radioGroup.isSelected(RadioName.getModel())) {
 					if (textSearch.getText().equals("")) {
 						showError("Please Type Leader Name To Search");
 					}else {
-						table.setModel(msql.getGroup(textSearch.getText().trim(),MyString.Name));;
+						table.setModel(usql.getGroup(textSearch.getText().trim(),MyString.Name));;
 				}
 				
 			}
@@ -175,16 +175,16 @@ public class GroupPanel extends JPanel {
 		});
 		panel.add(btnSearch, "cell 6 0");
 		
+		lblError = new JLabel("");
+		lblError.setForeground(Color.RED);
+		panel.add(lblError, "cell 7 0,grow");
+		
 		JButton btnNewButton_1 = new JButton("New Group");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new GroupEntry(null).setVisible(true);
 			}
 		});
-		
-		lblError = new JLabel("");
-		lblError.setForeground(Color.RED);
-		panel.add(lblError, "cell 7 0,grow");
 		panel.add(btnNewButton_1, "cell 8 0");
 		
 		JButton btnNewButton_2 = new JButton("Edit Group");
@@ -201,9 +201,23 @@ public class GroupPanel extends JPanel {
 		});
 		panel.add(btnNewButton_2, "cell 10 0");
 		
+		JButton btnDeleteGroup = new JButton("Delete Group");
+		btnDeleteGroup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Group to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					String GroupID = (String) table.getValueAt(table.getSelectedRow(),0);
+					JOptionPane.showMessageDialog(null, usql.checkBeforeDelete("group",GroupID),"Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		panel.add(btnDeleteGroup, "cell 12 0");
+		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		panel.add(separator_1, "cell 11 0,grow");
+		panel.add(separator_1, "cell 13 0,grow");
 		
 		JButton btnNewButton_3 = new JButton("Refresh");
 		btnNewButton_3.addActionListener(new ActionListener() {
@@ -211,7 +225,7 @@ public class GroupPanel extends JPanel {
 				createTable();
 			}
 		});
-		panel.add(btnNewButton_3, "cell 12 0");
+		panel.add(btnNewButton_3, "cell 14 0");
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 59, 1039, 510);
