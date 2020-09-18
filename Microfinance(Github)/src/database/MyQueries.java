@@ -186,8 +186,38 @@ public class MyQueries {
 		return false;
 	}
 	}
+	/////////////////////////////Insert End//////////////////////////////////////
 	
-	//Client And Guarantor And Group Update!!!
+	/////////////////////////////Delete Start//////////////////////////////////////
+	public boolean DeleteData(String tbName , String ID) {
+		if(tbName.equals("loanrequest1")) {
+			query = "delete from clientdetails where loanRequestID ='"+ID+"'";
+			query1 = "delete from loanrequest where loanRequestID ='"+ID+"'";
+		}
+		if(tbName.equals("loanrequest2")) {
+			query = "delete from groupdetails where loanRequestID ='"+ID+"'";
+			query1 = "delete from loanrequest where loanRequestID ='"+ID+"'";
+		}
+		try {
+			stmt = con.createStatement();
+			System.out.println(query);
+			if(stmt.executeUpdate(query)==1) {
+				if(stmt.executeUpdate(query1)==1) {
+				return true;}
+				else {
+					return false;
+				}
+			}else {
+				return false;
+			}
+		}catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	//////////////////// Update Start!!!/////////////////////////////////////
 	public static boolean UpdateData(String tbName, String[] data) {
 	if(tbName.equals("guarantor")) {
 		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
@@ -478,7 +508,8 @@ public class MyQueries {
 				
 				String approave = LoanRequestDetails[5];
 				String PayDay = LoanRequestDetails[4];
-				if(approave !=null && PayDay == null) {
+				String Remark = LoanRequestDetails[6];
+				if(approave !=null && PayDay == null && Remark == null) {
 					dtm.addRow(dataitem);
 				}
 			}
@@ -487,6 +518,50 @@ public class MyQueries {
 			System.out.println(e);
 			return null;
 		}
+	}
+	
+	public DefaultTableModel getIndividualRejectedLoanRequest() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[9];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from clientdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Client ID");
+				dtm.addColumn("Client Name");
+				dtm.addColumn("Client Phone");
+				dtm.addColumn("Amount");
+				dtm.addColumn("Duration");
+				dtm.addColumn("Remark");
+				dtm.addColumn("Date");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("ClientID");
+				dataitem[2] = msql.getClientNameFormID(rs.getString("ClientID"));
+				String[] Phone = getClientDetailsFormID(rs.getString("ClientID"));
+				dataitem[3] = Phone[4];
+				dataitem[4] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[5] = LoanRequestDetails[2];
+				dataitem[6] = LoanRequestDetails[6];
+				dataitem[7] = rs.getString("RequestDate");
+				
+				String approave = LoanRequestDetails[5];
+				String PayDay = LoanRequestDetails[4];
+				if(approave !=null && approave.equals("2")) {
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	
 	}
 	
 	public DefaultTableModel getGroupApprovedLoanRequest() {
@@ -528,7 +603,63 @@ public class MyQueries {
 				
 				String approave = LoanRequestDetails[5];
 				String PayDay = LoanRequestDetails[4];
-				if(approave !=null && PayDay == null) {
+				String Remark = LoanRequestDetails[6];
+				if(approave !=null && PayDay == null && Remark == null) {
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public DefaultTableModel getGroupRejectedLoanRequest() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[12];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from groupdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Group ID");
+				dtm.addColumn("Leader Name");
+				dtm.addColumn("Leader Phone");
+				dtm.addColumn("Member1 Name");
+				dtm.addColumn("Member2 Name");
+				dtm.addColumn("Member3 Name");
+				dtm.addColumn("Member4 Name");
+				dtm.addColumn("Amount");
+				dtm.addColumn("Duration");
+				dtm.addColumn("Remark");
+				dtm.addColumn("Date");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				String data = rs.getString("GroupID");
+				String query2 = "Select * from clientgroup where groupID= '"+data+"'";
+				ResultSet rs2 = stmt.executeQuery(query2);
+				rs2.next();
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("GroupID");
+				dataitem[2] = rs2.getString("leadername");
+				String[] Phone = getClientDetailsFormID(rs2.getString("Leader"));
+				dataitem[3] = Phone[4];
+				dataitem[4] = rs2.getString("M1Name");
+				dataitem[5] = rs2.getString("M2Name");
+				dataitem[6] = rs2.getString("M3Name");
+				dataitem[7] = rs2.getString("M4Name");
+				dataitem[8] = Calculation.addcomma(LoanRequestDetails[1]);
+				dataitem[9] = LoanRequestDetails[2];
+				dataitem[10] = LoanRequestDetails[6];
+				dataitem[11] = rs.getString("RequestDate");
+				
+				String approave = LoanRequestDetails[5];
+				String PayDay = LoanRequestDetails[4];
+				if(approave !=null && approave.equals("2")) {
 					dtm.addRow(dataitem);
 				}
 			}
@@ -540,7 +671,7 @@ public class MyQueries {
 	}
 	
 	public String[] GetLoanRequestData(String id) {
-		String[] data = new String[6];
+		String[] data = new String[7];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from loanrequest where LoanRequestID = '"+id+"'";
@@ -551,7 +682,8 @@ public class MyQueries {
 			data[2] = rs.getString(4); //Duration
 			data[3] = rs.getString(5); //Rate
 			data[4] = rs.getString(6); //PayDay
-			data[5] = rs.getString(7); //Approved
+			data[5] = rs.getString(7); //Approve
+			data[6] = rs.getString(8); //Remark
 			return data;
 		}
 		catch(SQLException e) {
