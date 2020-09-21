@@ -5,23 +5,38 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+
+import database.MyQueries;
+import entryForm.RepaymentEntry;
+
 import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 import tool.MyString;
 
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PaymentPanel extends JPanel {
 	private JTable table;
 	private JTextField textField;
 	private final ButtonGroup radioGroup = new ButtonGroup();
+	private final ButtonGroup radioGroup2 = new ButtonGroup();
 	private JPanel panel;
+	private JRadioButton rdoType;
+	private JRadioButton rdoIndividual,rdoGroup;
 	private JScrollPane scrollPane;
+	private String ClientID, LoanRequestID, Amount, Duration,GroupID;
+	
+	MyQueries msql = new MyQueries();
+	private JButton btnRefresh;
+	private JButton btnDetails;
 
 	 public void updatePanelSize() {
 
@@ -61,6 +76,15 @@ public class PaymentPanel extends JPanel {
 	    }
 	public PaymentPanel() {
 		Initialize();
+		createITable();
+	}
+	
+	public void createITable() {
+		table.setModel(msql.getIRepaymentTable());
+	}
+	
+	public void createGTable() {
+		table.setModel(msql.getGRepaymentTable());
 	}
 	
 	public void Initialize() {
@@ -73,7 +97,7 @@ public class PaymentPanel extends JPanel {
 		panel.setBounds(10, 11, 1039, 37);
 		panel.setBackground(Color.LIGHT_GRAY);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][166.00][]", "[]"));
+		panel.setLayout(new MigLayout("", "[][][][][166.00][][][][][][][][][][][][][][][][]", "[]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel.add(label, "cell 0 0");
@@ -83,15 +107,15 @@ public class PaymentPanel extends JPanel {
 		radioButton.setBackground(Color.LIGHT_GRAY);
 		panel.add(radioButton, "cell 1 0");
 		
-		JRadioButton radioButton_1 = new JRadioButton("Client ID");
-		radioGroup.add(radioButton_1);
-		radioButton_1.setBackground(Color.LIGHT_GRAY);
-		panel.add(radioButton_1, "cell 2 0");
+		rdoType = new JRadioButton("Client ID");
+		radioGroup.add(rdoType);
+		rdoType.setBackground(Color.LIGHT_GRAY);
+		panel.add(rdoType, "cell 2 0");
 		
-		JRadioButton radioButton_2 = new JRadioButton("Group ID");
-		radioGroup.add(radioButton_2);
-		radioButton_2.setBackground(Color.LIGHT_GRAY);
-		panel.add(radioButton_2, "cell 3 0");
+//		JRadioButton radioButton_2 = new JRadioButton("Group ID");
+//		radioGroup.add(radioButton_2);
+//		radioButton_2.setBackground(Color.LIGHT_GRAY);
+//		panel.add(radioButton_2, "cell 3 0");
 		
 		textField = new JTextField();
 		panel.add(textField, "cell 4 0,growx");
@@ -99,6 +123,74 @@ public class PaymentPanel extends JPanel {
 		
 		JButton button = new JButton("Search");
 		panel.add(button, "cell 5 0");
+		
+		rdoIndividual = new JRadioButton("Individual");
+		rdoIndividual.setSelected(true);
+		rdoIndividual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rdoType.setText("Client ID");
+				createITable();
+			}
+		});
+		rdoIndividual.setBackground(Color.LIGHT_GRAY);
+		panel.add(rdoIndividual, "cell 12 0");
+		radioGroup2.add(rdoIndividual);
+		
+		rdoGroup = new JRadioButton("Group");
+		rdoGroup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rdoType.setText("Group ID");
+				createGTable();
+			}
+		});
+		rdoGroup.setBackground(Color.LIGHT_GRAY);
+		panel.add(rdoGroup, "cell 13 0");
+		radioGroup2.add(rdoGroup);
+		
+		btnDetails = new JButton("Details");
+		btnDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rdoIndividual.isSelected()) {
+					if(table.getSelectedRow()<0) {
+						JOptionPane.showMessageDialog(null, "Please Choose a Loan to Pay!","Error",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						LoanRequestID = (String) table.getValueAt(table.getSelectedRow(),0);
+						ClientID = (String) table.getValueAt(table.getSelectedRow(),1);
+						Amount = (String) table.getValueAt(table.getSelectedRow(),4);
+						Duration = (String) table.getValueAt(table.getSelectedRow(),6);
+						new RepaymentEntry("Individual",LoanRequestID,ClientID,Amount,Duration).setVisible(true);
+					}
+				}
+				
+				else {
+					if(table.getSelectedRow()<0) {
+						JOptionPane.showMessageDialog(null, "Please Choose a Loan to Pay!","Error",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						LoanRequestID = (String) table.getValueAt(table.getSelectedRow(),0);
+						ClientID = (String) table.getValueAt(table.getSelectedRow(),1);
+						Amount = (String) table.getValueAt(table.getSelectedRow(),4);
+						Duration = (String) table.getValueAt(table.getSelectedRow(),6);
+						new RepaymentEntry("Group",LoanRequestID,ClientID,Amount,Duration).setVisible(true);
+					}
+				}
+			}
+		});
+		panel.add(btnDetails, "cell 19 0");
+		
+		btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rdoIndividual.isSelected()) {
+					createITable();
+				}
+				else if(rdoGroup.isSelected()) {
+					createGTable();
+				}
+			}
+		});
+		panel.add(btnRefresh, "cell 20 0");
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 59, 1039, 510);

@@ -2,7 +2,7 @@ package tool;
 
 import java.util.*;
 public class MyDate {
-	public String getdate() {
+	public static String getdate() {
 		StringBuffer str=new StringBuffer("");
 		Date date=new Date();		
 		

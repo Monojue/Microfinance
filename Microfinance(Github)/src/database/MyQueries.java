@@ -171,6 +171,10 @@ public class MyQueries {
 		query = "insert into loansetting(ID,MinAmount,MaxAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval,InterestRate,ServiceRate,Date,Type,OfficerID) "
 				+ "values('"+data[0]+"','"+Integer.parseInt(data[1])+"','"+Integer.parseInt(data[2])+"','"+Integer.parseInt(data[3])+"','"+Integer.parseInt(data[4])+"','"+Integer.parseInt(data[5])+"','"+Integer.parseInt(data[6])+"','"+Float.parseFloat(data[7])+"','"+Float.parseFloat(data[8])+"','"+data[9]+"','"+data[10]+"','"+data[11]+"')";
 	}
+	else if(tbName.equals("repayment")) {
+		query = "insert into repayment(RepaymentID,LoanRequestID,PaymentDate,Amount) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+Integer.parseInt(data[3])+"')";
+	}
 	
 	try {
 		stmt = con.createStatement();
@@ -696,12 +700,137 @@ public class MyQueries {
 	
 ///////////////////// LoanRequest Query End ////////////////////
 	
-///////////////////// GroupLoan Query Start ////////////////////
+///////////////////// Repayment Start ////////////////////
+	public DefaultTableModel getIRepaymentTable() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[8];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from clientdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Client ID");
+				dtm.addColumn("Client Name");
+				dtm.addColumn("Client Phone");
+				dtm.addColumn("Total Amount");
+				dtm.addColumn("Remaining Amount");
+				dtm.addColumn("Total Duration");
+				dtm.addColumn("Remaining Duration");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("ClientID");
+				dataitem[2] = msql.getClientNameFormID(rs.getString("ClientID"));
+				String[] Phone = getClientDetailsFormID(rs.getString("ClientID"));
+				dataitem[3] = Phone[4];
+				DefaultTableModel dtm2 = Calculation.calculator(Integer.parseInt(LoanRequestDetails[1]), Integer.parseInt(LoanRequestDetails[2]), Float.parseFloat(LoanRequestDetails[3]));
+				dataitem[4] = Calculation.addcomma((String)dtm2.getValueAt( Integer.parseInt(LoanRequestDetails[2]), 4));
+				dataitem[6] = LoanRequestDetails[2];
+				
+				String query3 = "Select * from repayment where LoanRequestID= '"+dataitem[0]+"'";
+				ResultSet rs2 = stmt.executeQuery(query3);
+				int RemainingAmount = Integer.parseInt(Calculation.removecomma(dataitem[4]));
+				int RemainingDuration = Integer.parseInt(LoanRequestDetails[2]);
+				while(rs2.next()) {
+					RemainingAmount = RemainingAmount - Integer.parseInt(rs2.getString("Amount"));
+					RemainingDuration = RemainingDuration - 1;
+				}
+				dataitem[5] = Calculation.addcomma(Integer.toString(RemainingAmount));
+				dataitem[7] = Integer.toString(RemainingDuration);
+				
+				String PayDay = LoanRequestDetails[4];
+				if(PayDay !=null) {
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	
+	}
+	
+	public DefaultTableModel getGRepaymentTable() {
+		DefaultTableModel dtm = new DefaultTableModel();
+		String dataitem[]= new String[8];
+		try {
+			stmt = con.createStatement();
+			query ="Select * from groupdetails";
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Loan Request ID");
+				dtm.addColumn("Group ID");
+				dtm.addColumn("Leader Name");
+				dtm.addColumn("Leader Phone");
+				dtm.addColumn("Total Amount");
+				dtm.addColumn("Remaining Amount");
+				dtm.addColumn("Total Duration");
+				dtm.addColumn("Remaining Duration");
+			}
+			while (rs.next()) {
+				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
+				String data = rs.getString("GroupID");
+				String query2 = "Select * from clientgroup where groupID= '"+data+"'";
+				ResultSet rs2 = stmt.executeQuery(query2);
+				rs2.next();
+				dataitem[0] = rs.getString("LoanRequestID");
+				dataitem[1] = rs.getString("GroupID");
+				dataitem[2] = rs2.getString("leadername");
+				String[] Phone = getClientDetailsFormID(rs2.getString("Leader"));
+				dataitem[3] = Phone[4];
+				DefaultTableModel dtm2 = Calculation.calculator(Integer.parseInt(LoanRequestDetails[1]), Integer.parseInt(LoanRequestDetails[2]), Float.parseFloat(LoanRequestDetails[3]));
+				dataitem[4] = Calculation.addcomma((String)dtm2.getValueAt( Integer.parseInt(LoanRequestDetails[2]), 4));
+				dataitem[6] = LoanRequestDetails[2];
+				
+				String query3 = "Select * from repayment where LoanRequestID= '"+dataitem[0]+"'";
+				ResultSet rs3 = stmt.executeQuery(query3);
+				int RemainingAmount = Integer.parseInt(Calculation.removecomma(dataitem[4]));
+				int RemainingDuration = Integer.parseInt(LoanRequestDetails[2]);
+				while(rs3.next()) {
+					RemainingAmount = RemainingAmount - Integer.parseInt(rs3.getString("Amount"));
+					RemainingDuration = RemainingDuration - 1;
+				}
+				dataitem[5] = Calculation.addcomma(Integer.toString(RemainingAmount));
+				dataitem[7] = Integer.toString(RemainingDuration);
+				
+				
+				String PayDay = LoanRequestDetails[4];
+				if(PayDay != null ) {
+					dtm.addRow(dataitem);
+				}
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public Integer GetPaymentNumber(String ID) {
+		int num=0;
+		try {
+			query = "Select * from repayment where LoanRequestID= '"+ID+"'";
+			rs = stmt.executeQuery(query);
+			
+			while(rs.next()) {
+			num = num+1;
+			}
+			return num;
+		}
+		catch (SQLException e) {
+			System.out.println(e);
+			return null;		
+		}
+	}
 	
 	
 	
-	
-///////////////////// GroupLoan Query End //////////////////////
+///////////////////// Repayment End //////////////////////
 	
 
 }

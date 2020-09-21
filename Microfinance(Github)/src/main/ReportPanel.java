@@ -98,16 +98,6 @@ public class ReportPanel extends JPanel {
 	        System.out.println("Resutl: " + resultWidth + "x" + resultHeight);
 //	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
 	    }
-	
-	// public void createApprovedTable() {
-	// 	tableApproved.setModel(msql.getApprovedLoanRequest());
-	// 	tableApproved.getColumnModel().getColumn(0).setPreferredWidth(100);
-	// 	tableApproved.getColumnModel().getColumn(1).setMinWidth(0);
-	// 	tableApproved.getColumnModel().getColumn(1).setMaxWidth(0);
-	// 	tableApproved.getColumnModel().getColumn(1).setWidth(0);
-	// 	tableApproved.getColumnModel().getColumn(2).setPreferredWidth(200);
-	// 	tableApproved.getColumnModel().getColumn(3).setPreferredWidth(200);
-	// 	tableApproved.getColumnModel().getColumn(4).setPreferredWidth(100);
 
 	public void createGroupTable() {
 		tableGroup.setModel(msql.getGroupLoanRequest());

@@ -265,7 +265,7 @@ public class LoanPanel extends JPanel {
 						JOptionPane.showMessageDialog(null, "Please Choose a Client Request","Error!",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						PaidDay((String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0),(String)tableIndividual.getValueAt(tableGroup.getSelectedRow(),7));
+						PaidDay((String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0),(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),3));
 						createITable();
 					}				
 				}
