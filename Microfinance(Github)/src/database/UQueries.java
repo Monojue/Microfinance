@@ -77,9 +77,15 @@ public class UQueries {
 				strdataitem[3] = Calculation.customRemove(rs.getString("Address"), "\\|",",");
 				strdataitem[4] = rs.getString("Phone");
 				strdataitem[5] = rs.getString("DateOfBirth");
-				strdataitem[6] = rs.getString("Home");
+				String Home = rs.getString("Home");
+				if(Home.equals("1")) {
+					strdataitem[6] = "owned";
+				}
+				else if(Home.equals("0")) {
+					strdataitem[6] = "-";
+				}
 				strdataitem[7] = rs.getString("Job");
-				strdataitem[8] = rs.getString("Salary");
+				strdataitem[8] = Calculation.addcomma(rs.getString("Salary"));				
 				dtm.addRow(strdataitem);
 			}
 			return dtm;

@@ -104,7 +104,6 @@ public class ClientPanel extends JPanel {
 			table.getColumnModel().getColumn(5).setPreferredWidth(100);
 			table.getColumnModel().getColumn(6).setPreferredWidth(50);
 			table.getColumnModel().getColumn(7).setPreferredWidth(100);
-			table.getColumnModel().getColumn(7).setPreferredWidth(100);
 	}
 	public void showError(String error) {
 		lblError.setText(error);
@@ -178,8 +177,7 @@ public class ClientPanel extends JPanel {
 					table.getColumnModel().getColumn(5).setPreferredWidth(100);
 					table.getColumnModel().getColumn(6).setPreferredWidth(50);
 					table.getColumnModel().getColumn(7).setPreferredWidth(100);
-					table.getColumnModel().getColumn(7).setPreferredWidth(100);
-					
+					table.getColumnModel().getColumn(7).setPreferredWidth(100);					
 			}
 		});
 		panel.add(btnSearch, "cell 6 0");
@@ -250,7 +248,7 @@ public class ClientPanel extends JPanel {
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE);
 		header.setForeground(Color.GREEN);
-		header.setFont(new Font("SansSerif", Font.BOLD , 20));;
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 		
 		UIDefaults defaults = UIManager.getLookAndFeelDefaults();
