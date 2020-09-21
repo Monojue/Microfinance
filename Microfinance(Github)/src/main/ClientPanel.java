@@ -6,8 +6,10 @@ import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.border.LineBorder;
+import javax.swing.table.JTableHeader;
 
 import database.MyQueries;
 import database.UQueries;
@@ -244,6 +246,11 @@ public class ClientPanel extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
+		table.setRowHeight(20);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.GREEN);
+		header.setFont(new Font("SansSerif", Font.BOLD , 20));;
 		scrollPane.setViewportView(table);
 		
 		UIDefaults defaults = UIManager.getLookAndFeelDefaults();
