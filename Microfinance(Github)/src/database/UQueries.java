@@ -109,6 +109,17 @@ public class UQueries {
 			return null;
 		}
 	}
+	
+	public void deleteClient(String ID) {
+		query = "Delete from client where clientID='"+ID+"'";
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 ///////////////////// Client Query End /////////////////////////
 	
@@ -334,15 +345,59 @@ public class UQueries {
 		return clientID;
 	}
 	
-	
+	public void deleteGroupFromClientID(String ID) {
+		query = "Delete from clientgroup where leader='"+ID+"' or Member_1='"+ID+"' or Member_2='"+ID+"' or Member_3='"+ID+"' or Member_4='"+ID+"'";
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	
 	
 ///////////////////// Group Query End //////////////////////////
 	
 ///////////////////// LoanRequest Query Start //////////////////
+	public String getLoanIDfromClientID(String ID) {
+		query = "Select * from ClientDetails where clientID='"+ID+"'";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				return rs.getString("LoanRequestID");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
-	
+	public void deleteClientDetailsClientID(String ID) {
+		query = "Delete from ClientDetails where='"+ID+"'";
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void deleteLoanRequestfromClientID(String ID) {
+		String LoanID = getLoanIDfromClientID(ID);
+		deleteClientDetailsClientID(ID);
+		query = "Delete from LoanRequest where LoanRequestID='"+LoanID+"'"; 
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 ///////////////////// LoanRequest Query End ////////////////////
