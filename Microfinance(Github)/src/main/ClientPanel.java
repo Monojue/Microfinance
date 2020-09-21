@@ -25,6 +25,9 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
@@ -34,7 +37,7 @@ public class ClientPanel extends JPanel {
 	private JTable table;
 	private JTextField test;
 	UQueries usql = new UQueries();
-	
+	public static final Color VERY_LIGHT_Grey = new Color(230,230,230);
 	MyQueries msql = new MyQueries();
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private JLabel lblPrefix;
@@ -242,7 +245,9 @@ public class ClientPanel extends JPanel {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
-
+		
+		UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+		defaults.putIfAbsent("Table.alternateRowColor", VERY_LIGHT_Grey);
 	}
 	
 
