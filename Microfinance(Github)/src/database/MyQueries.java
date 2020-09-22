@@ -112,7 +112,7 @@ public class MyQueries {
 			query = "select * from client where NRC='"+data[0]+"'";
 		}		
 		try {
-			stmt = con.createStatement();
+			stmt = con.createStatement(); 
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
 				return false;	

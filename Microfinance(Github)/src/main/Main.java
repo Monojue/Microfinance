@@ -37,7 +37,7 @@ public class Main extends JFrame {
 	private PaymentPanel paymentPanel;
 	private ReportPanel reportPanel;
 	private SettingPanel settingPanel;
-	
+	private String Role;
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +45,7 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main frame = new Main();
+					Main frame = new Main("Manager");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,7 +57,8 @@ public class Main extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Main() {
+	public Main(String Role) {
+		this.Role  = Role;
 		setTitle("MICROFINANACE");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, MyString.frameWidth, MyString.frameHeight);
@@ -86,11 +87,13 @@ public class Main extends JFrame {
 		paymentPanel = new PaymentPanel();
 		tabbedPane.addTab("          REPAYMENT          ", paymentPanel);
 		
-		reportPanel = new ReportPanel();
-		tabbedPane.addTab("          REPORT          ", reportPanel);
-		
-		settingPanel = new SettingPanel();
-		tabbedPane.addTab("          SETTING          ", settingPanel);
+		if (Role.equals("Manager")) {
+			reportPanel = new ReportPanel();
+			tabbedPane.addTab("          REPORT          ", reportPanel);
+			
+			settingPanel = new SettingPanel();
+			tabbedPane.addTab("          SETTING          ", settingPanel);
+		}
 		initListeners();
 	}
 	
@@ -106,11 +109,13 @@ public class Main extends JFrame {
 	                groupPanel.updatePanelSize();
 	                loanPanel.updatePanelSize();
 	                paymentPanel.updatePanelSize();
-	                reportPanel.updatePanelSize();
-	                settingPanel.updatePanelSize();
+	                if (Role.equals("Manager")) {
+	                	reportPanel.updatePanelSize();
+		                settingPanel.updatePanelSize();
+					}
 	            }
 
-	            @Override
+	            @Override 
 	            public void componentHidden(ComponentEvent evt) {}
 
 	            @Override

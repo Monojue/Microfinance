@@ -143,7 +143,7 @@ public class ClientEntry extends JFrame {
 			noteNRC.setVisible(true);
 			return false;
 		}
-		else if (boxNo.getText().length() != 6) {
+		else if (boxNo.getText().length() != 6 || !Checking.IsAllDigit(boxNo.getText())) {
 			noteNRC.setText("* Invalid");
 			noteNRC.setVisible(true);
 			return false;
@@ -185,8 +185,8 @@ public class ClientEntry extends JFrame {
 			notePhone.setVisible(true);
 			return false;
 		}
-		else if (Checking.IsLetter(textPh.getText())) {
-			notePhone.setText("* Invalid");
+		else if (Checking.IsAllDigit(textPh.getText())) {
+			notePhone.setText("* DigInvalid");
 			notePhone.setVisible(true);
 			return false;
 		}
@@ -365,6 +365,7 @@ public class ClientEntry extends JFrame {
 				noteNRC.setVisible(false);
 			}
 		});
+		boxN1.addItem("");
 		for (int i = 1; i <= 12; i++) {
 			boxN1.addItem(String.valueOf(i));
 		}
@@ -392,6 +393,7 @@ public class ClientEntry extends JFrame {
 				noteNRC.setVisible(false);
 			}
 		});
+		boxN3.addItem("");
 		boxN3.addItem("(N)");
 		panel.add(boxN3, "cell 10 2,growx,aligny top");
 		
