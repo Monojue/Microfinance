@@ -61,7 +61,7 @@ public class LoginForm extends JFrame {
 	public void showError(String str) {
 		lblError.setText(str);
 		lblError.setVisible(true);
-	}
+	} 
 	
 	public void hideError() {
 		lblError.setVisible(false);
@@ -118,10 +118,10 @@ public class LoginForm extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (check()) {
 					msql = new UQueries();
-					boolean success = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
-					if (success) {
+					String Role = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
+					if (!Role.equals("notfound")) {
 						dispose();
-						new Main().setVisible(true);
+						new Main(Role).setVisible(true);
 					}else {
 						showError("UserName or Password is Wrong!");
 					}

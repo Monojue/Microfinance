@@ -27,6 +27,7 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import database.MyQueries;
+import database.UQueries;
 import entryForm.OfficerEntry;
 
 import java.awt.event.MouseAdapter;
@@ -62,14 +63,16 @@ public class SettingPanel extends JPanel {
 	private String ID;
 	
 	MyQueries msql = new MyQueries();
+	UQueries usql = new UQueries();
 	DBConnection myDbConnection = new DBConnection();
 	private JPanel panel;
 	private JPanel panel_1;
 	private JTable table;
-	private JTextField textField;
+	private JTextField txtSearch;
 	private JPanel panel_2;
 	private JPanel panel_3;
 	private JScrollPane scrollPane;
+	private JLabel lblError;
 	
 	/**
 	 * Create the panel.
@@ -79,6 +82,18 @@ public class SettingPanel extends JPanel {
 		fieldDisable();
 		GetIData();
 		GetGData();
+		createTable();
+	}
+	
+	
+	public void createTable() {
+		table.setModel(usql.getOfficer(null, MyString.All));
+		table.getColumnModel().getColumn(0).setPreferredWidth(100);
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);
+		table.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table.getColumnModel().getColumn(3).setPreferredWidth(250);
+		table.getColumnModel().getColumn(4).setPreferredWidth(100);
+		table.getColumnModel().getColumn(5).setPreferredWidth(100);
 	}
 	
 	 public void updatePanelSize() {
@@ -827,18 +842,37 @@ public class SettingPanel extends JPanel {
 		panel_3 = new JPanel();
 		panel_3.setBounds(12, 10, 664, 35);
 		panel_2.add(panel_3);
-		panel_3.setLayout(new MigLayout("", "[][][][grow][][][][][]", "[]"));
+		panel_3.setLayout(new MigLayout("", "[56.00][100px][][grow][][][][][]", "[]"));
+		
+		JLabel lblNewLabel_19 = new JLabel("Name :");
+		panel_3.add(lblNewLabel_19, "flowx,cell 0 0,alignx center,growy");
 		
 		JLabel lblNewLabel_18 = new JLabel("");
 		panel_3.add(lblNewLabel_18, "cell 0 0,alignx trailing");
 		
-		textField = new JTextField();
-		textField.setToolTipText("Name");
-		panel_3.add(textField, "cell 1 0,growx");
-		textField.setColumns(10);
+		txtSearch = new JTextField();
+		txtSearch.setToolTipText("Name");
+		panel_3.add(txtSearch, "cell 1 0,growx");
+		txtSearch.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("Search");
-		panel_3.add(btnNewButton_1, "cell 2 0");
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (txtSearch.getText().equals("")) {
+					lblError.setText("Please Type Officer Name To Search");
+					lblError.setVisible(true);
+				}else {
+					table.setModel(usql.getOfficer(txtSearch.getText().trim(),MyString.Name));;
+				}
+				table.getColumnModel().getColumn(0).setPreferredWidth(100);
+				table.getColumnModel().getColumn(1).setPreferredWidth(150);
+				table.getColumnModel().getColumn(2).setPreferredWidth(200);
+				table.getColumnModel().getColumn(3).setPreferredWidth(250);
+				table.getColumnModel().getColumn(4).setPreferredWidth(100);
+				table.getColumnModel().getColumn(5).setPreferredWidth(100);
+			}
+		});
+		panel_3.add(btnSearch, "cell 2 0");
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
@@ -846,18 +880,44 @@ public class SettingPanel extends JPanel {
 				new OfficerEntry().setVisible(true);
 			}
 		});
+		
+		lblError = new JLabel("New label");
+		lblError.setForeground(Color.RED);
+		lblError.setVisible(false);
+		panel_3.add(lblError, "cell 3 0");
 		panel_3.add(btnAdd, "cell 4 0");
 		
 		JButton btnNew = new JButton("Delete");
+		btnNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Staff to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					String OfficerID = (String) table.getValueAt(table.getSelectedRow(),0);
+					if (usql.deleteOfficer(OfficerID)) {
+						JOptionPane.showMessageDialog(null, "Successfully Delete!");
+					}else {
+						JOptionPane.showMessageDialog(null, "Denied to Delete Manager!");
+					}
+				}
+			}
+			
+		});
 		panel_3.add(btnNew, "cell 6 0");
 		
 		JButton btnNewButton = new JButton("Refresh");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createTable();
+			}
+		});
 		panel_3.add(btnNewButton, "cell 8 0");
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 59, 664, 248);
 		panel_2.add(scrollPane);
-		
+		 
 		table = new JTable();
 		scrollPane.setViewportView(table);
 	}

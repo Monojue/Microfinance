@@ -123,19 +123,19 @@ public class UQueries {
 
 ///////////////////// Client Query End /////////////////////////
 	
-	public boolean CheckLogin(String username, String password) {
+	public String CheckLogin(String username, String password) {
 		query = "Select * from officer where username ='"+username+"' and password='"+password+"'";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
-				return true;	
+				return rs.getString("Role");	
 			} else {
-				return false;
+				return "notfound";
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),"SQL Exception", JOptionPane.ERROR_MESSAGE);
-			return false;
+			return "notfound";
 		}
 	}
 	
@@ -191,8 +191,11 @@ public class UQueries {
 	}else if (tbName.equals(MyString.GroupEntry)) {
 		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4, leaderName, M1Name, M2Name, M3Name, M4Name) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+data[6]+"','"+data[7]+"','"+data[8]+"','"+data[9]+"','"+data[10]+"')";
+	}else if (tbName.equals("Officer")) {
+		query = "Insert into Officer(officerID, Name, Address, Phone, NRC, Role, UserName, Password) "
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+data[6]+"','"+data[7]+"')";
 	}
-	
+	 
 	try {
 		stmt = con.createStatement();
 		System.out.println(query);
@@ -408,8 +411,59 @@ public class UQueries {
 	
 	
 ///////////////////// GroupLoan Query End //////////////////////
+	public DefaultTableModel getOfficer(String data, String type) {
+		dtm= new DefaultTableModel();
+		String strdataitem[]= new String[6];
+		try {
+			stmt = con.createStatement();
+			if (MyString.All.equals(type)) {
+				query ="Select * from officer";
+			}else if (MyString.ID.equals(type)) {
+				query="Select * from officer where officerID= '"+data+"'";
+			}else if (MyString.Name.equals(type)) {
+				query="Select * from officer where Name like '"+data+"%'";
+			}
+			
+			ResultSet rs = stmt.executeQuery(query);
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("OfficerID");
+				dtm.addColumn("Name");
+				dtm.addColumn("NRC");
+				dtm.addColumn("Address");
+				dtm.addColumn("Phone");
+				dtm.addColumn("Role");
+			}
+			while (rs.next()) {
+				strdataitem[0] = rs.getString("OfficerID");
+				strdataitem[1] = rs.getString("Name");
+				strdataitem[2] = Calculation.customRemove(rs.getString("NRC"), "-","");
+				strdataitem[3] = rs.getString("Address");
+				strdataitem[4] = rs.getString("Phone");
+				strdataitem[5] = rs.getString("Role");
+				dtm.addRow(strdataitem);
+			}
+			return dtm;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return dtm;
+	}
 	
-
+	public boolean deleteOfficer(String ID) {
+		query = "Delete from officer where officerID='"+ID+"' and Role='Staff'";
+		try {
+			stmt = con.createStatement();
+			if (stmt.executeUpdate(query)==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 }
 
 

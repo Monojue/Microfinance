@@ -22,7 +22,7 @@ public class Checking {
 	
 	public static boolean IsNull(String str) { //txt.getText()
 		if(str.trim().equals("") || str.trim().equals(null)) {
-			return true;
+			return true; 
 		}
 		else {
 			return false;
