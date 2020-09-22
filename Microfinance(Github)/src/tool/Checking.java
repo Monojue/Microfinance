@@ -5,6 +5,11 @@ import java.util.*;
 
 public class Checking {
 	
+	
+	public static void main(String[] args) {
+		System.out.println(IsAllDigit("0124"));
+	}
+	
 	public static boolean IsValidName(String str) {
 		if(str.startsWith(" ")) {
 			return false;
@@ -26,20 +31,20 @@ public class Checking {
 	
 	public static boolean IsLetter(String str) {
 		for(int i=0;i<str.length();i++) {
-			if(Character.isLetter(str.charAt(0))) {
-				return true;
+			if(!Character.isLetter(str.charAt(0))) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	public static boolean IsAllDigit(String str) {
 		for(int i=0;i<str.length();i++) {
-			if(Character.isDigit(str.charAt(i))){
-				return true;
+			if(!Character.isDigit(str.charAt(i))){
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	public static boolean IsContain(char c,String str) {
