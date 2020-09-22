@@ -24,7 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class PaymentPanel extends JPanel {
-	private JTable table;
+	private static JTable table;
 	private JTextField textField;
 	private final ButtonGroup radioGroup = new ButtonGroup();
 	private final ButtonGroup radioGroup2 = new ButtonGroup();
@@ -34,13 +34,13 @@ public class PaymentPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private String ClientID, LoanRequestID, Amount, Duration,GroupID;
 	
-	MyQueries msql = new MyQueries();
+	static MyQueries msql = new MyQueries();
 	private JButton btnRefresh;
 	private JButton btnDetails;
 
 	 public void updatePanelSize() {
 
-//	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+////	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 //	                .getDefaultScreenDevice();
 //	        float monitorWidth = gd.getDisplayMode().getWidth();
 //	        float monitorHeight = gd.getDisplayMode().getHeight();
@@ -79,11 +79,11 @@ public class PaymentPanel extends JPanel {
 		createITable();
 	}
 	
-	public void createITable() {
+	public static void createITable() {
 		table.setModel(msql.getIRepaymentTable());
 	}
 	
-	public void createGTable() {
+	public static void createGTable() {
 		table.setModel(msql.getGRepaymentTable());
 	}
 	
@@ -158,7 +158,7 @@ public class PaymentPanel extends JPanel {
 						LoanRequestID = (String) table.getValueAt(table.getSelectedRow(),0);
 						ClientID = (String) table.getValueAt(table.getSelectedRow(),1);
 						Amount = (String) table.getValueAt(table.getSelectedRow(),4);
-						Duration = (String) table.getValueAt(table.getSelectedRow(),6);
+						Duration = (String) table.getValueAt(table.getSelectedRow(),7);
 						new RepaymentEntry("Individual",LoanRequestID,ClientID,Amount,Duration).setVisible(true);
 					}
 				}
@@ -171,7 +171,7 @@ public class PaymentPanel extends JPanel {
 						LoanRequestID = (String) table.getValueAt(table.getSelectedRow(),0);
 						ClientID = (String) table.getValueAt(table.getSelectedRow(),1);
 						Amount = (String) table.getValueAt(table.getSelectedRow(),4);
-						Duration = (String) table.getValueAt(table.getSelectedRow(),6);
+						Duration = (String) table.getValueAt(table.getSelectedRow(),7);
 						new RepaymentEntry("Group",LoanRequestID,ClientID,Amount,Duration).setVisible(true);
 					}
 				}

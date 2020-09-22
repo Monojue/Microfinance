@@ -27,6 +27,7 @@ import net.miginfocom.swing.MigLayout;
 import tool.Calculation;
 import tool.MyDate;
 import tool.MyString;
+import main.PaymentPanel;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -106,7 +107,6 @@ public class RepaymentEntry extends JFrame {
 			CreatePaymentTable();
 			PaymentSetData();
 		}
-		
 		else if (form.equals("Individual")) {
 			GPanel.setVisible(false);
 			CPanel.setVisible(true);
@@ -464,6 +464,7 @@ public class RepaymentEntry extends JFrame {
 		panel.add(scrollPane);
 		
 		table_1 = new JTable();
+		table_1.setEnabled(false);
 		table_1.setRowHeight(20);
 		scrollPane.setViewportView(table_1);
 		
@@ -528,8 +529,14 @@ public class RepaymentEntry extends JFrame {
 				data[3] = Calculation.removecomma(textI2.getText());
 				boolean save = MyQueries.InsertData("repayment", data);
 				if (save) {
-					JOptionPane.showMessageDialog(null, "Recorded Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
-					AutoID();
+					JOptionPane.showMessageDialog(null,textI2.getText()+ " is Paid Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+					if(CPanel.isVisible()) {
+						PaymentPanel.createITable();
+					}
+					else if(GPanel.isVisible()) {
+						PaymentPanel.createGTable();
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Failed to Save new Pay Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					AutoID();
@@ -543,3 +550,4 @@ public class RepaymentEntry extends JFrame {
 		
 	}
 }
+//

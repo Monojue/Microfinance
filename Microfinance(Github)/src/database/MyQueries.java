@@ -18,7 +18,7 @@ import tool.MyString;
 public class MyQueries {
 	static Connection con = null;
 	static Statement stmt;
-	static String query,query1;
+	static String query,query1,query2;
 	ResultSet rs;
 	DBConnection connect = new DBConnection();
 	UQueries msql = new UQueries();
@@ -700,10 +700,10 @@ public class MyQueries {
 	
 ///////////////////// LoanRequest Query End ////////////////////
 	
-///////////////////// Repayment Start ////////////////////
+///////////////////// Repayment Start //////////////////////
 	public DefaultTableModel getIRepaymentTable() {
 		DefaultTableModel dtm = new DefaultTableModel();
-		String dataitem[]= new String[8];
+		String dataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from clientdetails";
@@ -714,6 +714,7 @@ public class MyQueries {
 				dtm.addColumn("Client ID");
 				dtm.addColumn("Client Name");
 				dtm.addColumn("Client Phone");
+				dtm.addColumn("Loan Amount");
 				dtm.addColumn("Total Amount");
 				dtm.addColumn("Remaining Amount");
 				dtm.addColumn("Total Duration");
@@ -726,23 +727,28 @@ public class MyQueries {
 				dataitem[2] = msql.getClientNameFormID(rs.getString("ClientID"));
 				String[] Phone = getClientDetailsFormID(rs.getString("ClientID"));
 				dataitem[3] = Phone[4];
+				dataitem[4] = Calculation.addcomma(LoanRequestDetails[1]);
 				DefaultTableModel dtm2 = Calculation.calculator(Integer.parseInt(LoanRequestDetails[1]), Integer.parseInt(LoanRequestDetails[2]), Float.parseFloat(LoanRequestDetails[3]));
-				dataitem[4] = Calculation.addcomma((String)dtm2.getValueAt( Integer.parseInt(LoanRequestDetails[2]), 4));
-				dataitem[6] = LoanRequestDetails[2];
+				dataitem[5] = Calculation.addcomma((String)dtm2.getValueAt( Integer.parseInt(LoanRequestDetails[2]), 4));
+				dataitem[7] = LoanRequestDetails[2];
 				
 				String query3 = "Select * from repayment where LoanRequestID= '"+dataitem[0]+"'";
 				ResultSet rs2 = stmt.executeQuery(query3);
-				int RemainingAmount = Integer.parseInt(Calculation.removecomma(dataitem[4]));
+				int RemainingAmount = Integer.parseInt(Calculation.removecomma(dataitem[5]));
 				int RemainingDuration = Integer.parseInt(LoanRequestDetails[2]);
 				while(rs2.next()) {
 					RemainingAmount = RemainingAmount - Integer.parseInt(rs2.getString("Amount"));
 					RemainingDuration = RemainingDuration - 1;
 				}
-				dataitem[5] = Calculation.addcomma(Integer.toString(RemainingAmount));
-				dataitem[7] = Integer.toString(RemainingDuration);
+				dataitem[6] = Calculation.addcomma(Integer.toString(RemainingAmount));
+				dataitem[8] = Integer.toString(RemainingDuration);
+				
+				if(RemainingDuration<=0) {
+					DeleteLoanRequest(dataitem[0],"Individual");
+				}
 				
 				String PayDay = LoanRequestDetails[4];
-				if(PayDay !=null) {
+				if(PayDay !=null && RemainingDuration>0) {
 					dtm.addRow(dataitem);
 				}
 			}
@@ -756,7 +762,7 @@ public class MyQueries {
 	
 	public DefaultTableModel getGRepaymentTable() {
 		DefaultTableModel dtm = new DefaultTableModel();
-		String dataitem[]= new String[8];
+		String dataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from groupdetails";
@@ -767,6 +773,7 @@ public class MyQueries {
 				dtm.addColumn("Group ID");
 				dtm.addColumn("Leader Name");
 				dtm.addColumn("Leader Phone");
+				dtm.addColumn("Loan Amount");
 				dtm.addColumn("Total Amount");
 				dtm.addColumn("Remaining Amount");
 				dtm.addColumn("Total Duration");
@@ -775,7 +782,7 @@ public class MyQueries {
 			while (rs.next()) {
 				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
 				String data = rs.getString("GroupID");
-				String query2 = "Select * from clientgroup where groupID= '"+data+"'";
+				query2 = "Select * from clientgroup where groupID= '"+data+"'";
 				ResultSet rs2 = stmt.executeQuery(query2);
 				rs2.next();
 				dataitem[0] = rs.getString("LoanRequestID");
@@ -783,24 +790,28 @@ public class MyQueries {
 				dataitem[2] = rs2.getString("leadername");
 				String[] Phone = getClientDetailsFormID(rs2.getString("Leader"));
 				dataitem[3] = Phone[4];
+				dataitem[4] = Calculation.addcomma(LoanRequestDetails[1]);
 				DefaultTableModel dtm2 = Calculation.calculator(Integer.parseInt(LoanRequestDetails[1]), Integer.parseInt(LoanRequestDetails[2]), Float.parseFloat(LoanRequestDetails[3]));
-				dataitem[4] = Calculation.addcomma((String)dtm2.getValueAt( Integer.parseInt(LoanRequestDetails[2]), 4));
-				dataitem[6] = LoanRequestDetails[2];
+				dataitem[5] = Calculation.addcomma((String)dtm2.getValueAt( Integer.parseInt(LoanRequestDetails[2]), 4));
+				dataitem[7] = LoanRequestDetails[2];
 				
 				String query3 = "Select * from repayment where LoanRequestID= '"+dataitem[0]+"'";
 				ResultSet rs3 = stmt.executeQuery(query3);
-				int RemainingAmount = Integer.parseInt(Calculation.removecomma(dataitem[4]));
+				int RemainingAmount = Integer.parseInt(Calculation.removecomma(dataitem[5]));
 				int RemainingDuration = Integer.parseInt(LoanRequestDetails[2]);
 				while(rs3.next()) {
 					RemainingAmount = RemainingAmount - Integer.parseInt(rs3.getString("Amount"));
 					RemainingDuration = RemainingDuration - 1;
 				}
-				dataitem[5] = Calculation.addcomma(Integer.toString(RemainingAmount));
-				dataitem[7] = Integer.toString(RemainingDuration);
+				dataitem[6] = Calculation.addcomma(Integer.toString(RemainingAmount));
+				dataitem[8] = Integer.toString(RemainingDuration);
 				
+				if(RemainingDuration<=0) {
+					DeleteLoanRequest(dataitem[0],"Group");
+				}
 				
 				String PayDay = LoanRequestDetails[4];
-				if(PayDay != null ) {
+				if(PayDay != null) {
 					dtm.addRow(dataitem);
 				}
 			}
@@ -826,6 +837,29 @@ public class MyQueries {
 			System.out.println(e);
 			return null;		
 		}
+	}
+	
+	public void DeleteLoanRequest(String ID,String Type) {
+		try {
+			stmt = con.createStatement();
+			query = "Delete from repayment where LoanRequestID= '"+ID+"'";
+			query1 = "Delete from loanrequest where LoanRequestID= '"+ID+"'";
+			if(Type.equals("Individual")) 
+			{
+				query2 = "Delete from clientdetails where LoanRequestID= '"+ID+"'";
+			}
+			else if(Type.equals("Group")) 
+			{
+				query2 = "Delete from groupdetails where LoanRequestID= '"+ID+"'";
+			}
+			stmt.executeUpdate(query);
+			stmt.executeUpdate(query2);
+			stmt.executeUpdate(query1);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	
