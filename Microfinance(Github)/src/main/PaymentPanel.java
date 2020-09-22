@@ -40,7 +40,7 @@ public class PaymentPanel extends JPanel {
 
 	 public void updatePanelSize() {
 
-//	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+////	        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 //	                .getDefaultScreenDevice();
 //	        float monitorWidth = gd.getDisplayMode().getWidth();
 //	        float monitorHeight = gd.getDisplayMode().getHeight();

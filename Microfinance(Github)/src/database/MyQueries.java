@@ -700,7 +700,7 @@ public class MyQueries {
 	
 ///////////////////// LoanRequest Query End ////////////////////
 	
-///////////////////// Repayment Start ////////////////////
+///////////////////// Repayment Start //////////////////////
 	public DefaultTableModel getIRepaymentTable() {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[9];
