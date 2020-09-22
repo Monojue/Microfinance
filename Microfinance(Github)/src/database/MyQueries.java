@@ -696,7 +696,22 @@ public class MyQueries {
 		}
 	}
 	
-	
+	public boolean CheckIndividualAvaliable(String ID) {
+		try {
+			stmt = con.createStatement();
+			query = "Select * from clientdetails where ClientID= '"+ID+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			if(rs.next()) {
+				return true;
+			}
+			else {
+				return false;
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 ///////////////////// LoanRequest Query End ////////////////////
 	

@@ -360,6 +360,12 @@ public class LoanRequestForm extends JFrame {
 			noteDuration.setVisible(true);
 			return false;
 		}
+		//Check Avaliable
+		if(msql.CheckIndividualAvaliable(textCID.getText())) {
+			noteClientError.setText("* This Client is Already Requested");
+			noteClientError.setVisible(true);
+			return false;	
+		}
 		else {
 			return true;
 		}
