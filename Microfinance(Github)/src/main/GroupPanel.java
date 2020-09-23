@@ -21,6 +21,7 @@ import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.border.SoftBevelBorder;
 
@@ -204,14 +205,49 @@ public class GroupPanel extends JPanel {
 		JButton btnDeleteGroup = new JButton("Delete Group");
 		btnDeleteGroup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String password  = "";
+				String message = "This Group is founded in ";
 				if(table.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Group to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					String GroupID = (String) table.getValueAt(table.getSelectedRow(),0);
-					JOptionPane.showMessageDialog(null, usql.checkBeforeDelete("group",GroupID),"Error!",JOptionPane.INFORMATION_MESSAGE);
+					System.out.println(usql.getLoanIDfromGroupID(GroupID));
+					Vector<String> found = usql.checkBeforeDelete("group", GroupID);
+					
+					if (found.size()>0) {
+						
+						for (int i = 0; i < found.size(); i++) {
+							message += "\n"+found.get(i); 
+						}
+						
+						while(password.isEmpty()){
+							password = JOptionPane.showInputDialog(null, message
+									+ "\n Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+						}
+						if (password.equals("password")) {
+							for (int j = found.size()-1; j >= 0; j--) {
+								System.out.println(found.get(j));
+								usql.AutoDelete("group", found.get(j), GroupID);
+							}
+							
+							if (usql.deleteGroupFromGroupID(GroupID)) {
+								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+							}else {
+								JOptionPane.showMessageDialog(null, "Error Occoured!");
+							}
+						}
+					}else {
+						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Delete!", "Warning!", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+							if (usql.deleteClient(GroupID)) {
+								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+							}else {
+								JOptionPane.showMessageDialog(null, "Error Occoured!");
+							}
+						}
+					}
 				}
-			}
+			} 
 		});
 		panel.add(btnDeleteGroup, "cell 12 0");
 		

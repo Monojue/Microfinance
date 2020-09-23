@@ -31,6 +31,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 
@@ -211,54 +212,47 @@ public class ClientPanel extends JPanel {
 		JButton btnDeleteClient = new JButton("Delete Client");
 		btnDeleteClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String password;
+				String password  = "";
+				String message = "This Client is founded in ";
 				if(table.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Client to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					ClientID = (String) table.getValueAt(table.getSelectedRow(),0);
-					if (usql.checkBeforeDelete("client",ClientID).equals(MyString.ClientFoundInLoan)) {
+					Vector<String> found = usql.checkBeforeDelete("client", ClientID);
+					
+					if (found.size()>0) {
 						
-						do {
-							password = JOptionPane.showInputDialog(null, "This Client is Found in the Loan Form!\n "
-									+ "Delete this Client also delete the Loan Form!\n "
-									+ "Please Type the Password to Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
-						}while(password.trim().equals(""));
-						if (password.equals("password")) {
-							usql.deleteLoanRequestfromClientID(ClientID);
-							usql.deleteClient(ClientID);
+						for (int i = 0; i < found.size(); i++) {
+							message += "\n"+found.get(i); 
 						}
 						
-					}else if (usql.checkBeforeDelete("client",ClientID).equals(MyString.ClientFoundInGroup)) {
-						do {
-							password = JOptionPane.showInputDialog(null, "This Client is Found in Client Group!\n "
-									+ "Delete this Client also delete the Client Group!\n "
-									+ "Please Type the Password to Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
-						}while(password.trim().equals(""));
-						if (password.equals("password")) {
-							usql.deleteGroupFromClientID(ClientID);
-							usql.deleteClient(ClientID);
+						while(password.isEmpty()){
+							password = JOptionPane.showInputDialog(null, message
+									+ "\n Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
 						}
-						
-					}else if (usql.checkBeforeDelete("client",ClientID).equals(MyString.ClientFoundInGroupandLoan)) {
-						do {
-							password = JOptionPane.showInputDialog(null, "This Client is Found in the Client Group and Loan Form!\n "
-									+ "Delete this Client also delete the Client Group and Loan Form!\n "
-									+ "Please Type the Password to Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
-						}while(password.trim().equals(""));
 						if (password.equals("password")) {
-							usql.deleteLoanRequestfromClientID(ClientID);
-							usql.deleteGroupFromClientID(ClientID);
-							usql.deleteClient(ClientID);
+							for (int j = found.size()-1; j >= 0; j--) {
+								System.out.println(found.get(j));
+								usql.AutoDelete("client", found.get(j), ClientID);
+							}
+							
+							if (usql.deleteClient(ClientID)) {
+								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+							}else {
+								JOptionPane.showMessageDialog(null, "Error Occoured!");
+							}
 						}
-						
-					}else if (usql.checkBeforeDelete("client", ClientID).equals(MyString.OkToDelete)) {
+					}else {
 						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Delete!", "Warning!", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-							usql.deleteClient(ClientID);
+							if (usql.deleteClient(ClientID)) {
+								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+							}else {
+								JOptionPane.showMessageDialog(null, "Error Occoured!");
+							}
 						}
 					}
 				}
-				
 			}
 		});
 		panel.add(btnDeleteClient, "cell 12 0");

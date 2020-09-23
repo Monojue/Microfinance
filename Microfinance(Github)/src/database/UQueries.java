@@ -22,7 +22,7 @@ public class UQueries {
 	ResultSet rs;
 	DefaultTableModel dtm = new DefaultTableModel();
 	DBConnection connect = new DBConnection();
-	
+	static UQueries usql = new UQueries();
 	public UQueries() {
 		try {
 			con = connect.GetMySQLConnection();
@@ -110,15 +110,18 @@ public class UQueries {
 		}
 	}
 	
-	public void deleteClient(String ID) {
+	public boolean deleteClient(String ID) {
 		query = "Delete from client where clientID='"+ID+"'";
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate(query);
+			if (stmt.executeUpdate(query)==1) {
+				return true;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 ///////////////////// Client Query End /////////////////////////
@@ -229,24 +232,58 @@ public class UQueries {
 //	}
 //	}
 	
-	public String checkBeforeDelete(String tbName, String ID) {
+//	public String checkBeforeDelete(String tbName, String ID) {
+//		if (tbName.equals("client")) {
+//			if (checkInTable("group", ID)) {
+//				String groupID = getGroupIDFormClientID(ID);
+//				if (checkInTable("groupdetails", groupID)) {
+//					return MyString.ClientFoundInGroupandLoan;
+//				}else {
+//					return MyString.ClientFoundInGroup;
+//				}
+//			}else if (checkInTable("clientdetails", ID)) {
+//				return MyString.ClientFoundInLoan;
+//			}
+//		}else if (tbName.equals("group")) {
+//			if (checkInTable("groupdetails", ID)) {
+//				return MyString.GroupFoundInLoan;
+//			}
+//		}
+//		return MyString.OkToDelete;
+//	}
+	
+	public Vector<String> checkBeforeDelete(String tbName, String ID) {
+		Vector<String> found = new Vector<>();
 		if (tbName.equals("client")) {
 			if (checkInTable("group", ID)) {
-				String groupID = getGroupIDFormClientID(ID);
-				if (checkInTable("groupdetails", groupID)) {
-					return MyString.ClientFoundInGroupandLoan;
-				}else {
-					return MyString.ClientFoundInGroup;
+				found.add("Group");
+				if (checkInTable("groupdetails", getGroupIDFormClientID(ID))) {
+					found.add("Group Loan");
+					if (checkInTable("repayment", getLoanIDfromGroupID(getGroupIDFormClientID(ID)))) {
+						found.add("Group Repayment");
+					}
 				}
-			}else if (checkInTable("clientdetails", ID)) {
-				return MyString.ClientFoundInLoan;
+			}else {
+				if (checkInTable("clientdetails", ID)) {
+					found.add("Client Loan");
+					if (checkInTable("repayment", getLoanIDfromClientID(ID))) {
+						found.add("Individual Repayment");
+					}
+				}
 			}
 		}else if (tbName.equals("group")) {
 			if (checkInTable("groupdetails", ID)) {
-				return MyString.GroupFoundInLoan;
+				found.add("Group Loan");
+				if (checkInTable("repayment", getLoanIDfromGroupID(ID))) {
+					found.add("Group Repayment");
+				}
+			}
+		}else if (tbName.equals("loanrequest")) {
+			if (checkInTable("repayment", ID)) {
+				found.add("Repayment");
 			}
 		}
-		return MyString.OkToDelete;
+		return found;
 	}
 	
 	
@@ -259,6 +296,8 @@ public class UQueries {
 			query = "Select * from groupdetails where GroupID='"+ID+"'";
 		}else if (tbName.equals("clientdetails")) {
 			query  = "Select * from clientdetails where ClientID='"+ID+"'";
+		}else if (tbName.equals("repayment")) {
+			query  = "Select * from repayment where LoanRequestID='"+ID+"'";
 		}
 		
 		try {
@@ -347,25 +386,12 @@ public class UQueries {
 		}
 		return clientID;
 	}
-	
-	public void deleteGroupFromClientID(String ID) {
-		query = "Delete from clientgroup where leader='"+ID+"' or Member_1='"+ID+"' or Member_2='"+ID+"' or Member_3='"+ID+"' or Member_4='"+ID+"'";
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
-	
-	
 ///////////////////// Group Query End //////////////////////////
 	
 ///////////////////// LoanRequest Query Start //////////////////
-	public String getLoanIDfromClientID(String ID) {
-		query = "Select * from ClientDetails where clientID='"+ID+"'";
+	public String getLoanIDfromClientID(String ClientID) {
+		query = "Select * from ClientDetails where clientID='"+ClientID+"'";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
@@ -379,28 +405,23 @@ public class UQueries {
 		return null;
 	}
 	
-	public void deleteClientDetailsClientID(String ID) {
-		query = "Delete from ClientDetails where='"+ID+"'";
+	public String getLoanIDfromGroupID(String GroupID) {
+		query = "Select * from GroupDetails where GroupID='"+GroupID+"'";
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate(query);
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				return rs.getString("LoanRequestID");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
-	public void deleteLoanRequestfromClientID(String ID) {
-		String LoanID = getLoanIDfromClientID(ID);
-		deleteClientDetailsClientID(ID);
-		query = "Delete from LoanRequest where LoanRequestID='"+LoanID+"'"; 
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
+	
+
 	
 	
 ///////////////////// LoanRequest Query End ////////////////////
@@ -464,6 +485,141 @@ public class UQueries {
 		return false;
 	}
 	
+////////////////////////Delete /////////////////////////
+	public boolean deletePayment(String LoanRequestID) {
+		query = "Delete from repayment where LoanRequestID='"+LoanRequestID+"'";
+		try {
+			stmt = con.createStatement();
+			if (stmt.executeUpdate(query)>0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean deleteclientLoanRequest(String ClientID) {
+		String LoanID = getLoanIDfromClientID(ClientID);
+		return deleteclientLoanRequestLoanID(LoanID);
+	}
+	
+	public boolean deleteclientLoanRequestLoanID(String LoanID) {
+		deleteClientDetailsLoanID(LoanID);
+		query = "Delete from LoanRequest where LoanRequestID='"+LoanID+"'"; 
+		try {
+			stmt = con.createStatement();
+			if (stmt.executeUpdate(query)==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean deleteGroupLoanRequest(String GroupID) {
+		String LoanID = getLoanIDfromGroupID(GroupID);
+		return deleteGroupLoanRequestLoanID(LoanID);
+	}
+	
+	public boolean deleteGroupLoanRequestLoanID(String LoanID) {
+		deleteGroupDetailsLoanID(LoanID);
+		query = "Delete from LoanRequest where LoanRequestID='"+LoanID+"'"; 
+		try {
+			stmt = con.createStatement();
+			if (stmt.executeUpdate(query)==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public void deleteClientDetailsLoanID(String LoanID) {
+		query = "Delete from ClientDetails where LoanRequestID='"+LoanID+"'";
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteGroupDetailsLoanID(String LoanID) {
+		query = "Delete from GroupDetails where LoanRequestID='"+LoanID+"'";
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean deleteGroupFromGroupID(String ID) {
+		query = "Delete from clientgroup where GroupID='"+ID+"'";
+		try {
+			stmt = con.createStatement();
+			if (stmt.executeUpdate(query)==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean AutoDelete(String tbName, String key, String ID) {
+		if (tbName.equals("client")) {
+			if (key.equals("Individual Repayment")) {
+				if (deletePayment(getLoanIDfromClientID(ID))) {
+					return true;
+				}
+			}if (key.equals("Group Repayment")) {
+				if (deletePayment(getLoanIDfromGroupID(getGroupIDFormClientID(ID)))) {
+					return true;
+				}
+			}else if (key.equals("Group Loan")) {
+				if (deleteGroupLoanRequest(getGroupIDFormClientID(ID))) {
+					return true;
+				}
+			}else if (key.equals("Client Loan")) {
+				if (deleteclientLoanRequest(ID)) {
+					return true;
+				}
+			}else if (key.equals("Group")) {
+				if (deleteGroupFromGroupID(getGroupIDFormClientID(ID))) {
+					return true;
+				}
+			}
+		}else if (tbName.equals("group")) {
+			System.out.println("enter to group");
+			if (key.equals("Group Repayment")) {
+				if (deletePayment(getLoanIDfromGroupID(ID))) {
+					System.out.println("group Repay");
+					return true;
+				}
+			}else if (key.equals("Group Loan")) {
+				if (deleteGroupLoanRequest(ID)) {
+					System.out.println("group Loankkk");
+					return true;
+				}
+			}
+		}else if (tbName.equals("loanrequest")) {
+			if (key.equals("Repayment")) {
+				if (deletePayment(ID)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 
 

@@ -7,6 +7,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
 import database.MyQueries;
+import database.UQueries;
 import entryForm.RepaymentEntry;
 
 import javax.swing.JScrollPane;
@@ -35,8 +36,10 @@ public class PaymentPanel extends JPanel {
 	private String ClientID, LoanRequestID, Amount, Duration,GroupID;
 	
 	static MyQueries msql = new MyQueries();
+	static UQueries usql = new UQueries();
 	private JButton btnRefresh;
 	private JButton btnDetails;
+	private JButton btnDelete;
 
 	 public void updatePanelSize() {
 
@@ -97,7 +100,7 @@ public class PaymentPanel extends JPanel {
 		panel.setBounds(10, 11, 1039, 37);
 		panel.setBackground(Color.LIGHT_GRAY);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][166.00][][][][][][][][][][][][][][][][]", "[]"));
+		panel.setLayout(new MigLayout("", "[][][][][166.00][][][][][][][][][][][][][][35.00][38.00][]", "[]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel.add(label, "cell 0 0");
@@ -147,6 +150,18 @@ public class PaymentPanel extends JPanel {
 		panel.add(rdoGroup, "cell 13 0");
 		radioGroup2.add(rdoGroup);
 		
+		btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rdoIndividual.isSelected()) {
+					createITable();
+				}
+				else if(rdoGroup.isSelected()) {
+					createGTable();
+				}
+			}
+		});
+		
 		btnDetails = new JButton("Details");
 		btnDetails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -177,19 +192,41 @@ public class PaymentPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(btnDetails, "cell 19 0");
+		panel.add(btnDetails, "cell 18 0");
 		
-		btnRefresh = new JButton("Refresh");
-		btnRefresh.addActionListener(new ActionListener() {
+		btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(rdoIndividual.isSelected()) {
-					createITable();
+				String password  = "";
+				if(table.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Payment to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
-				else if(rdoGroup.isSelected()) {
-					createGTable();
+				else {
+					String LoanID = (String) table.getValueAt(table.getSelectedRow(),0);
+					while(password.isEmpty()){
+						password = JOptionPane.showInputDialog(null, "Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+					}
+					if (password.equals("password")) {
+						if(rdoIndividual.isSelected()) {
+							if (usql.deletePayment(LoanID) && usql.deleteclientLoanRequestLoanID(LoanID)) {
+								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+							}else {
+								JOptionPane.showMessageDialog(null, "Error Occoured!");
+							}
+						}
+						else if(rdoGroup.isSelected()) {
+							if (usql.deletePayment(LoanID) && usql.deleteGroupLoanRequestLoanID(LoanID)) {
+								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+							}else {
+								JOptionPane.showMessageDialog(null, "Error Occoured!");
+							}
+						}
+						
+					}					
 				}
 			}
 		});
+		panel.add(btnDelete, "cell 19 0");
 		panel.add(btnRefresh, "cell 20 0");
 		
 		scrollPane = new JScrollPane();

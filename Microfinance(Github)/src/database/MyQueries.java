@@ -916,11 +916,8 @@ public class MyQueries {
 		}
 
 	}
-	
-	
-	
 ///////////////////// Repayment End //////////////////////
-	
+
 
 }
 

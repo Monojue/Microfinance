@@ -13,6 +13,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
 import database.MyQueries;
+import database.UQueries;
 import entryForm.GroupRequestForm;
 import entryForm.LoanRequestForm;
 import net.miginfocom.swing.MigLayout;
@@ -24,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -53,6 +55,7 @@ public class LoanPanel extends JPanel {
 	private JRadioButton rdoGAccepted;
 	private JRadioButton rdoGRejected;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private UQueries usql = new UQueries();
 
 	/**
 	 * Create the panel.
@@ -200,7 +203,7 @@ public class LoanPanel extends JPanel {
 		panel_2.setBackground(Color.LIGHT_GRAY);
 		panel_2.setBounds(10, 11, 1034, 34);
 		panel.add(panel_2);
-		panel_2.setLayout(new MigLayout("", "[][][][159.00][][][][][][27.00,grow][][][][]", "[]"));
+		panel_2.setLayout(new MigLayout("", "[][][][120][][][][][][27.00,grow][][][][][]", "[]"));
 		
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -299,7 +302,31 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_2.add(button, "cell 12 0,growx,aligny center");
+		
+		JButton btnInDelete = new JButton("Delete");
+		btnInDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String password  = "";
+				if(tableIndividual.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Loan Request to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					String LoanID = (String) tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0);
+					while(password.isEmpty()){
+						password = JOptionPane.showInputDialog(null, "Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+					}
+					if (password.equals("password")) {
+						if (usql.deleteclientLoanRequestLoanID(LoanID)) {
+							JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+						}else {
+							JOptionPane.showMessageDialog(null, "Error Occoured!");
+						}
+					}					
+				}
+			}
+		});
+		panel_2.add(btnInDelete, "cell 11 0");
+		panel_2.add(button, "cell 13 0,growx,aligny center");
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Group", panel_1);
@@ -321,7 +348,7 @@ public class LoanPanel extends JPanel {
 		panel_4.setBounds(10, 11, 1034, 34);
 		panel_1.add(panel_4);
 //		panel_4.setLayout(new MigLayout("", "[58px][105px][85px][159px][65px][][129px][][71px]", "[23px]"));
-		panel_4.setLayout(new MigLayout("", "[][][][159.00][][][][][][grow][][][][]", "[]"));
+		panel_4.setLayout(new MigLayout("", "[][][][120][][][][][][grow][][][][][]", "[]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel_4.add(label, "cell 0 0,growx,aligny center");
@@ -424,7 +451,31 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_4.add(button_3, "cell 12 0,growx,aligny center");
+		
+		JButton btnGDelete = new JButton("Delete");
+		btnGDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String password  = "";
+				if(tableGroup.getSelectedRow()<0) {
+					JOptionPane.showMessageDialog(null, "Please Choose a Loan Request to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					String LoanID = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),0);
+					while(password.isEmpty()){
+						password = JOptionPane.showInputDialog(null, "Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+					}
+					if (password.equals("password")) {
+						if (usql.deleteGroupLoanRequestLoanID(LoanID)) {
+							JOptionPane.showMessageDialog(null, "Successfully Deleted!");
+						}else {
+							JOptionPane.showMessageDialog(null, "Error Occoured!");
+						}
+					}					
+				}
+			}
+		});
+		panel_4.add(btnGDelete, "cell 11 0");
+		panel_4.add(button_3, "cell 13 0,growx,aligny center");
 		
 
 	}

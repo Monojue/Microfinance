@@ -185,8 +185,8 @@ public class ClientEntry extends JFrame {
 			notePhone.setVisible(true);
 			return false;
 		}
-		else if (Checking.IsAllDigit(textPh.getText())) {
-			notePhone.setText("* DigInvalid");
+		else if (!Checking.IsAllDigit(textPh.getText())) {
+			notePhone.setText("* Invalid");
 			notePhone.setVisible(true);
 			return false;
 		}
