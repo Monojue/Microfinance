@@ -169,7 +169,7 @@ public class LoanRequestForm extends JFrame {
 				data[8] = "1";
 				data[9] = java.time.LocalDate.now().toString();
 				data[10] = "Individual";
-				data[11] = "1";
+				data[11] = "OF-0000001";
 				msql.InsertData("Iloansetting", data);
 				GetILoanSetting();
 			}

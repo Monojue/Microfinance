@@ -63,7 +63,6 @@ public class DBConnection {
 				else if(current>9999 && current<=99999) {return prefix + "00" + current;}
 				else if(current>99999 && current<=999999) {return prefix + "0" + current;}
 				else if(current>999999 && current<=9999999) {return prefix +  current;}
-		
 			}
 		}catch (SQLException e) {
 			//SQL Exception

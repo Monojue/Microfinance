@@ -317,7 +317,28 @@ public class GroupEntry extends JFrame {
 				if (leadID.getText().isEmpty()||M1ID.getText().isEmpty()||M2ID.getText().isEmpty()||M3ID.getText().isEmpty()||M4ID.getText().isEmpty()) {
 					lblAlert.setText("Please Fill All Member!");
 					lblAlert.setVisible(true);
-				}else {
+				}
+				else if(msql1.CheckClientIsInGroup(leadID.getText())) {
+					lblAlert.setText( "Leader is in another Group!");
+					lblAlert.setVisible(true);
+				}
+				else if(msql1.CheckClientIsInGroup(M1ID.getText())) {
+					lblAlert.setText(M1Name.getText() +" is in another Group!");
+					lblAlert.setVisible(true);
+				}
+				else if(msql1.CheckClientIsInGroup(M2ID.getText())) {
+					lblAlert.setText(M2Name.getText() +" is in another Group!");
+					lblAlert.setVisible(true);
+				}
+				else if(msql1.CheckClientIsInGroup(M3ID.getText())) {
+					lblAlert.setText(M3Name.getText() +" is in another Group!");
+					lblAlert.setVisible(true);
+				}
+				else if(msql1.CheckClientIsInGroup(M4ID.getText())) {
+					lblAlert.setText(M4Name.getText() +" is in another Group!");
+					lblAlert.setVisible(true);
+				}
+				else {
 					String[] data = new String[11];
 					data[0] = textGID.getText();
 					data[1] = leadID.getText();

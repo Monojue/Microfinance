@@ -163,8 +163,8 @@ public class SettingPanel extends JPanel {
 			data[8] = "1";
 			data[9] = java.time.LocalDate.now().toString();
 			data[10] = "Individual";
-			data[11] = "1";
-			msql.InsertData("Iloansetting", data);
+			data[11] = "OF-0000001";
+			MyQueries.InsertData("Iloansetting", data);
 			GetIData();
 		}
 	}
@@ -194,7 +194,7 @@ public class SettingPanel extends JPanel {
 			data[8] = "1";
 			data[9] = java.time.LocalDate.now().toString();
 			data[10] = "Group";
-			data[11] = "1";
+			data[11] = "OF-0000001";
 			msql.InsertData("Gloansetting", data);
 			GetIData();
 		}
@@ -716,7 +716,7 @@ public class SettingPanel extends JPanel {
 						INewSetting[8] = textIFees.getText();
 						INewSetting[9] = java.time.LocalDate.now().toString();
 						INewSetting[10] = "Individual";
-						INewSetting[11] = "1";
+						INewSetting[11] = "OF-0000001";
 						boolean insert = msql.InsertData("Iloansetting", INewSetting);
 						if(insert) {
 							fieldDisable();
@@ -776,7 +776,7 @@ public class SettingPanel extends JPanel {
 						GNewSetting[8] = textGFees.getText();
 						GNewSetting[9] = java.time.LocalDate.now().toString();
 						GNewSetting[10] = "Group";
-						GNewSetting[11] = "1";
+						GNewSetting[11] = "OF-0000001";
 						boolean insert = msql.InsertData("Gloansetting", GNewSetting);
 						if(insert) {
 							fieldDisable();

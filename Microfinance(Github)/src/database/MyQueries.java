@@ -367,7 +367,42 @@ public class MyQueries {
 			e.printStackTrace();
 		}
 		return null;	
-	}	
+	}
+	
+	public boolean CheckClientIsInGroup(String ID){
+		try {
+			stmt = con.createStatement();
+			String q1 = "Select * from clientgroup where Leader= '"+ID+"'";
+			String q2 = "Select * from clientgroup where Member_1= '"+ID+"'";
+			String q3 = "Select * from clientgroup where Member_2= '"+ID+"'";
+			String q4 = "Select * from clientgroup where Member_3= '"+ID+"'";
+			String q5 = "Select * from clientgroup where Member_4= '"+ID+"'";
+			ResultSet rs1 = stmt.executeQuery(q1);
+			if(rs1.next()) {
+				return true;
+			}
+			ResultSet rs2 = stmt.executeQuery(q2);
+			if(rs2.next()) {
+				return true;
+			}
+			ResultSet rs3 = stmt.executeQuery(q3);
+			if(rs3.next()) {
+				return true;
+			}
+			ResultSet rs4 = stmt.executeQuery(q4);
+			if(rs4.next()) {
+				return true;
+			}
+			ResultSet rs5 = stmt.executeQuery(q5);
+			if(rs5.next()) {
+				return true;
+			}
+				return false;					
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	
 	
