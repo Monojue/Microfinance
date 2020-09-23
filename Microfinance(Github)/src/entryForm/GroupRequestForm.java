@@ -196,6 +196,11 @@ public class GroupRequestForm extends JFrame{
 			noteDuration.setVisible(true);
 			return false;
 		}
+		if(msql.CheckAvaliable("Group",txtGroupID.getText())) {
+			noteClientError.setText("* This Group is Already Requested");
+			noteClientError.setVisible(true);
+			return false;	
+		}
 		else {
 			return true;
 		}

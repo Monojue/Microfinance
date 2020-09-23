@@ -361,7 +361,7 @@ public class LoanRequestForm extends JFrame {
 			return false;
 		}
 		//Check Avaliable
-		if(msql.CheckIndividualAvaliable(textCID.getText())) {
+		if(msql.CheckAvaliable("Individual",textCID.getText())) {
 			noteClientError.setText("* This Client is Already Requested");
 			noteClientError.setVisible(true);
 			return false;	

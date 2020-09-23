@@ -731,10 +731,15 @@ public class MyQueries {
 		}
 	}
 	
-	public boolean CheckIndividualAvaliable(String ID) {
+	public boolean CheckAvaliable(String Type,String ID) {
 		try {
 			stmt = con.createStatement();
+			if(Type.equals("Individual")) {
 			query = "Select * from clientdetails where ClientID= '"+ID+"'";
+			}
+			else if(Type.equals("Group")) {
+			query = "Select * from groupdetails where GroupID= '"+ID+"'";	
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			if(rs.next()) {
 				return true;
