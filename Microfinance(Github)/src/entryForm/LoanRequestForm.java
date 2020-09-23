@@ -366,6 +366,11 @@ public class LoanRequestForm extends JFrame {
 			noteClientError.setVisible(true);
 			return false;	
 		}
+		else if(msql.CheckClientIsInGroup(textCID.getText())) {
+			noteClientError.setText( "This Client is in another Group!");
+			noteClientError.setVisible(true);
+			return false;
+		}
 		else {
 			return true;
 		}
