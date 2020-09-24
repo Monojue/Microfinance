@@ -127,7 +127,7 @@ public class UQueries {
 ///////////////////// Client Query End /////////////////////////
 	
 	public String CheckLogin(String username, String password) {
-		query = "Select * from officer where username ='"+username+"' and password='"+password+"'";
+		query = "Select * from officer where binary username ='"+username+"' and binary password='"+password+"'";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
