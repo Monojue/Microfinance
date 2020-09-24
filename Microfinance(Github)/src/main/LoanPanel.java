@@ -340,7 +340,7 @@ public class LoanPanel extends JPanel {
 		panel_4 = new JPanel();
 
 		tableGroup = new JTable();
-		scrollPane_1.setColumnHeaderView(tableGroup);
+		scrollPane_1.setViewportView(tableGroup);
 		
 		
 
