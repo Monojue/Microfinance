@@ -7,10 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import database.DBConnection;
 import database.MyQueries;
@@ -112,6 +114,7 @@ public class LoanRequestForm extends JFrame {
 	private int MaxAmount,MinAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval;
 	private float Rate,Fees;
 	private String ClientID,RequestedAmount,RequestedDuration;
+	public static final Color VERY_LIGHT_Grey = new Color(230,230,230);
 	/**
 	 * Launch the application.
 	 */
@@ -883,6 +886,12 @@ public class LoanRequestForm extends JFrame {
 	panel.add(scrollPane);
 	
 	table = new JTable();
+	table.setRowHeight(20);
+	table.setEnabled(false);
+	JTableHeader header = table.getTableHeader();
+	header.setBackground(Color.WHITE);
+	header.setForeground(Color.BLACK);
+	header.setFont(new Font("SansSerif", Font.BOLD , 16));
 	scrollPane.setColumnHeaderView(table);
 	scrollPane.setViewportView(table);
 	
@@ -961,5 +970,8 @@ public class LoanRequestForm extends JFrame {
 	});
 	btnRequestLoan.setBounds(1078, 674, 122, 23);
 	this.getContentPane().add(btnRequestLoan);
+	
+	UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+	defaults.putIfAbsent("Table.alternateRowColor", VERY_LIGHT_Grey);
 	}
 }
