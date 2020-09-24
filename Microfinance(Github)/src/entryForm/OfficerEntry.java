@@ -158,6 +158,7 @@ public class OfficerEntry extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[428.00,grow]", "[31.00][182.00,grow][30.00]"));
+		this.setResizable(false);
 		
 		JPanel panelhead = new JPanel();
 		contentPane.add(panelhead, "cell 0 0,grow");
