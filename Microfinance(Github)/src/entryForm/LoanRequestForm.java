@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import database.DBConnection;
@@ -85,6 +87,7 @@ public class LoanRequestForm extends JFrame {
 	private JLabel noteGJob;
 	private JLabel noteGSalary;
 	private static JTextField textGRelationship;
+	private static String Home;
 	private JLabel noteGRelationship;
 	private JLabel noteAmount;
 	private JLabel noteDuration;
@@ -246,7 +249,8 @@ public class LoanRequestForm extends JFrame {
 		textPDOB.setText(DOB);
 		textPJob.setText(job);
 		textPSalary.setText(salary);
-		if (home.equals("1")) {
+		Home = home;
+		if (home.equals("owned")) {
 			checkPHome.setSelected(true);
 		}
 		else {
@@ -485,8 +489,19 @@ public class LoanRequestForm extends JFrame {
 	panel_1.add(label_9, "cell 1 7,alignx left,aligny center");
 	
 	checkPHome = new JCheckBox("Owned");
+	checkPHome.addChangeListener(new ChangeListener() {
+		
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			if (Home.equals("owned")) {
+				checkPHome.setSelected(true);
+			}else {
+				checkPHome.setSelected(false);
+			}
+			
+		}
+	});
 	panel_1.add(checkPHome, "cell 3 7 5 1,alignx left,aligny top");
-	checkPHome.setEnabled(false);
 	
 	JLabel label_10 = new JLabel("Job");
 	panel_1.add(label_10, "cell 1 8,alignx left,aligny center");

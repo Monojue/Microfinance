@@ -491,6 +491,14 @@ public class SettingPanel extends JPanel {
 		add(panel);
 		panel.setLayout(new MigLayout("", "[][][20][65.00][][65][][][][][35:65.00,grow][][20][65][][65][][][][]", "[10][][][30][30][][30][30][30][30][]"));
 		
+		JButton btnHistory = new JButton("View Loan Edit History");
+		btnHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new History().setVisible(true);
+			}
+		});
+		panel.add(btnHistory, "cell 1 0 5 1,alignx left");
+		
 		JLabel lblNewLabel = new JLabel("Individual");
 		panel.add(lblNewLabel, "cell 1 1");
 		

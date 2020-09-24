@@ -108,6 +108,7 @@ public class Select extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setResizable(false);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 11, 904, 36);
