@@ -29,6 +29,7 @@ import javax.swing.text.JTextComponent;
 
 import database.MyQueries;
 import database.UQueries;
+import main.LoanPanel;
 import net.miginfocom.swing.MigLayout;
 import tool.Calculation;
 import tool.MyString;
@@ -73,6 +74,7 @@ public class ViewDetails extends JFrame {
 	private JTextField textDuration;
 	private TextArea textRemark;
 	private String LoanRequestID, ID, Amount, Duration;
+	private JButton btnAccept,btnDecline;
 	
 	MyQueries msql = new MyQueries();
 	static UQueries usql = new UQueries();
@@ -84,7 +86,7 @@ public class ViewDetails extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ViewDetails frame = new ViewDetails(null,null,null,null,null);
+					ViewDetails frame = new ViewDetails(null,null,null,null,null,null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -99,8 +101,9 @@ public class ViewDetails extends JFrame {
 	 * @param amount 
 	 * @param groupID 
 	 * @param loanRequestID 
+	 * @param Remark 
 	 */
-	public ViewDetails(String form, String loanRequestID, String groupID, String amount, String duration) {
+	public ViewDetails(String form, String loanRequestID, String groupID, String amount, String duration, String Remark) {
 		Initialize();
 		if (form.equals("Group")) {
 			GPanel.setVisible(true);
@@ -110,6 +113,12 @@ public class ViewDetails extends JFrame {
 			Amount = amount;
 			Duration = duration;
 			GroupSetData();
+			if(Remark != null) {
+				textRemark.setText(Remark);
+				textRemark.setEditable(false);
+				btnAccept.setText("Inform");
+				btnDecline.setText("Cancle");
+			}
 		}
 		
 		else if (form.equals("Individual")) {
@@ -121,6 +130,12 @@ public class ViewDetails extends JFrame {
 			Amount = amount;
 			Duration = duration;
 			ClientSetData();
+			if(Remark != null) {
+				textRemark.setText(Remark);
+				textRemark.setEditable(false);
+				btnAccept.setText("Inform");
+				btnDecline.setText("Cancle");
+			}
 		}
 		
 	}
@@ -511,9 +526,11 @@ public class ViewDetails extends JFrame {
 		panel.add(panel_1);
 		panel_1.setLayout(new MigLayout("", "[grow][][][]", "[]"));
 		
-		JButton btnNewButton_1 = new JButton("Accept");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnAccept = new JButton("Accept");
+		btnAccept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+			if(btnAccept.getText()=="Accept") {
 				String[] Approve = new String[2];
 				Approve[0] = textID.getText();
 				Approve[1] = "1";
@@ -526,12 +543,41 @@ public class ViewDetails extends JFrame {
 					JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
+			
+			else if(btnAccept.getText()=="Inform") {
+				if(CPanel.isVisible()) {
+				boolean delete = msql.DeleteData("loanrequest1",textID.getText());
+				if(delete) {
+					JOptionPane.showMessageDialog(null, "A loan Request is Deleted Sucessfully","Success!",JOptionPane.INFORMATION_MESSAGE);
+						LoanPanel.createRejectedITable();
+						dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Cant Delete A Request","Error!",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+				else if(GPanel.isVisible()) {
+					boolean delete = msql.DeleteData("loanrequest2",textID.getText());
+					if(delete) {
+						JOptionPane.showMessageDialog(null, "A loan Request is Deleted Sucessfully","Success!",JOptionPane.INFORMATION_MESSAGE);
+						LoanPanel.createRejectedGTable();
+						dispose();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Cant Delete A Request","Error!",JOptionPane.INFORMATION_MESSAGE);
+					}
+				}	
+			}
+			
+			}	
 		});
-		panel_1.add(btnNewButton_1, "cell 1 0");
+		panel_1.add(btnAccept, "cell 1 0");
 		
-		JButton btnNewButton = new JButton("Decline");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnDecline = new JButton("Decline");
+		btnDecline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+			if(btnDecline.getText()=="Decline") {
 				if(check()) {
 				String[] Decline = new String[3];
 				Decline[0] = textID.getText();
@@ -545,10 +591,15 @@ public class ViewDetails extends JFrame {
 				else if(!update) {
 					JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 				}
+			}}
+			
+			else if(btnDecline.getText()=="Cancle") {
+				dispose();
 			}
+				
 				}
 		});
-		panel_1.add(btnNewButton, "cell 3 0");
+		panel_1.add(btnDecline, "cell 3 0");
 		
 		JLabel lblNewLabel_3 = new JLabel("Remarks:");
 		lblNewLabel_3.setFont(new Font("MS UI Gothic", Font.BOLD, 12));

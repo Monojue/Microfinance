@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 import database.DBConnection;
 import database.MyQueries;
+import main.LoanPanel;
 
 import java.awt.Color;
 import javax.swing.UIManager;
@@ -100,8 +101,8 @@ public class LoanRequestForm extends JFrame {
 	MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
 	DefaultTableModel dtm = new DefaultTableModel();
-	private JTextField textDuration;
-	private JTextField textAmount;
+	private static JTextField textDuration;
+	private static JTextField textAmount;
 	private JTable table;
 	private JLabel lblNewLabel_6;
 	private JLabel lblMonth;
@@ -115,7 +116,7 @@ public class LoanRequestForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoanRequestForm window = new LoanRequestForm();
+					LoanRequestForm window = new LoanRequestForm(null,null);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -134,11 +135,24 @@ public class LoanRequestForm extends JFrame {
 			boxGNRC2.add(data);
 		}
 	}
-	public LoanRequestForm() {
+	public LoanRequestForm(String LID, String CID) {
 		GetILoanSetting();
 		initialize();
+		
+		if(LID==null && CID==null) 
+		{
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
+		}
+		
+		else {
+		String[] ClientDetails = msql.getClientDetailsFormID(CID);
+		textID.setText(LID);
+		setClientData(ClientDetails[0],ClientDetails[1],ClientDetails[2],ClientDetails[3],ClientDetails[4],ClientDetails[5],ClientDetails[6],ClientDetails[7],ClientDetails[8]);
+		setGuarantorData(ClientDetails[9],ClientDetails[15],ClientDetails[13],ClientDetails[14],ClientDetails[10],ClientDetails[11],ClientDetails[12]);
+		String[] LoanRequestDetails = msql.GetLoanRequestData(LID);
+		setLoanRequestData(LoanRequestDetails[1],LoanRequestDetails[2],LoanRequestDetails[3]);
+		}
 		SetNRCcodeData();
 	}
 	
@@ -175,6 +189,20 @@ public class LoanRequestForm extends JFrame {
 			}
 	}
 	
+	public void PaidDay(String ID,String Amount) {
+		String[] PayDay = new String[2];
+		PayDay[0] = ID;
+		PayDay[1] = java.time.LocalDate.now().toString();
+		boolean update = msql.UpdateData("paidday", PayDay);
+		
+		if (update) {
+			JOptionPane.showMessageDialog(null, Amount +" is Paid Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if(!update) {
+			JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	
 	public void createTable() {
 		if(Checking.IsNull(textAmount.getText())) {
 			noteAmount.setVisible(true);
@@ -197,6 +225,16 @@ public class LoanRequestForm extends JFrame {
 		table.getColumnModel().getColumn(3).setHeaderValue("Interest");
 		table.getColumnModel().getColumn(4).setHeaderValue("Installment");
 		}
+	}
+	
+	public void setLoanRequestData(String Amount1,String Duration1,String Rate1) {
+		textAmount.setText(Calculation.addcomma(Amount1));
+		textDuration.setText(Duration1);
+		lblRate.setText(Rate1+" %");
+		lblFees.setText("Paid");
+		sliderAmount.setEnabled(false);
+		sliderDuration.setEnabled(false);
+		btnRequestLoan.setText("Pay");
 	}
 	
 	public static void setClientData(String id,String name,String NRC,String address,String phno,String DOB,String home,String job,String salary) {
@@ -850,6 +888,7 @@ public class LoanRequestForm extends JFrame {
 	btnRequestLoan.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			
+			if(btnRequestLoan.getText()=="Request Loan") {
 			boolean check = check();
 			if(check) {
 				
@@ -892,6 +931,12 @@ public class LoanRequestForm extends JFrame {
 					else if (!insert2){
 						JOptionPane.showMessageDialog(null, "Failed to Save Client Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
+			}}
+			
+			else if(btnRequestLoan.getText()=="Pay") {
+				PaidDay(textID.getText(),textAmount.getText());
+				LoanPanel.createITable();
+				dispose();
 			}
 				}
 	});

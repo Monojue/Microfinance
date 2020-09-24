@@ -89,9 +89,9 @@ public class ClientPanel extends JPanel {
 	            revalidate(); // preferred dimensions not applied, so force them
 	        }
 
-	        System.out.println("Frame: " + width + "x" + height);
-	        System.out.println("ChangeSize: " + paddedWidth + "x" + paddedHeight);
-	        System.out.println("Resutl: " + resultWidth + "x" + resultHeight);
+//	        System.out.println("Frame: " + width + "x" + height);
+//	        System.out.println("ChangeSize: " + paddedWidth + "x" + paddedHeight);
+//	        System.out.println("Resutl: " + resultWidth + "x" + resultHeight);
 //	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
 	    }
 	
@@ -281,7 +281,7 @@ public class ClientPanel extends JPanel {
 		table.setRowHeight(20);
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE);
-		header.setForeground(Color.GREEN);
+		header.setForeground(Color.BLACK);
 		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 		

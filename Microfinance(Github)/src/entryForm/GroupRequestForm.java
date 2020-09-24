@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import database.DBConnection;
 import database.MyQueries;
 import database.UQueries;
+import main.LoanPanel;
 import net.miginfocom.swing.MigLayout;
 import tool.Calculation;
 import tool.Checking;
@@ -88,7 +89,7 @@ public class GroupRequestForm extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GroupRequestForm window = new GroupRequestForm();
+					GroupRequestForm window = new GroupRequestForm(null,null);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,11 +101,37 @@ public class GroupRequestForm extends JFrame{
 
 	
 	
-	public GroupRequestForm() {
+	public GroupRequestForm(String LID, String GID) {
 		GetILoanSetting();
 		initialize();
+		
+		if(LID == null && GID == null) {
 		textID.setText(loanRequest.getAutoID());
 		textDate.setText(myDate.getdate());
+		}
+		
+		else {
+			String[] GroupDetails = msql.getGroupDetailsFormID(GID);
+			textID.setText(LID);
+			setGroupData(GroupDetails[0],GroupDetails[6],GroupDetails[7],GroupDetails[8],GroupDetails[9],GroupDetails[10]);
+			String[] LoanRequestDetails = msql.GetLoanRequestData(LID);
+			setLoanRequestData(LoanRequestDetails[1],LoanRequestDetails[2],LoanRequestDetails[3]);
+			btnSelect.setEnabled(false);
+			}
+	}
+	
+	public void PaidDay(String ID,String Amount) {
+		String[] PayDay = new String[2];
+		PayDay[0] = ID;
+		PayDay[1] = java.time.LocalDate.now().toString();
+		boolean update = msql.UpdateData("paidday", PayDay);
+		
+		if (update) {
+			JOptionPane.showMessageDialog(null, Amount +" is Paid Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if(!update) {
+			JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	public static void setGroupData(String id,String leader,String mem1,String mem2,String mem3,String mem4) {
@@ -120,6 +147,16 @@ public class GroupRequestForm extends JFrame{
 		txtM2ID.setText(clientID.get(2));
 		txtM3ID.setText(clientID.get(3));
 		txtM4ID.setText(clientID.get(4));
+	}
+	
+	public void setLoanRequestData(String Amount1,String Duration1,String Rate1) {
+		textAmount.setText(Calculation.addcomma(Amount1));
+		textDuration.setText(Duration1);
+		lblRate.setText(Rate1+" %");
+		lblFees.setText("Paid");
+		sliderAmount.setEnabled(false);
+		sliderDuration.setEnabled(false);
+		btnRequestLoan.setText("Pay");
 	}
 	
 	//Get Individual Loan Setting
@@ -507,6 +544,8 @@ public class GroupRequestForm extends JFrame{
 		btnRequestLoan = new JButton("Request Loan");
 		btnRequestLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+			if(btnRequestLoan.getText()=="Request Loan") {
 				boolean check = check();
 				if(check) {
 						
@@ -534,6 +573,12 @@ public class GroupRequestForm extends JFrame{
 						}
 					}
 			}
+			else if(btnRequestLoan.getText()=="Pay") {
+				PaidDay(textID.getText(),textAmount.getText());
+				LoanPanel.createGTable();
+				dispose();
+			}
+				}
 		});
 		btnRequestLoan.setBounds(762, 653, 122, 23);
 		this.getContentPane().add(btnRequestLoan);

@@ -16,6 +16,7 @@ import database.MyQueries;
 import database.UQueries;
 import entryForm.GroupRequestForm;
 import entryForm.LoanRequestForm;
+import entryForm.ViewDetails;
 import net.miginfocom.swing.MigLayout;
 import tool.MyString;
 
@@ -35,11 +36,11 @@ public class LoanPanel extends JPanel {
 
 	private JTextField textField;
 	//private JTable table;
-	private JTable tableIndividual;
+	private static JTable tableIndividual;
 	private JTextField textField_1;
 	private JTextField textField_2;
 
-	MyQueries msql = new MyQueries();
+	static MyQueries msql = new MyQueries();
 
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
@@ -47,7 +48,7 @@ public class LoanPanel extends JPanel {
 	private JPanel panel_2;
 	private JScrollPane scrollPane_1;
 	private JPanel panel_4;
-	private JTable tableGroup;
+	private static JTable tableGroup;
 	private JButton btnIPaid;
 	private JButton btnGPaid;
 	private JRadioButton rdoIAccept;
@@ -67,7 +68,7 @@ public class LoanPanel extends JPanel {
 		createGTable();
 	}
 	
-	public void createITable() {
+	public static void createITable() {
 		tableIndividual.setModel(msql.getIndividualApprovedLoanRequest());
 		tableIndividual.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tableIndividual.getColumnModel().getColumn(1).setMinWidth(0);
@@ -78,7 +79,7 @@ public class LoanPanel extends JPanel {
 		tableIndividual.getColumnModel().getColumn(4).setPreferredWidth(100);
 	}
 	
-	public void createRejectedITable() {
+	public static void createRejectedITable() {
 		tableIndividual.setModel(msql.getIndividualRejectedLoanRequest());
 		tableIndividual.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tableIndividual.getColumnModel().getColumn(1).setMinWidth(0);
@@ -132,7 +133,7 @@ public class LoanPanel extends JPanel {
 //	        System.out.println("Ratio: " + (float)resultWidth / resultHeight);
 	    }
 
-	public void createGTable() {
+	public static void createGTable() {
 		tableGroup.setModel(msql.getGroupApprovedLoanRequest());
 		tableGroup.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tableGroup.getColumnModel().getColumn(1).setMinWidth(0);
@@ -147,7 +148,7 @@ public class LoanPanel extends JPanel {
 		tableGroup.getColumnModel().getColumn(8).setPreferredWidth(100);
 		tableGroup.getColumnModel().getColumn(9).setPreferredWidth(100);
 	}
-	public void createRejectedGTable() {
+	public static void createRejectedGTable() {
 		tableGroup.setModel(msql.getGroupRejectedLoanRequest());
 		tableGroup.getColumnModel().getColumn(0).setPreferredWidth(100);
 		tableGroup.getColumnModel().getColumn(1).setMinWidth(0);
@@ -208,7 +209,7 @@ public class LoanPanel extends JPanel {
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new LoanRequestForm().setVisible(true);
+				new LoanRequestForm(null,null).setVisible(true);
 			}
 		});
 		
@@ -237,7 +238,7 @@ public class LoanPanel extends JPanel {
 		rdoIAccept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createITable();
-				btnIPaid.setText("Paid");
+				btnIPaid.setText("To Pay");
 			}
 		});
 		buttonGroup.add(rdoIAccept);
@@ -248,7 +249,7 @@ public class LoanPanel extends JPanel {
 		rdoIRejected.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createRejectedITable();
-				btnIPaid.setText("Informed");
+				btnIPaid.setText("To Inform");
 			}
 		});
 		buttonGroup.add(rdoIRejected);
@@ -260,31 +261,25 @@ public class LoanPanel extends JPanel {
 		panel_2.add(separator, "cell 5 0,grow");
 		panel_2.add(btnNewButton, "cell 10 0,growx,aligny center");
 		
-		btnIPaid = new JButton("Paid");
+		btnIPaid = new JButton("To Pay");
 		btnIPaid.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (btnIPaid.getText() == "Paid") {
+				if (btnIPaid.getText() == "To Pay") {
 					if(tableIndividual.getSelectedRow()<0) {
 						JOptionPane.showMessageDialog(null, "Please Choose a Client Request","Error!",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						PaidDay((String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0),(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),3));
-						createITable();
+						new LoanRequestForm((String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0),(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),1)).setVisible(true);
 					}				
 				}
-				else if(btnIPaid.getText()=="Informed") {
+				else if(btnIPaid.getText()=="To Inform") {
 					if(tableIndividual.getSelectedRow()<0) {
 						JOptionPane.showMessageDialog(null, "Please Choose a Individual Request to Inform","Error!",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						boolean delete = msql.DeleteData("loanrequest1",(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0));
-						if(delete) {
-							JOptionPane.showMessageDialog(null, "A loan Request is Deleted Sucessfully","Success!",JOptionPane.INFORMATION_MESSAGE);
-							createRejectedITable();
-						}
-						else {
-							JOptionPane.showMessageDialog(null, "Cant Delete A Request","Error!",JOptionPane.INFORMATION_MESSAGE);
-						}
+						new ViewDetails("Individual",(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0),(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),1),
+								(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),4),(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),5),
+								(String)tableIndividual.getValueAt(tableIndividual.getSelectedRow(),6)).setVisible(true);
 					}				
 				}			
 			}
@@ -377,7 +372,7 @@ public class LoanPanel extends JPanel {
 		rdoGAccepted.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createGTable();
-				btnGPaid.setText("Paid");
+				btnGPaid.setText("To Pay");
 			}
 		});
 		rdoGAccepted.setBackground(Color.LIGHT_GRAY);
@@ -388,7 +383,7 @@ public class LoanPanel extends JPanel {
 		rdoGRejected.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createRejectedGTable();
-				btnGPaid.setText("Informed");
+				btnGPaid.setText("To Inform");
 			}
 		});
 		rdoGRejected.setBackground(Color.LIGHT_GRAY);
@@ -404,37 +399,33 @@ public class LoanPanel extends JPanel {
 		JButton btnNewGroupLoan = new JButton("New Group Loan");
 		btnNewGroupLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new GroupRequestForm().setVisible(true);
+				new GroupRequestForm(null,null).setVisible(true);
 			}
 		});
 		panel_4.add(btnNewGroupLoan, "cell 10 0,growx,aligny center");
 		
-		btnGPaid = new JButton("Paid");
+		btnGPaid = new JButton("To Pay");
 		btnGPaid.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (btnGPaid.getText() == "Paid") {
+				
+				if (btnGPaid.getText() == "To Pay") {
 					if(tableGroup.getSelectedRow()<0) {
 						JOptionPane.showMessageDialog(null, "Please Choose a Group Request","Error!",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						PaidDay((String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),7));
-						createGTable();
-					}				
+						new GroupRequestForm((String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),1)).setVisible(true);
+					}
 				}
-				else if(btnGPaid.getText()=="Informed") {
+				else if(btnGPaid.getText()=="To Inform") {
 					if(tableGroup.getSelectedRow()<0) {
 						JOptionPane.showMessageDialog(null, "Please Choose a Group Request to Inform Them","Error!",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						boolean delete = msql.DeleteData("loanrequest2",(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0));
-						if(delete) {
-							JOptionPane.showMessageDialog(null, "A loan Request is Deleted Sucessfully","Success!",JOptionPane.INFORMATION_MESSAGE);
-							createRejectedGTable();
-						}
-						else {
-							JOptionPane.showMessageDialog(null, "Cant Delete A Request","Error!",JOptionPane.INFORMATION_MESSAGE);
-						}
-					}				
+						new ViewDetails("Group",(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),1),
+								(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),8),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),9),
+								(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),10)).setVisible(true);
+					}
+					
 				}
 			}
 		});
