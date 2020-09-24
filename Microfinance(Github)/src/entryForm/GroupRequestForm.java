@@ -548,7 +548,7 @@ public class GroupRequestForm extends JFrame{
 			if(btnRequestLoan.getText()=="Request Loan") {
 				boolean check = check();
 				if(check) {
-						
+					if (JOptionPane.showConfirmDialog(null, "Are you sure want to Request a Group Loan!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
 						String[] LoanRequest = new String[5];
 						LoanRequest[0] = textID.getText();
 						LoanRequest[1] = "Group";
@@ -572,11 +572,14 @@ public class GroupRequestForm extends JFrame{
 							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request2!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
+				}
 			}
 			else if(btnRequestLoan.getText()=="Pay") {
-				PaidDay(textID.getText(),textAmount.getText());
-				LoanPanel.createGTable();
-				dispose();
+				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+					PaidDay(textID.getText(),textAmount.getText());
+					LoanPanel.createGTable();
+					dispose();
+				}
 			}
 				}
 		});

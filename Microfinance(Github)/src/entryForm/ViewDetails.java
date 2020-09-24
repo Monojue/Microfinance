@@ -596,7 +596,6 @@ public class ViewDetails extends JFrame {
 			else if(btnDecline.getText()=="Cancle") {
 				dispose();
 			}
-				
 				}
 		});
 		panel_1.add(btnDecline, "cell 3 0");

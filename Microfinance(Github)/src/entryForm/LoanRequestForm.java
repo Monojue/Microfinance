@@ -905,9 +905,9 @@ public class LoanRequestForm extends JFrame {
 			
 			if(btnRequestLoan.getText()=="Request Loan") {
 			boolean check = check();
-			if(check) {
-				
-				String NRC = boxGNRC1.getSelectedItem().toString()+"/-"+boxGNRC2.getSelectedItem().toString()
+			if(check) {				
+				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Request a Loan!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+					String NRC = boxGNRC1.getSelectedItem().toString()+"/-"+boxGNRC2.getSelectedItem().toString()
 							 +"-"+ boxGNRC3.getSelectedItem().toString()+"-" + textGNRC.getText();
 				String Address = textGAddress.getText()+"\\|"+textGCity.getText()+"\\|"+textGState.getText();
 					String[] GDetails = new String[8];
@@ -946,12 +946,16 @@ public class LoanRequestForm extends JFrame {
 					else if (!insert2){
 						JOptionPane.showMessageDialog(null, "Failed to Save Client Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 					}
-			}}
+			
+				}
+				}}
 			
 			else if(btnRequestLoan.getText()=="Pay") {
-				PaidDay(textID.getText(),textAmount.getText());
-				LoanPanel.createITable();
-				dispose();
+				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+					PaidDay(textID.getText(),textAmount.getText());
+					LoanPanel.createITable();
+					dispose();
+				}
 			}
 				}
 	});
