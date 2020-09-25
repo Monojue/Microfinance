@@ -343,7 +343,7 @@ public class ClientEntry extends JFrame {
 		});
 		textName.setColumns(10);
 		panel.add(textName, "cell 2 1 16 1,grow");
-		panel.add(noteName, "cell 19 1 4 1,alignx left,growy");
+		panel.add(noteName, "cell 19 1 5 1,alignx left,growy");
 		
 		JLabel label_1 = new JLabel("NRC");
 		panel.add(label_1, "cell 1 2,alignx left,growy");
@@ -405,7 +405,7 @@ public class ClientEntry extends JFrame {
 		noteNRC.setForeground(Color.RED);
 		noteNRC.setBackground(Color.WHITE);
 		noteNRC.setVisible(false);
-		panel.add(noteNRC, "cell 18 2 5 1,alignx left,growy");
+		panel.add(noteNRC, "cell 18 2 6 1,alignx left,growy");
 		
 		JLabel lblDateOfBirth = new JLabel("Date of Birth");
 		panel.add(lblDateOfBirth, "cell 1 3,alignx left,growy");
@@ -458,7 +458,7 @@ public class ClientEntry extends JFrame {
 			}
 		});
 		panel.add(boxYear, "cell 10 3 3 1,growx");
-		panel.add(noteAge, "cell 20 3 3 1,alignx left,growy");
+		panel.add(noteAge, "cell 13 3 10 1,alignx left,growy");
 		boxYear.addItem("");
 		for(int i=TodayYear-70;i<=TodayYear;i++) {
 			boxYear.addItem(String.valueOf(i));

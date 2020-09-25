@@ -70,7 +70,19 @@ public class LoginForm extends JFrame {
 	}
 	public LoginForm() {
 		Initialize();
-		
+	}
+	public void Login() {
+		if (check()) {
+			msql = new UQueries();
+			String Role = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
+			if (!Role.equals("notfound")) {
+				dispose();
+				MyString.LoginUser = txtName.getText().trim();
+				new Main(Role).setVisible(true);
+			}else {
+				showError("UserName or Password is Wrong!");
+			}
+		}
 	}
 	public void Initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,6 +118,11 @@ public class LoginForm extends JFrame {
 		panel.add(lblPassword, "cell 1 6 2 1,alignx center,aligny center");
 		
 		txtPassword = new JPasswordField();
+		txtPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Login();
+			}
+		});
 		txtPassword.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
 		txtPassword.setColumns(10);
 		panel.add(txtPassword, "cell 3 6 2 1,grow");
@@ -118,17 +135,7 @@ public class LoginForm extends JFrame {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (check()) {
-					msql = new UQueries();
-					String Role = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
-					if (!Role.equals("notfound")) {
-						dispose();
-						MyString.LoginUser = txtName.getText().trim();
-						new Main(Role).setVisible(true);
-					}else {
-						showError("UserName or Password is Wrong!");
-					}
-				}
+				Login();
 			}
 		});
 		panel.add(btnLogin, "cell 2 8 3 1,alignx center,aligny top");
