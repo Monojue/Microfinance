@@ -211,11 +211,11 @@ public class GroupEntry extends JFrame {
 	
 	public void initialize() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(500, 100, 458, 380);
+		setBounds(500, 100, 540, 406);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[420px]", "[39px][229px][34px]"));
+		contentPane.setLayout(new MigLayout("", "[420px,grow]", "[39px][229px,grow][34px]"));
 		this.setResizable(false);
 		
 		JPanel panel_1 = new JPanel();
@@ -244,11 +244,11 @@ public class GroupEntry extends JFrame {
 		panel.setBackground(Color.WHITE);
 		panel.setBorder(new TitledBorder(null, "GROUP INFORMATION", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(panel, "cell 0 1,grow");
-		panel.setLayout(new MigLayout("", "[62px][158.00px][165.00px][]", "[22px][30][30][30][30][30]"));
+		panel.setLayout(new MigLayout("", "[24.00][62px][158.00px][165.00px][]", "[22px][30][30][30][30][30]"));
 		
 		label = new Label("Leader");
 		label.setFont(new Font("Dialog", Font.PLAIN, 13));
-		panel.add(label, "cell 0 1,grow");
+		panel.add(label, "cell 1 1,grow");
 		
 		btnled = new Button("+");
 		btnled.addActionListener(new ActionListener() {
@@ -257,11 +257,11 @@ public class GroupEntry extends JFrame {
 				chooseClient();
 			}
 		});
-		panel.add(btnled, "cell 3 1,alignx center,aligny center");
+		panel.add(btnled, "cell 4 1,alignx center,aligny center");
 		
 		label_1 = new Label("Member 1");
 		label_1.setFont(new Font("Dialog", Font.PLAIN, 13));
-		panel.add(label_1, "cell 0 2,grow");
+		panel.add(label_1, "cell 1 2,grow");
 		
 		btn1 = new Button("+");
 		btn1.addActionListener(new ActionListener() {
@@ -270,11 +270,11 @@ public class GroupEntry extends JFrame {
 				chooseClient();
 			}
 		});
-		panel.add(btn1, "cell 3 2,growx");
+		panel.add(btn1, "cell 4 2,growx");
 		
 		label_2 = new Label("Member 2");
 		label_2.setFont(new Font("Dialog", Font.PLAIN, 13));
-		panel.add(label_2, "cell 0 3,grow");
+		panel.add(label_2, "cell 1 3,grow");
 		
 		btn2 = new Button("+");
 		btn2.addActionListener(new ActionListener() {
@@ -283,11 +283,11 @@ public class GroupEntry extends JFrame {
 				chooseClient();
 			}
 		});
-		panel.add(btn2, "cell 3 3,growx,aligny center");
+		panel.add(btn2, "cell 4 3,growx,aligny center");
 		
 		label_3 = new Label("Member 3");
 		label_3.setFont(new Font("Dialog", Font.PLAIN, 13));
-		panel.add(label_3, "cell 0 4,grow");
+		panel.add(label_3, "cell 1 4,grow");
 		
 		btn3 = new Button("+");
 		btn3.addActionListener(new ActionListener() {
@@ -296,59 +296,59 @@ public class GroupEntry extends JFrame {
 				chooseClient();
 			}
 		});
-		panel.add(btn3, "cell 3 4,alignx center,aligny center");
+		panel.add(btn3, "cell 4 4,alignx center,aligny center");
 		
 		label_4 = new Label("Member 4");
 		label_4.setFont(new Font("Dialog", Font.PLAIN, 13));
-		panel.add(label_4, "cell 0 5,grow");
+		panel.add(label_4, "cell 1 5,grow");
 		
 		label_5 = new Label("Name");
 		label_5.setFont(new Font("Dialog", Font.PLAIN, 12));
-		panel.add(label_5, "cell 1 0,alignx center,aligny center");
+		panel.add(label_5, "cell 2 0,alignx center,aligny center");
 		
 		label_6 = new Label("Client ID");
 		label_6.setFont(new Font("Dialog", Font.PLAIN, 12));
-		panel.add(label_6, "cell 2 0,alignx center,aligny center");
+		panel.add(label_6, "cell 3 0,alignx center,aligny center");
 		
 		leadName = new JTextField();
 		leadName.setEditable(false);
-		panel.add(leadName, "cell 1 1,grow");
+		panel.add(leadName, "cell 2 1,grow");
 		
 		M1Name = new JTextField();
 		M1Name.setEditable(false);
-		panel.add(M1Name, "cell 1 2,grow");
+		panel.add(M1Name, "cell 2 2,grow");
 		
 		M2Name = new JTextField();
 		M2Name.setEditable(false);
-		panel.add(M2Name, "cell 1 3,grow");
+		panel.add(M2Name, "cell 2 3,grow");
 		
 		M3Name = new JTextField();
 		M3Name.setEditable(false);
-		panel.add(M3Name, "cell 1 4,grow");
+		panel.add(M3Name, "cell 2 4,grow");
 		
 		M4Name = new JTextField();
 		M4Name.setEditable(false);
-		panel.add(M4Name, "cell 1 5,grow");
+		panel.add(M4Name, "cell 2 5,grow");
 		
 		leadID = new JTextField();
 		leadID.setEditable(false);
-		panel.add(leadID, "cell 2 1,grow");
+		panel.add(leadID, "cell 3 1,grow");
 		
 		M1ID = new JTextField();
 		M1ID.setEditable(false);
-		panel.add(M1ID, "cell 2 2,grow");
+		panel.add(M1ID, "cell 3 2,grow");
 		
 		M2ID = new JTextField();
 		M2ID.setEditable(false);
-		panel.add(M2ID, "cell 2 3,grow");
+		panel.add(M2ID, "cell 3 3,grow");
 		
 		M3ID = new JTextField();
 		M3ID.setEditable(false);
-		panel.add(M3ID, "cell 2 4,grow");
+		panel.add(M3ID, "cell 3 4,grow");
 		
 		M4ID = new JTextField();
 		M4ID.setEditable(false);
-		panel.add(M4ID, "cell 2 5,grow");
+		panel.add(M4ID, "cell 3 5,grow");
 		
 		btn4 = new Button("+");
 		btn4.addActionListener(new ActionListener() {
@@ -357,11 +357,11 @@ public class GroupEntry extends JFrame {
 				chooseClient();
 			}
 		});
-		panel.add(btn4, "cell 3 5,alignx center,aligny center");
+		panel.add(btn4, "cell 4 5,alignx center,aligny center");
 		
 		panel_2 = new JPanel();
 		contentPane.add(panel_2, "cell 0 2,grow");
-		panel_2.setLayout(new MigLayout("", "[294.00][][]", "[]"));
+		panel_2.setLayout(new MigLayout("", "[294.00,grow][][]", "[]"));
 		
 		lblAlert = new JLabel("* Please Fill All Member!");
 		lblAlert.setForeground(Color.RED);
