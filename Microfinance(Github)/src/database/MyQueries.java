@@ -115,9 +115,9 @@ public class MyQueries {
 			stmt = con.createStatement(); 
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
-				return false;	
+				return true;	
 			} else {
-				return true;
+				return false;
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),"SQL Exception", JOptionPane.ERROR_MESSAGE);
