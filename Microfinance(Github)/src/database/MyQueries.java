@@ -110,7 +110,7 @@ public class MyQueries {
 	public boolean IsDuplicate(String tbName, String[] data) {
 		if(tbName.equals("client")) {
 			query = "select * from client where NRC='"+data[0]+"'";
-		}		
+		}	
 		try {
 			stmt = con.createStatement(); 
 			rs = stmt.executeQuery(query);

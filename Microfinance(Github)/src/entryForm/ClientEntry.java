@@ -643,14 +643,6 @@ public class ClientEntry extends JFrame {
 					if(checkHome.isSelected()) {
 						home = "1";
 					}
-					String[] st = new String[1];
-					st[0] = NRC;
-					boolean dup = msql.IsDuplicate(MyString.ClientEntry, st);
-					if(dup) {
-						noteNRC.setText("* Already Existed");
-						noteNRC.setVisible(true);
-					}
-					else {
 						String[] data = new String[9];
 						data[0] = textCID.getText();
 						data[1] = textName.getText();
@@ -661,31 +653,39 @@ public class ClientEntry extends JFrame {
 						data[6] = home;
 						data[7] = textJob.getText();
 						data[8] = textSalary.getText();
+						
 						if(btnSave.getText()=="Save") {
-						boolean save = msql.InsertData(MyString.ClientEntry, data);
-						if (save) {
-							JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
-							Clear();
-							AutoID();
-						} else {
-							JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
-							AutoID();
-						}
-						}
+							String[] st = new String[1];
+							st[0] = NRC;
+							boolean dup = msql.IsDuplicate("client", st);
+							
+							if(dup) {
+								noteNRC.setText("* Already Existed");
+								noteNRC.setVisible(true);
+							}
+							else {
+									boolean save = msql.InsertData(MyString.ClientEntry, data);
+										if (save) {
+												JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+												Clear();
+												AutoID();
+										} 				
+										else {
+												JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
+												AutoID();
+											}
+								}
+							}
 						
 						else if(btnSave.getText()=="Update") {
 							boolean update = msql.UpdateData("client", data);
 							if (update) {
 								JOptionPane.showMessageDialog(null, "Updated Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
-								Clear();
-								AutoID();
 							} else {
 								JOptionPane.showMessageDialog(null, "Failed to Update new Data!","Cannot Updated",JOptionPane.INFORMATION_MESSAGE);
-								AutoID();
 							}
 						}
 					}
-			}
 		}});
 		panel_2.add(btnSave, "cell 1 0");
 		
