@@ -67,13 +67,13 @@ public class GroupRequestForm extends JFrame{
 	private static JTextField txtM1Name;
 	private static JTextField txtM4Name;
 	DBConnection myDbConnection = new DBConnection();
-	MyQueries msql = new MyQueries();
+	static MyQueries msql = new MyQueries();
 	DefaultTableModel dtm = new DefaultTableModel();
 	private int MaxAmount,MinAmount,MinDuration,MaxDuration,AmountInterval,DurationInterval;
 	private float Rate,Fees;
 	private JLabel noteDuration;
 	private JLabel noteAmount;
-	private JLabel noteClientError;
+	private static JLabel noteClientError;
 	private JLabel lblFees;
 	private JLabel lblRate;
 	private JTextField textAmount;
@@ -147,6 +147,10 @@ public class GroupRequestForm extends JFrame{
 		txtM2ID.setText(clientID.get(2));
 		txtM3ID.setText(clientID.get(3));
 		txtM4ID.setText(clientID.get(4));
+		if(msql.CheckAvaliable("Group",txtGroupID.getText())) {
+			noteClientError.setText("* This Group is Already Requested");
+			noteClientError.setVisible(true);
+		}
 	}
 	
 	public void setLoanRequestData(String Amount1,String Duration1,String Rate1) {
@@ -524,7 +528,7 @@ public class GroupRequestForm extends JFrame{
 		noteClientError = new JLabel("New label");
 		noteClientError.setForeground(Color.RED);
 		noteClientError.setVisible(false);
-		panel_1.add(noteClientError, "cell 1 8");
+		panel_1.add(noteClientError, "cell 0 8 2 1");
 		panel_1.add(btnSelect, "cell 2 8,alignx right");
 		
 		btnCancel = new JButton("Cancel");

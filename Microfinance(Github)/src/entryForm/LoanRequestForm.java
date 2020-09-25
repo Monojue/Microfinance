@@ -64,7 +64,7 @@ public class LoanRequestForm extends JFrame {
 	private static JTextField textPPhone;
 	private static JTextField textPJob;
 	private static JTextField textPSalary;
-	private JLabel noteClientError;
+	private static JLabel noteClientError;
 	private static JTextField textGName;
 	private static JTextField textGNRC;
 	private static JTextField textGAddress;
@@ -103,7 +103,7 @@ public class LoanRequestForm extends JFrame {
 	
 	LoanRequest loanRequest = new LoanRequest();
 	DBConnection myDbConnection = new DBConnection();
-	MyQueries msql = new MyQueries();
+	static MyQueries msql = new MyQueries();
 	MyDate myDate = new MyDate();
 	DefaultTableModel dtm = new DefaultTableModel();
 	private static JTextField textDuration;
@@ -258,6 +258,14 @@ public class LoanRequestForm extends JFrame {
 		}
 		else {
 			checkPHome.setSelected(false);
+		}
+		if(msql.CheckAvaliable("Individual",textCID.getText())) {
+			noteClientError.setText("* This Client is Already Requested");
+			noteClientError.setVisible(true);
+		}
+		else if(msql.CheckClientIsInGroup(textCID.getText())) {
+			noteClientError.setText( "This Client is in another Group!");
+			noteClientError.setVisible(true);
 		}
 	}
 	
