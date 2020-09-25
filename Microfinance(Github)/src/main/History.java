@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import database.MyQueries;
+
 import javax.swing.JTable;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JScrollPane;
@@ -14,6 +17,8 @@ public class History extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	
+	MyQueries msql = new MyQueries();
 
 	/**
 	 * Launch the application.
@@ -47,5 +52,6 @@ public class History extends JFrame {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		table.setModel(msql.GetAllLoanSetting());
 	}
 }

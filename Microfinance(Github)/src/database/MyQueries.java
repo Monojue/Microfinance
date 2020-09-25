@@ -340,6 +340,67 @@ public class MyQueries {
 			return null;
 		}
 	}
+	
+	public DefaultTableModel GetAllLoanSetting() {
+		try {
+			DefaultTableModel dtm = new DefaultTableModel();
+			String data[] = new String[11];
+			stmt = con.createStatement();
+			query = "select * from loansetting limit 20";
+			rs = stmt.executeQuery(query);
+			rs.next();
+			int count = dtm.getRowCount();
+			if (count==0) {
+				dtm.addColumn("Name");
+				dtm.addColumn("Type");
+				dtm.addColumn("Min Amount");
+				dtm.addColumn("Max Amount");
+				dtm.addColumn("Min Duration");
+				dtm.addColumn("Max Duration");
+				dtm.addColumn("Amount Interval");
+				dtm.addColumn("Duration Interval");
+				dtm.addColumn("Interest Rate");
+				dtm.addColumn("Service Rate");
+				dtm.addColumn("Updated Date");
+			}
+			while(rs.next()) {
+				String OfficerName = GetOfficerData(rs.getString("OfficerID"));
+				data[0] = OfficerName;
+				data[1] = rs.getString("Type");
+				data[2] = rs.getString("MinAmount");
+				data[3] = rs.getString("MaxAmount");
+				data[4] = rs.getString("MinDuration");
+				data[5] = rs.getString("MaxDuration");
+				data[6] = rs.getString("AmountInterval");
+				data[7] = rs.getString("DurationInterval");
+				data[8] = rs.getString("InterestRate");
+				data[9] = rs.getString("ServiceRate");
+				data[10] = rs.getString("Date");
+				dtm.addRow(data);
+			}
+			return dtm;
+		}
+		catch(SQLException e) {
+			return null;
+		}
+	}
+	
+	public String GetOfficerData(String id) {
+		String Name;
+		try {
+			stmt = con.createStatement();
+			query ="Select * from officer where OfficerID = '"+id+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			rs.next();
+			Name = rs.getString("Name"); //Name
+			return Name;
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
 ///////////////////// Get Loan Setting End ////////////////////////
 	
 ///////////////////// Group Query Start ////////////////////////
