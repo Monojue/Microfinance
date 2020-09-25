@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import database.MyQueries;
@@ -61,6 +62,7 @@ public class SettingPanel extends JPanel {
 	private JTextField textIAmountInterval;
 	private JTextField textGAmountInterval;
 	private String ID;
+	private Color RandomColor;
 	
 	MyQueries msql = new MyQueries();
 	UQueries usql = new UQueries();
@@ -94,6 +96,22 @@ public class SettingPanel extends JPanel {
 		table.getColumnModel().getColumn(3).setPreferredWidth(250);
 		table.getColumnModel().getColumn(4).setPreferredWidth(100);
 		table.getColumnModel().getColumn(5).setPreferredWidth(100);
+	}
+	
+	public void GenerateRandomColor() {
+		Random r = new Random();
+		int result = r.nextInt(11-1)+1;
+		if(result==1) panel_1.setBackground(Color.RED);
+		else if(result==1) panel_1.setBackground(Color.RED);
+		else if(result==2) panel_1.setBackground(Color.blue);
+		else if(result==3) panel_1.setBackground(Color.green);
+		else if(result==4) panel_1.setBackground(Color.yellow);
+		else if(result==5) panel_1.setBackground(Color.orange);
+		else if(result==6) panel_1.setBackground(Color.cyan);
+		else if(result==7) panel_1.setBackground(Color.pink);
+		else if(result==8) panel_1.setBackground(Color.magenta);
+		else if(result==9) panel_1.setBackground(Color.LIGHT_GRAY);
+		else if(result==10) panel_1.setBackground(Color.white);
 	}
 	
 	 public void updatePanelSize() {
@@ -813,6 +831,12 @@ public class SettingPanel extends JPanel {
 		panel.add(Gcancel, "cell 12 10 3 1");
 		
 		panel_1 = new JPanel();
+		panel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				GenerateRandomColor();
+			}
+		});
 		panel_1.setBackground(Color.ORANGE);
 		panel_1.setBounds(710, 11, 339, 671);
 		add(panel_1);
