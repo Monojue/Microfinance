@@ -2,6 +2,8 @@ package tool;
 
 public class MyString {
 	
+	public static String LoginUser = "";
+	
 	//ErrorCode
 	
 	public static String ClientFoundInGroup = "ClientFoundInGroup";

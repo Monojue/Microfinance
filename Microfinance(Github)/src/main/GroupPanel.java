@@ -5,6 +5,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,6 +19,8 @@ import net.miginfocom.swing.MigLayout;
 import tool.MyString;
 
 import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
@@ -207,6 +210,12 @@ public class GroupPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String password  = "";
 				String message = "This Group is founded in ";
+				JPasswordField passwordField = new JPasswordField();
+				passwordField.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
+				Object[] obj = {"Are you sure want to Delete!"
+						+ "\n Please Type Password To Delete!", passwordField};
+				Object stringArray[] = {"OK","Cancel"};
+				
 				if(table.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Group to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -216,16 +225,20 @@ public class GroupPanel extends JPanel {
 					Vector<String> found = usql.checkBeforeDelete("group", GroupID);
 					
 					if (found.size()>0) {
-						
 						for (int i = 0; i < found.size(); i++) {
 							message += "\n"+found.get(i); 
 						}
-						
+						Object[] objmsg = {message + "\n Please Type Password To Delete!", passwordField};
 						while(password.isEmpty()){
-							password = JOptionPane.showInputDialog(null, message
-									+ "\n Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+							if (JOptionPane.showOptionDialog(null, objmsg, "Warning!",
+									JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+										password = passwordField.getText().toString();
+							else {
+								password = "";
+								return;
+							}
 						}
-						if (password.equals("password")) {
+						if (usql.CheckPassword(MyString.LoginUser, password)) {
 							for (int j = found.size()-1; j >= 0; j--) {
 								System.out.println(found.get(j));
 								usql.AutoDelete("group", found.get(j), GroupID);
@@ -236,14 +249,32 @@ public class GroupPanel extends JPanel {
 							}else {
 								JOptionPane.showMessageDialog(null, "Error Occoured!");
 							}
+						}else {
+							JOptionPane.showMessageDialog(null,  "Wrong Password!");
 						}
 					}else {
-						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Delete!", "Warning!", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-							if (usql.deleteClient(GroupID)) {
+						while(password.isEmpty()){
+							if (JOptionPane.showOptionDialog(null, obj, "Warning!",
+									JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+										password = passwordField.getText().toString();
+							else {
+								password = "";
+								return;
+							}
+						}
+						if (usql.CheckPassword(MyString.LoginUser, password)) {
+							for (int j = found.size()-1; j >= 0; j--) {
+								System.out.println(found.get(j));
+								usql.AutoDelete("group", found.get(j), GroupID);
+							}
+							
+							if (usql.deleteGroupFromGroupID(GroupID)) {
 								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
 							}else {
 								JOptionPane.showMessageDialog(null, "Error Occoured!");
 							}
+						}else {
+							JOptionPane.showMessageDialog(null,  "Wrong Password!");
 						}
 					}
 				}

@@ -1,10 +1,12 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -235,6 +237,7 @@ public class LoanPanel extends JPanel {
 		panel_2.add(lblNewLabel_1, "cell 6 0");
 		
 		rdoIAccept = new JRadioButton("Accepted");
+		rdoIAccept.setSelected(true);
 		rdoIAccept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createITable();
@@ -302,21 +305,37 @@ public class LoanPanel extends JPanel {
 		btnInDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String password  = "";
+				String message = "This Client is founded in ";
+				JPasswordField passwordField = new JPasswordField();
+				passwordField.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
+				Object[] obj = {"Are you sure want to Delete!"
+						+ "\n Please Type Password To Delete!", passwordField};
+				Object stringArray[] = {"OK","Cancel"};
 				if(tableIndividual.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Loan Request to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					String LoanID = (String) tableIndividual.getValueAt(tableIndividual.getSelectedRow(),0);
+					
 					while(password.isEmpty()){
-						password = JOptionPane.showInputDialog(null, "Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+						if (JOptionPane.showOptionDialog(null, obj, "Warning!",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+									password = passwordField.getText().toString();
+						else {
+							password = "";
+							return;
+						}
 					}
-					if (password.equals("password")) {
+					if (usql.CheckPassword(MyString.LoginUser, password)) {
+						
 						if (usql.deleteclientLoanRequestLoanID(LoanID)) {
 							JOptionPane.showMessageDialog(null, "Successfully Deleted!");
 						}else {
 							JOptionPane.showMessageDialog(null, "Error Occoured!");
 						}
-					}					
+					}else {
+						JOptionPane.showMessageDialog(null,  "Wrong Password!");
+					}
 				}
 			}
 		});
@@ -369,6 +388,7 @@ public class LoanPanel extends JPanel {
 		panel_4.add(lblNewLabel_2, "cell 6 0");
 		
 		rdoGAccepted = new JRadioButton("Accepted");
+		rdoGAccepted.setSelected(true);
 		rdoGAccepted.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createGTable();
@@ -447,21 +467,38 @@ public class LoanPanel extends JPanel {
 		btnGDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String password  = "";
+				String message = "This Client is founded in ";
+				JPasswordField passwordField = new JPasswordField();
+				passwordField.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
+				Object[] obj = {"Are you sure want to Delete!"
+						+ "\n Please Type Password To Delete!", passwordField};
+				Object stringArray[] = {"OK","Cancel"};
+				
 				if(tableGroup.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Loan Request to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					String LoanID = (String) tableGroup.getValueAt(tableGroup.getSelectedRow(),0);
+					
 					while(password.isEmpty()){
-						password = JOptionPane.showInputDialog(null, "Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+						if (JOptionPane.showOptionDialog(null, obj, "Warning!",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+									password = passwordField.getText().toString();
+						else {
+							password = "";
+							return;
+						}
 					}
-					if (password.equals("password")) {
+					if (usql.CheckPassword(MyString.LoginUser, password)) {
+						
 						if (usql.deleteGroupLoanRequestLoanID(LoanID)) {
 							JOptionPane.showMessageDialog(null, "Successfully Deleted!");
 						}else {
 							JOptionPane.showMessageDialog(null, "Error Occoured!");
 						}
-					}					
+					}else {
+						JOptionPane.showMessageDialog(null,  "Wrong Password!");
+					}
 				}
 			}
 		});

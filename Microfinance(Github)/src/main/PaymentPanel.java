@@ -1,8 +1,10 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
@@ -198,15 +200,31 @@ public class PaymentPanel extends JPanel {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String password  = "";
+				String message = "This Client is founded in ";
+				JPasswordField passwordField = new JPasswordField();
+				passwordField.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
+				Object[] obj = {"Are you sure want to Delete!"
+						+ "\n Please Type Password To Delete!", passwordField};
+				Object stringArray[] = {"OK","Cancel"};
+				
 				if(table.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Payment to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					String LoanID = (String) table.getValueAt(table.getSelectedRow(),0);
+					
 					while(password.isEmpty()){
-						password = JOptionPane.showInputDialog(null, "Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+						if (JOptionPane.showOptionDialog(null, obj, "Warning!",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+									password = passwordField.getText().toString();
+						else {
+							password = "";
+							return;
+						}
 					}
-					if (password.equals("password")) {
+					
+					if (usql.CheckPassword(MyString.LoginUser, password)) {
+						
 						if(rdoIndividual.isSelected()) {
 							if (usql.deletePayment(LoanID) && usql.deleteclientLoanRequestLoanID(LoanID)) {
 								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
@@ -222,7 +240,9 @@ public class PaymentPanel extends JPanel {
 							}
 						}
 						
-					}					
+					}else {
+						JOptionPane.showMessageDialog(null,  "Wrong Password!");
+					}
 				}
 			}
 		});

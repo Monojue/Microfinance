@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import net.miginfocom.swing.MigLayout;
 import tool.Checking;
+import tool.MyString;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -121,6 +123,7 @@ public class LoginForm extends JFrame {
 					String Role = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
 					if (!Role.equals("notfound")) {
 						dispose();
+						MyString.LoginUser = txtName.getText().trim();
 						new Main(Role).setVisible(true);
 					}else {
 						showError("UserName or Password is Wrong!");

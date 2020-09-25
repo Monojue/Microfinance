@@ -1,6 +1,7 @@
 package main;
 
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -214,6 +215,11 @@ public class ClientPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String password  = "";
 				String message = "This Client is founded in ";
+				JPasswordField passwordField = new JPasswordField();
+				passwordField.setFont(new Font("Microsoft Sans Serif", Font.BOLD, 20));
+				Object[] obj = {"Are you sure want to Delete!"
+						+ "\n Please Type Password To Delete!", passwordField};
+				Object stringArray[] = {"OK","Cancel"};
 				if(table.getSelectedRow()<0) {
 					JOptionPane.showMessageDialog(null, "Please Choose a Client to Delete!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -226,12 +232,17 @@ public class ClientPanel extends JPanel {
 						for (int i = 0; i < found.size(); i++) {
 							message += "\n"+found.get(i); 
 						}
-						
+						Object[] objmsg = {message + "\n Please Type Password To Delete!", passwordField};
 						while(password.isEmpty()){
-							password = JOptionPane.showInputDialog(null, message
-									+ "\n Please Type Password To Delete!", "Warning!", JOptionPane.YES_NO_OPTION);
+							if (JOptionPane.showOptionDialog(null, objmsg, "Warning!",
+									JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, objmsg) == JOptionPane.YES_OPTION)
+										password = passwordField.getText().toString();
+							else {
+								password = "";
+								return;
+							}
 						}
-						if (password.equals("password")) {
+						if (usql.CheckPassword(MyString.LoginUser, password)) {
 							for (int j = found.size()-1; j >= 0; j--) {
 								System.out.println(found.get(j));
 								usql.AutoDelete("client", found.get(j), ClientID);
@@ -242,14 +253,32 @@ public class ClientPanel extends JPanel {
 							}else {
 								JOptionPane.showMessageDialog(null, "Error Occoured!");
 							}
+						}else {
+							JOptionPane.showMessageDialog(null,  "Wrong Password!");
 						}
 					}else {
-						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Delete!", "Warning!", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+						while(password.isEmpty()){
+							if (JOptionPane.showOptionDialog(null, obj, "Warning!",
+									JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+										password = passwordField.getText().toString();
+							else {
+								password = "";
+								return;
+							}
+						}
+						if (usql.CheckPassword(MyString.LoginUser, password)) {
+							for (int j = found.size()-1; j >= 0; j--) {
+								System.out.println(found.get(j));
+								usql.AutoDelete("client", found.get(j), ClientID);
+							}
+							
 							if (usql.deleteClient(ClientID)) {
 								JOptionPane.showMessageDialog(null, "Successfully Deleted!");
 							}else {
 								JOptionPane.showMessageDialog(null, "Error Occoured!");
 							}
+						}else {
+							JOptionPane.showMessageDialog(null,  "Wrong Password!");
 						}
 					}
 				}

@@ -143,6 +143,20 @@ public class UQueries {
 	}
 	
 	
+	public boolean CheckPassword(String username, String password) {
+		query = "Select * from officer where binary username ='"+username+"' and binary password='"+password+"'";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				return true;	
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),"SQL Exception", JOptionPane.ERROR_MESSAGE);
+		}
+		return false;
+	}
+	
 		//Duplicate Method
 	public boolean IsDuplicate(String tbName, String[] data) {
 		if(tbName.equals(MyString.ClientEntry)) {
