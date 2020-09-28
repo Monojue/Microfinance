@@ -141,7 +141,7 @@ public class ViewDetails extends JFrame {
 	}
 	
 	public boolean check() {
-		if(textRemark.getText()=="") {
+		if(textRemark.getText().equals("")) {
 				JOptionPane.showMessageDialog(null, "Please fill a Remark!","Error!",JOptionPane.INFORMATION_MESSAGE);
 				return false;
 		}
