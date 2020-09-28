@@ -194,7 +194,7 @@ public class OfficerEntry extends JFrame {
 							 +"-"+ boxN3.getSelectedItem().toString()+"-" + boxNo.getText();
 					String[] st = new String[1];
 					st[0] = NRC;
-					boolean dup = msql.IsDuplicate(MyString.ClientEntry, st);
+					boolean dup = msql.IsDuplicate("officer", st);
 					if(dup) {
 						showError("NRC Already Existed");
 					}else {
@@ -212,6 +212,7 @@ public class OfficerEntry extends JFrame {
 							JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 							Clear();
 							AutoID();
+							dispose();
 						} else {
 							JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 							AutoID();
@@ -224,6 +225,11 @@ public class OfficerEntry extends JFrame {
 		panelbtn.add(btnAdd, "cell 1 0");
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		panelbtn.add(btnCancel, "cell 3 0");
 		
 		lblName = new JLabel("Name");

@@ -953,6 +953,7 @@ public class LoanRequestForm extends JFrame {
 					boolean insert2 = msql.InsertData("clientdetails", ClientDetails);
 					if (update && insert && insert2) {
 						JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
+						dispose();
 					}
 					else if(!update) {
 						JOptionPane.showMessageDialog(null, "Failed to Save Guarantor Information Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
