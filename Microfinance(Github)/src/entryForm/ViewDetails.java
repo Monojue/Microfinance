@@ -113,7 +113,14 @@ public class ViewDetails extends JFrame {
 			Amount = amount;
 			Duration = duration;
 			GroupSetData();
-			if(Remark != null) {
+			if(Remark == "ToPay") {
+				textRemark.setText("Accepted");
+				textRemark.setForeground(Color.green);
+				textRemark.setEditable(false);
+				btnAccept.setText("Pay");
+				btnDecline.setText("Cancle");
+			}
+			else if(Remark != null) {
 				textRemark.setText(Remark);
 				textRemark.setEditable(false);
 				btnAccept.setText("Inform");
@@ -130,7 +137,14 @@ public class ViewDetails extends JFrame {
 			Amount = amount;
 			Duration = duration;
 			ClientSetData();
-			if(Remark != null) {
+			if(Remark == "Accepted") {
+				textRemark.setText("Accepted");
+				textRemark.setForeground(Color.green);
+				textRemark.setEditable(false);
+				btnAccept.setText("Pay");
+				btnDecline.setText("Cancle");
+			}
+			else if(Remark != null) {
 				textRemark.setText(Remark);
 				textRemark.setEditable(false);
 				btnAccept.setText("Inform");
@@ -147,6 +161,20 @@ public class ViewDetails extends JFrame {
 		}
 		else {
 			return true;
+		}
+	}
+	
+	public void PaidDay(String ID,String Amount) {
+		String[] PayDay = new String[2];
+		PayDay[0] = ID;
+		PayDay[1] = java.time.LocalDate.now().toString();
+		boolean update = msql.UpdateData("paidday", PayDay);
+		
+		if (update) {
+			JOptionPane.showMessageDialog(null, Amount +" is Paid Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if(!update) {
+			JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
@@ -495,6 +523,7 @@ public class ViewDetails extends JFrame {
 		panel_4.add(label, "cell 5 0 1 2,alignx trailing");
 		
 		textDuration = new JTextField();
+		textDuration.setFont(new Font("Tahoma", Font.BOLD, 13));
 		textDuration.setEditable(false);
 		textDuration.setColumns(10);
 		panel_4.add(textDuration, "cell 6 0 1 2,growx");
@@ -569,6 +598,23 @@ public class ViewDetails extends JFrame {
 				}	
 			}
 			
+			else if(btnAccept.getText()=="Pay") {
+				if(CPanel.isVisible()) {
+						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+							PaidDay(textID.getText(),textAmount.getText());
+							LoanPanel.createITable();
+							dispose();
+						}
+				}
+				
+				else if(GPanel.isVisible()) {
+						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+							PaidDay(textID.getText(),textAmount.getText());
+							LoanPanel.createGTable();
+							dispose();
+				}
+			}
+			}
 			}	
 		});
 		panel_1.add(btnAccept, "cell 1 0");
