@@ -126,19 +126,26 @@ public class UQueries {
 
 ///////////////////// Client Query End /////////////////////////
 	
-	public String CheckLogin(String username, String password) {
+	public String[] CheckLogin(String username, String password) {
+		String[] Officer = new String[2];
 		query = "Select * from officer where binary username ='"+username+"' and binary password='"+password+"'";
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
-				return rs.getString("Role");	
+				Officer[0] = rs.getString("OfficerID");
+				Officer[1] = rs.getString("Role");
+				return Officer;
 			} else {
-				return "notfound";
+				Officer[0] = "";
+				Officer[1] = "";
+				return Officer;
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),"SQL Exception", JOptionPane.ERROR_MESSAGE);
-			return "notfound";
+			Officer[0] = "";
+			Officer[1] = "";
+			return Officer;
 		}
 	}
 	

@@ -74,11 +74,11 @@ public class LoginForm extends JFrame {
 	public void Login() {
 		if (check()) {
 			msql = new UQueries();
-			String Role = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
-			if (!Role.equals("notfound")) {
+			String[] Officer = msql.CheckLogin(txtName.getText().trim(), txtPassword.getText().trim());
+			if (Officer[0] != "") {
 				dispose();
 				MyString.LoginUser = txtName.getText().trim();
-				new Main(Role).setVisible(true);
+				new Main(Officer[0],Officer[1]).setVisible(true);
 			}else {
 				showError("UserName or Password is Wrong!");
 			}

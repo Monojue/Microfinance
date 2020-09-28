@@ -75,11 +75,17 @@ public class SettingPanel extends JPanel {
 	private JPanel panel_3;
 	private JScrollPane scrollPane;
 	private JLabel lblError;
+	private String OfficerID;
 	
 	/**
 	 * Create the panel.
+	 * @param officerID 
 	 */
-	public SettingPanel() {
+	public SettingPanel(String officerID) {
+		OfficerID = officerID;
+		if(OfficerID.equals(null)) {
+			new LoginForm();
+		}
 		initialize();
 		fieldDisable();
 		GetIData();
@@ -742,7 +748,7 @@ public class SettingPanel extends JPanel {
 						INewSetting[8] = textIFees.getText();
 						INewSetting[9] = java.time.LocalDate.now().toString();
 						INewSetting[10] = "Individual";
-						INewSetting[11] = "OF-0000001";
+						INewSetting[11] = OfficerID;
 						boolean insert = msql.InsertData("Iloansetting", INewSetting);
 						if(insert) {
 							fieldDisable();
@@ -802,7 +808,7 @@ public class SettingPanel extends JPanel {
 						GNewSetting[8] = textGFees.getText();
 						GNewSetting[9] = java.time.LocalDate.now().toString();
 						GNewSetting[10] = "Group";
-						GNewSetting[11] = "OF-0000001";
+						GNewSetting[11] = OfficerID;
 						boolean insert = msql.InsertData("Gloansetting", GNewSetting);
 						if(insert) {
 							fieldDisable();

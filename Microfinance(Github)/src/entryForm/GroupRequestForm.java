@@ -105,19 +105,17 @@ public class GroupRequestForm extends JFrame{
 		GetILoanSetting();
 		initialize();
 		
-		if(LID == null && GID == null) {
 		textID.setText(loanRequest.getAutoID());
-		textDate.setText(myDate.getdate());
-		}
+		textDate.setText(myDate.getdate());		
 		
-		else {
-			String[] GroupDetails = msql.getGroupDetailsFormID(GID);
-			textID.setText(LID);
-			setGroupData(GroupDetails[0],GroupDetails[6],GroupDetails[7],GroupDetails[8],GroupDetails[9],GroupDetails[10]);
-			String[] LoanRequestDetails = msql.GetLoanRequestData(LID);
-			setLoanRequestData(LoanRequestDetails[1],LoanRequestDetails[2],LoanRequestDetails[3]);
-			btnSelect.setEnabled(false);
-			}
+//		else {
+//			String[] GroupDetails = msql.getGroupDetailsFormID(GID);
+//			textID.setText(LID);
+//			setGroupData(GroupDetails[0],GroupDetails[6],GroupDetails[7],GroupDetails[8],GroupDetails[9],GroupDetails[10]);
+//			String[] LoanRequestDetails = msql.GetLoanRequestData(LID);
+//			setLoanRequestData(LoanRequestDetails[1],LoanRequestDetails[2],LoanRequestDetails[3]);
+//			btnSelect.setEnabled(false);
+//			}
 	}
 	
 	public void PaidDay(String ID,String Amount) {
@@ -579,13 +577,13 @@ public class GroupRequestForm extends JFrame{
 					}
 				}
 			}
-			else if(btnRequestLoan.getText()=="Pay") {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-					PaidDay(textID.getText(),textAmount.getText());
-					LoanPanel.createGTable();
-					dispose();
-				}
-			}
+//			else if(btnRequestLoan.getText()=="Pay") {
+//				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+//					PaidDay(textID.getText(),textAmount.getText());
+//					LoanPanel.createGTable();
+//					dispose();
+//				}
+//			}
 				}
 		});
 		btnRequestLoan.setBounds(762, 653, 122, 23);

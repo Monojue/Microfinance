@@ -195,20 +195,6 @@ public class LoanRequestForm extends JFrame {
 			}
 	}
 	
-	public void PaidDay(String ID,String Amount) {
-		String[] PayDay = new String[2];
-		PayDay[0] = ID;
-		PayDay[1] = java.time.LocalDate.now().toString();
-		boolean update = msql.UpdateData("paidday", PayDay);
-		
-		if (update) {
-			JOptionPane.showMessageDialog(null, Amount +" is Paid Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
-		}
-		else if(!update) {
-			JOptionPane.showMessageDialog(null, "Failed to Approve Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-	
 	public void createTable() {
 		if(Checking.IsNull(textAmount.getText())) {
 			noteAmount.setVisible(true);
@@ -968,13 +954,13 @@ public class LoanRequestForm extends JFrame {
 				}
 				}}
 			
-			else if(btnRequestLoan.getText()=="Pay") {
-				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-					PaidDay(textID.getText(),textAmount.getText());
-					LoanPanel.createITable();
-					dispose();
-				}
-			}
+//			else if(btnRequestLoan.getText()=="Pay") {
+//				if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+//					PaidDay(textID.getText(),textAmount.getText());
+//					LoanPanel.createITable();
+//					dispose();
+//				}
+//			}
 				}
 	});
 	btnRequestLoan.setBounds(1078, 674, 122, 23);

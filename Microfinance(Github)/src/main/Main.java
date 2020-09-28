@@ -37,7 +37,7 @@ public class Main extends JFrame {
 	private PaymentPanel paymentPanel;
 	private ReportPanel reportPanel;
 	private SettingPanel settingPanel;
-	private String Role;
+	private String Role,OfficerID;
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +45,7 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main frame = new Main("Manager");
+					Main frame = new Main("OF-0000001","Manager");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,9 +56,11 @@ public class Main extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param officer 
 	 */
-	public Main(String Role) {
+	public Main(String ID, String Role) {
 		this.Role  = Role;
+		OfficerID = ID;
 		setTitle("MICROFINANACE");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(10, 10, MyString.frameWidth, MyString.frameHeight);
@@ -91,10 +93,15 @@ public class Main extends JFrame {
 			reportPanel = new ReportPanel();
 			tabbedPane.addTab("          REPORT          ", reportPanel);
 			
-			settingPanel = new SettingPanel();
+			settingPanel = new SettingPanel(OfficerID);
 			tabbedPane.addTab("          SETTING          ", settingPanel);
 		}
+		if(OfficerID == null) {
+			new LoginForm();
+		}
+		else {
 		initListeners();
+		}
 	}
 	
 	   public void initListeners() {
