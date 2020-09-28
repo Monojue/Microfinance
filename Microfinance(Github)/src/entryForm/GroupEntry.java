@@ -396,6 +396,7 @@ public class GroupEntry extends JFrame {
 						JOptionPane.showMessageDialog(null, "Saved Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 						Clear();
 						AutoID();
+						dispose();
 					} else {
 						JOptionPane.showMessageDialog(null, "Failed to Save new Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
 						AutoID();

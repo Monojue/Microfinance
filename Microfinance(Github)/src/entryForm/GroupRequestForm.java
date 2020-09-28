@@ -568,6 +568,7 @@ public class GroupRequestForm extends JFrame{
 						boolean insert2 = msql.InsertData("groupdetails", GroupDetails);
 						if (insert && insert2) {
 							JOptionPane.showMessageDialog(null, "Saved Successfully!","New Loan Request Saved",JOptionPane.INFORMATION_MESSAGE);
+							dispose();
 						}
 						else if (!insert){
 							JOptionPane.showMessageDialog(null, "Failed to Save Loan New Request!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);
