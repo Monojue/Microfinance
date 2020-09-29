@@ -242,6 +242,8 @@ public class MyQueries {
 	}
 	if(tbName.equals("paidday")) {
 		query = "update loanrequest set PayDay= '"+data[1]+"' where LoanrequestID= '"+data[0]+"'";
+	}else if (tbName.equals("groupColumn")) {
+		query = "Update clientGroup set "+data[0]+"= '"+data[1]+"' where GroupID='"+data[2]+"'";
 	}
 	try {
 		stmt = con.createStatement();
@@ -857,6 +859,8 @@ public class MyQueries {
 				query ="Select * from clientdetails where LoanRequestID='"+ID+"'";
 			}else if (str.equals("CID")) {
 				query ="Select * from clientdetails where ClientID='"+ID+"'";
+			}else if (str.equals("Date")) {
+				query ="Select * from clientdetails where DueDate='"+ID+"'";
 			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
@@ -923,6 +927,8 @@ public class MyQueries {
 				query ="Select * from groupdetails where LoanRequestID='"+ID+"'";
 			}else if (str.equals("GID")) {
 				query ="Select * from groupdetails where GroupID='"+ID+"'";
+			}else if (str.equals("Date")) {
+				query ="Select * from groupdetails where DueDate='"+ID+"'";
 			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
@@ -1020,6 +1026,46 @@ public class MyQueries {
 
 	}
 ///////////////////// Repayment End //////////////////////
+
+	public String getDueDate(String tbName, String loanRequestID) {
+		try {
+			stmt = con.createStatement();
+			if (tbName.equals("Individual")) {
+				query ="Select * from clientdetails where LoanRequestID = '"+loanRequestID+"'";
+			}else if (tbName.equals("Group")) {
+				query ="Select * from groupdetails where LoanRequestID = '"+loanRequestID+"'";
+			}
+			
+			ResultSet rs = stmt.executeQuery(query);
+			rs.next();
+			
+			return rs.getString("DueDate");
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public boolean updateDueDate(String tbName, String Date, String LoanRequestID) {
+		if(tbName.equals("Individual")) {
+			query = "update clientDetails set DueDate= '"+Date+"' where LoanrequestID= '"+LoanRequestID+"'";
+		}else if (tbName.equals("Group")) {
+			query = "update groupDetails set DueDate= '"+Date+"' where LoanrequestID= '"+LoanRequestID+"'";
+		}
+		try {
+			stmt = con.createStatement();
+			if(stmt.executeUpdate(query)==1) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 
 }

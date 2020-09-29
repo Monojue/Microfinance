@@ -67,7 +67,7 @@ public class RepaymentEntry extends JFrame {
 	private JTextField textID;
 	private JTextField textDate;
 	private JTable table_1;
-	private JTextField textMonth;
+	private JTextField txtDueDate;
 	private JTextField textPO;
 	private JTextField textP;
 	private JTextField textI2;
@@ -77,6 +77,7 @@ public class RepaymentEntry extends JFrame {
 	
 	MyQueries msql = new MyQueries();
 	DBConnection myDbConnection = new DBConnection();
+	String form;
 
 	/**
 	 * Launch the application.
@@ -100,6 +101,7 @@ public class RepaymentEntry extends JFrame {
 	public RepaymentEntry(String form,String loanRequestID, String groupID, String amount, String duration) {
 		Initialize();
 		AutoID();
+		this.form = form;
 		if (form.equals("Group")) {
 			GPanel.setVisible(true);
 			CPanel.setVisible(false);
@@ -109,7 +111,7 @@ public class RepaymentEntry extends JFrame {
 			Duration = duration;
 			GroupSetData();
 			CreatePaymentTable();
-			PaymentSetData();
+			PaymentSetData("Group");
 		}
 		else if (form.equals("Individual")) {
 			GPanel.setVisible(false);
@@ -120,7 +122,7 @@ public class RepaymentEntry extends JFrame {
 			Duration = duration;
 			ClientSetData();
 			CreatePaymentTable();
-			PaymentSetData();
+			PaymentSetData("Individual");
 		}
 	}
 	
@@ -139,14 +141,14 @@ public class RepaymentEntry extends JFrame {
 		txtM4ID.setText(GroupDetails[5]);
 	}
 	
-	public void PaymentSetData() {
+	public void PaymentSetData(String form) {
 		num = msql.GetPaymentNumber(LoanRequestID);
 		//textMonth.setText((String) table_1.getValueAt(num, 0));
 		String[] LoanDetails = msql.GetLoanRequestData(LoanRequestID);
 		Date today;
 		try {
 			today = new SimpleDateFormat("yyyy-MM-dd").parse(LoanDetails[7]);
-			textMonth.setText(MyDate.getdate2(today, Integer.parseInt((String) table_1.getValueAt(num, 0))));
+			txtDueDate.setText(msql.getDueDate(form, LoanRequestID));
 		} 
 		catch (Exception e) {
 			e.getStackTrace();
@@ -492,10 +494,10 @@ public class RepaymentEntry extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("Due Date");
 		panel_1.add(lblNewLabel_2, "cell 1 1");
 		
-		textMonth = new JTextField();
-		textMonth.setEditable(false);
-		panel_1.add(textMonth, "cell 3 1 2 1,growx");
-		textMonth.setColumns(10);
+		txtDueDate = new JTextField();
+		txtDueDate.setEditable(false);
+		panel_1.add(txtDueDate, "cell 3 1 2 1,growx");
+		txtDueDate.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("Principal Oustanding");
 		panel_1.add(lblNewLabel_3, "cell 1 2");
@@ -538,12 +540,14 @@ public class RepaymentEntry extends JFrame {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String[] data = new String[4];
+				Calculation calculation = new Calculation();
 				data[0] = textID.getText();
 				data[1] = LoanRequestID;
 				data[2] = textDate.getText();
 				data[3] = Calculation.removecomma(textI2.getText());
 				boolean save = MyQueries.InsertData("repayment", data);
-				if (save) {
+				boolean duedate = msql.updateDueDate(form, calculation.CalculateDueDate(txtDueDate.getText()), LoanRequestID);
+				if (save && duedate) {
 					JOptionPane.showMessageDialog(null,textI2.getText()+ " is Paid Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 					if(CPanel.isVisible()) {

@@ -8,6 +8,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
+import org.omg.PortableInterceptor.ServerRequestInfo;
+
 import database.MyQueries;
 import database.UQueries;
 import entryForm.RepaymentEntry;
@@ -24,7 +26,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
+import com.toedter.calendar.JDateChooser;
 
 public class PaymentPanel extends JPanel {
 	private static JTable table;
@@ -42,6 +46,8 @@ public class PaymentPanel extends JPanel {
 	private JButton btnRefresh;
 	private JButton btnDetails;
 	private JButton btnDelete;
+	private JRadioButton rdoDate;
+	private JDateChooser dateChooser;
 
 	 public void updatePanelSize() {
 
@@ -102,21 +108,48 @@ public class PaymentPanel extends JPanel {
 		panel.setBounds(10, 11, 1039, 37);
 		panel.setBackground(Color.LIGHT_GRAY);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[][][][][166.00][][][][][][][][][][][][][][35.00][38.00][]", "[]"));
+		panel.setLayout(new MigLayout("", "[61px][111px][71px][49px][143.00][67px][grow][73px][55px][grow][69px][65px][73px]", "[23px,grow]"));
 		
 		JLabel label = new JLabel("Search With");
-		panel.add(label, "cell 0 0");
+		panel.add(label, "cell 0 0,alignx left,aligny center");
 		
 		JRadioButton rdoLRID = new JRadioButton("Loan Request ID");
+		rdoLRID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dateChooser.setVisible(false);
+				txtSearch.setVisible(true);
+			}
+		});
 		rdoLRID.setSelected(true);
 		radioGroup.add(rdoLRID);
 		rdoLRID.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoLRID, "cell 1 0");
+		panel.add(rdoLRID, "cell 1 0,alignx left,aligny bottom");
 		
 		rdoCID = new JRadioButton("Client ID");
+		rdoCID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dateChooser.setVisible(false);
+				txtSearch.setVisible(true);
+			}
+		});
 		radioGroup.add(rdoCID);
 		rdoCID.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoCID, "cell 2 0");
+		panel.add(rdoCID, "cell 2 0,alignx left,aligny bottom");
+		
+		rdoDate = new JRadioButton("Date");
+		rdoDate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtSearch.setVisible(false);
+				dateChooser.setVisible(true);
+			}
+		});
+		radioGroup.add(rdoDate);
+		rdoDate.setBackground(Color.LIGHT_GRAY);
+		panel.add(rdoDate, "cell 3 0,alignx left,aligny bottom");
+		
+		JPanel panel_1 = new JPanel();
+		panel.add(panel_1, "cell 4 0,grow");
+		panel_1.setLayout(null);
 		
 //		JRadioButton radioButton_2 = new JRadioButton("Group ID");
 //		radioGroup.add(radioButton_2);
@@ -124,13 +157,19 @@ public class PaymentPanel extends JPanel {
 //		panel.add(radioButton_2, "cell 3 0");
 		
 		txtSearch = new JTextField();
-		panel.add(txtSearch, "cell 4 0,growx");
+		txtSearch.setBounds(0, 0, 143, 23);
+		panel_1.add(txtSearch);
 		txtSearch.setColumns(10);
+		
+		dateChooser = new JDateChooser();
+		dateChooser.setBounds(0, 0, 143, 23);
+		panel_1.add(dateChooser);
+		dateChooser.setVisible(false);
 		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!txtSearch.getText().equals("")) {
+				if (!txtSearch.getText().equals("") && !rdoDate.isSelected()) {
 					String searchdata = txtSearch.getText();
 					if (rdoLRID.isSelected()) {
 						if (rdoIndividual.isSelected()) {
@@ -145,12 +184,26 @@ public class PaymentPanel extends JPanel {
 							createGTable("GID", "GP-"+searchdata);
 						}
 					}
+				}else if (rdoDate.isSelected()) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd");
+					String searchdate="";
+					try {
+						searchdate = sdf.format(dateChooser.getDate());
+						System.out.println(searchdate);
+						if (rdoIndividual.isSelected()) {
+							createITable("Date", searchdate);
+						}else if (rdoGroup.isSelected()) {
+							createGTable("Date", searchdate);
+						}
+					} catch (NullPointerException ne) {
+						JOptionPane.showMessageDialog(null, "Please choose Date To search!");
+					}
 				}else {
 					JOptionPane.showMessageDialog(null, "Please Type To search!");
 				}
 			}
 		});
-		panel.add(btnSearch, "cell 5 0");
+		panel.add(btnSearch, "cell 5 0,alignx left,aligny bottom");
 		
 		rdoIndividual = new JRadioButton("Individual");
 		rdoIndividual.setSelected(true);
@@ -160,8 +213,11 @@ public class PaymentPanel extends JPanel {
 				createITable("All", null);
 			}
 		});
+		
+		JLabel lblNewLabel = new JLabel("View Table Of :");
+		panel.add(lblNewLabel, "cell 6 0,alignx right");
 		rdoIndividual.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoIndividual, "cell 12 0");
+		panel.add(rdoIndividual, "cell 7 0,alignx left,aligny bottom");
 		radioGroup2.add(rdoIndividual);
 		
 		rdoGroup = new JRadioButton("Group");
@@ -172,7 +228,7 @@ public class PaymentPanel extends JPanel {
 			}
 		});
 		rdoGroup.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoGroup, "cell 13 0");
+		panel.add(rdoGroup, "cell 8 0,alignx left,aligny bottom");
 		radioGroup2.add(rdoGroup);
 		
 		btnRefresh = new JButton("Refresh");
@@ -217,7 +273,7 @@ public class PaymentPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(btnDetails, "cell 18 0");
+		panel.add(btnDetails, "cell 10 0,alignx left,aligny bottom");
 		
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
@@ -269,8 +325,8 @@ public class PaymentPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(btnDelete, "cell 19 0");
-		panel.add(btnRefresh, "cell 20 0");
+		panel.add(btnDelete, "cell 11 0,alignx left,aligny bottom");
+		panel.add(btnRefresh, "cell 12 0,alignx left,aligny bottom");
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 59, 1039, 510);

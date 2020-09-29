@@ -1,6 +1,12 @@
 package tool;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.table.DefaultTableModel;
+
+import database.UQueries;
 
 public class Calculation {
 
@@ -67,17 +73,14 @@ public class Calculation {
 	public static String[] splitBirthday(String str) {
 		return str.split("-");
 	}
+	
+	public String CalculateDueDate(String DateNow) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+		LocalDate duedate = LocalDate.parse("2020-Sep-05", formatter);
+		return duedate.plusMonths(1).format(formatter);
+	}
 	public static void main(String[] args) {
-		System.out.println(splitNRC("12/-DAGARA-(N)-654321")[1]);
-		
-		//calculator(1000000, 12, 2.33);
-//		interest = (int) Math.round((amount*rate)/100);
-//		System.out.print(String.valueOf(i+1)+"\t");
-//		System.out.print(String.valueOf(amount)+"\t");
-//		System.out.print(String.valueOf(principal)+"\t");
-//		System.out.print(String.valueOf(interest)+"\t");
-//		System.out.print(String.valueOf(principal+interest));
-//		System.out.println();
-//		amount = amount - principal;
+		UQueries usq  = new UQueries();
+		System.out.println(usq.getColumnName("GP-0000001", "CL-0000004"));
 	}
 }

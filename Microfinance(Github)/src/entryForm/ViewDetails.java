@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -79,6 +81,7 @@ public class ViewDetails extends JFrame {
 	
 	MyQueries msql = new MyQueries();
 	static UQueries usql = new UQueries();
+	String form;
 
 	/**
 	 * Launch the application.
@@ -106,6 +109,7 @@ public class ViewDetails extends JFrame {
 	 */
 	public ViewDetails(String form, String loanRequestID, String groupID, String amount, String duration, String Remark) {
 		Initialize();
+		this.form = form;
 		if (form.equals("Group")) {
 			GPanel.setVisible(true);
 			CPanel.setVisible(false);
@@ -170,10 +174,12 @@ public class ViewDetails extends JFrame {
 	
 	public void PaidDay(String ID,String Amount) {
 		String[] PayDay = new String[2];
+		Calculation calculation = new Calculation();
 		PayDay[0] = ID;
 		PayDay[1] = java.time.LocalDate.now().toString();
 		boolean update = msql.UpdateData("paidday", PayDay);
-		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+		boolean duedate = msql.updateDueDate(form, calculation.CalculateDueDate(LocalDate.now().format(formatter)), LoanRequestID);
 		if (update) {
 			JOptionPane.showMessageDialog(null, Amount +" is Paid Sucessfully!","Success!",JOptionPane.INFORMATION_MESSAGE);
 		}
