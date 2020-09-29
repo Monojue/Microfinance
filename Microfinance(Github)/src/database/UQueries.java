@@ -642,7 +642,30 @@ public class UQueries {
 		return false;
 	}
 	
-	
+	public String getColumnName(String GID, String CID) {
+		query = "Select * from clientGroup where GroupID='"+GID+"'";
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			if (rs.next()) {
+				if (rs.getString("Leader").equals(CID)) {
+					return "LeaderName";
+				}else if (rs.getString("Member_1").equals(CID)) {
+					return "M1Name";
+				}else if (rs.getString("Member_2").equals(CID)) {
+					return "M2Name";
+				}else if (rs.getString("Member_3").equals(CID)) {
+					return "M3Name";
+				}else if (rs.getString("Member_4").equals(CID)) {
+					return "M4Name";
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 }

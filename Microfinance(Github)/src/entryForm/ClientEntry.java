@@ -679,8 +679,27 @@ public class ClientEntry extends JFrame {
 							}
 						
 						else if(btnSave.getText()=="Update") {
+							UQueries usql = new UQueries();
+							boolean gupdate =false;
 							boolean update = msql.UpdateData("client", data);
-							if (update) {
+							try {
+								String GID = usql.getGroupIDFormClientID(textCID.getText());
+								System.out.println(GID);
+								if (!GID.isEmpty()) {
+									String columnName = usql.getColumnName(GID, textCID.getText());
+									System.out.println(columnName);
+									String[] upd = new String[3];
+									upd[0] = columnName;
+									upd[1] = textName.getText();
+									upd[2] = GID;
+									gupdate = msql.UpdateData("groupColumn", upd);
+									System.out.println(gupdate);
+								}
+							} catch (NullPointerException e2) {
+								gupdate = true;
+								System.out.println(e2);
+							}
+							if (update && gupdate) {
 								JOptionPane.showMessageDialog(null, "Updated Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 							} else {
