@@ -547,10 +547,10 @@ public class RepaymentEntry extends JFrame {
 					JOptionPane.showMessageDialog(null,textI2.getText()+ " is Paid Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 					if(CPanel.isVisible()) {
-						PaymentPanel.createITable();
+						PaymentPanel.createITable("All",null);
 					}
 					else if(GPanel.isVisible()) {
-						PaymentPanel.createGTable();
+						PaymentPanel.createGTable("All",null);
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Failed to Save new Pay Record!","Cannot Saved",JOptionPane.INFORMATION_MESSAGE);

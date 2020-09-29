@@ -28,11 +28,11 @@ import java.awt.event.ActionEvent;
 
 public class PaymentPanel extends JPanel {
 	private static JTable table;
-	private JTextField textField;
+	private JTextField txtSearch;
 	private final ButtonGroup radioGroup = new ButtonGroup();
 	private final ButtonGroup radioGroup2 = new ButtonGroup();
 	private JPanel panel;
-	private JRadioButton rdoType;
+	private JRadioButton rdoCID;
 	private JRadioButton rdoIndividual,rdoGroup;
 	private JScrollPane scrollPane;
 	private String ClientID, LoanRequestID, Amount, Duration,GroupID;
@@ -81,15 +81,15 @@ public class PaymentPanel extends JPanel {
 	    }
 	public PaymentPanel() {
 		Initialize();
-		createITable();
+		createITable("All", null);
 	}
 	
-	public static void createITable() {
-		table.setModel(msql.getIRepaymentTable());
+	public static void createITable(String str, String ID) {
+		table.setModel(msql.getIRepaymentTable(str, ID));
 	}
 	
-	public static void createGTable() {
-		table.setModel(msql.getGRepaymentTable());
+	public static void createGTable(String str, String ID) {
+		table.setModel(msql.getGRepaymentTable(str, ID));
 	}
 	
 	public void Initialize() {
@@ -107,34 +107,57 @@ public class PaymentPanel extends JPanel {
 		JLabel label = new JLabel("Search With");
 		panel.add(label, "cell 0 0");
 		
-		JRadioButton radioButton = new JRadioButton("Loan Request ID");
-		radioGroup.add(radioButton);
-		radioButton.setBackground(Color.LIGHT_GRAY);
-		panel.add(radioButton, "cell 1 0");
+		JRadioButton rdoLRID = new JRadioButton("Loan Request ID");
+		rdoLRID.setSelected(true);
+		radioGroup.add(rdoLRID);
+		rdoLRID.setBackground(Color.LIGHT_GRAY);
+		panel.add(rdoLRID, "cell 1 0");
 		
-		rdoType = new JRadioButton("Client ID");
-		radioGroup.add(rdoType);
-		rdoType.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoType, "cell 2 0");
+		rdoCID = new JRadioButton("Client ID");
+		radioGroup.add(rdoCID);
+		rdoCID.setBackground(Color.LIGHT_GRAY);
+		panel.add(rdoCID, "cell 2 0");
 		
 //		JRadioButton radioButton_2 = new JRadioButton("Group ID");
 //		radioGroup.add(radioButton_2);
 //		radioButton_2.setBackground(Color.LIGHT_GRAY);
 //		panel.add(radioButton_2, "cell 3 0");
 		
-		textField = new JTextField();
-		panel.add(textField, "cell 4 0,growx");
-		textField.setColumns(10);
+		txtSearch = new JTextField();
+		panel.add(txtSearch, "cell 4 0,growx");
+		txtSearch.setColumns(10);
 		
-		JButton button = new JButton("Search");
-		panel.add(button, "cell 5 0");
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!txtSearch.getText().equals("")) {
+					String searchdata = txtSearch.getText();
+					if (rdoLRID.isSelected()) {
+						if (rdoIndividual.isSelected()) {
+							createITable("LID", "LR-"+ searchdata);
+						}else if (rdoGroup.isSelected()) {
+							createGTable("LID", "LR-"+ searchdata);
+						}
+					}else if (rdoCID.isSelected()) {
+						if (rdoIndividual.isSelected()) {
+							createITable("CID", "CL-"+ searchdata);
+						}else if (rdoGroup.isSelected()) {
+							createGTable("GID", "GP-"+searchdata);
+						}
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "Please Type To search!");
+				}
+			}
+		});
+		panel.add(btnSearch, "cell 5 0");
 		
 		rdoIndividual = new JRadioButton("Individual");
 		rdoIndividual.setSelected(true);
 		rdoIndividual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rdoType.setText("Client ID");
-				createITable();
+				rdoCID.setText("Client ID");
+				createITable("All", null);
 			}
 		});
 		rdoIndividual.setBackground(Color.LIGHT_GRAY);
@@ -144,8 +167,8 @@ public class PaymentPanel extends JPanel {
 		rdoGroup = new JRadioButton("Group");
 		rdoGroup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rdoType.setText("Group ID");
-				createGTable();
+				rdoCID.setText("Group ID");
+				createGTable("All", null);
 			}
 		});
 		rdoGroup.setBackground(Color.LIGHT_GRAY);
@@ -156,10 +179,10 @@ public class PaymentPanel extends JPanel {
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(rdoIndividual.isSelected()) {
-					createITable();
+					createITable("All", null);
 				}
 				else if(rdoGroup.isSelected()) {
-					createGTable();
+					createGTable("All", null);
 				}
 			}
 		});

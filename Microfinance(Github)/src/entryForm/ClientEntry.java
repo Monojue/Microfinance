@@ -682,6 +682,7 @@ public class ClientEntry extends JFrame {
 							boolean update = msql.UpdateData("client", data);
 							if (update) {
 								JOptionPane.showMessageDialog(null, "Updated Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+								dispose();
 							} else {
 								JOptionPane.showMessageDialog(null, "Failed to Update new Data!","Cannot Updated",JOptionPane.INFORMATION_MESSAGE);
 							}

@@ -583,12 +583,20 @@ public class MyQueries {
 		}
 	}
 	
-	public DefaultTableModel getIndividualApprovedLoanRequest() {
+	public DefaultTableModel getIndividualApprovedLoanRequest(String str, String data) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[7];
 		try {
 			stmt = con.createStatement();
-			query ="Select * from clientdetails";
+			if (str.equals("All")) {
+				query ="Select * from clientdetails";
+			}else if (str.equals("LID")) {
+				query ="Select * from clientdetails where LoanRequestID='"+data+"'";
+			}else if (str.equals("CID")) {
+				query ="Select * from clientdetails where ClientID='"+data+"'";
+			}
+			
+			
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
@@ -622,12 +630,18 @@ public class MyQueries {
 		}
 	}
 	
-	public DefaultTableModel getIndividualRejectedLoanRequest() {
+	public DefaultTableModel getIndividualRejectedLoanRequest(String str, String data) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
-			query ="Select * from clientdetails";
+			if (str.equals("All")) {
+				query ="Select * from clientdetails";
+			}else if (str.equals("LID")) {
+				query ="Select * from clientdetails where LoanRequestID='"+data+"'";
+			}else if (str.equals("CID")) {
+				query ="Select * from clientdetails where ClientID='"+data+"'";
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
@@ -666,12 +680,18 @@ public class MyQueries {
 	
 	}
 	
-	public DefaultTableModel getGroupApprovedLoanRequest() {
+	public DefaultTableModel getGroupApprovedLoanRequest(String str, String ID) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[10];
 		try {
 			stmt = con.createStatement();
-			query ="Select * from groupdetails";
+			if (str.equals("All")) {
+				query ="Select * from groupdetails";
+			}else if (str.equals("LID")) {
+				query ="Select * from groupdetails where LoanRequestID='"+ID+"'";
+			}else if (str.equals("GID")) {
+				query ="Select * from groupdetails where GroupID='"+ID+"'";
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
@@ -717,12 +737,18 @@ public class MyQueries {
 		}
 	}
 	
-	public DefaultTableModel getGroupRejectedLoanRequest() {
+	public DefaultTableModel getGroupRejectedLoanRequest(String str, String ID) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[12];
 		try {
 			stmt = con.createStatement();
-			query ="Select * from groupdetails";
+			if (str.equals("All")) {
+				query ="Select * from groupdetails";
+			}else if (str.equals("LID")) {
+				query ="Select * from groupdetails where LoanRequestID='"+ID+"'";
+			}else if (str.equals("GID")) {
+				query ="Select * from groupdetails where GroupID='"+ID+"'";
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
@@ -820,12 +846,18 @@ public class MyQueries {
 ///////////////////// LoanRequest Query End ////////////////////
 	
 ///////////////////// Repayment Start ////////////////////////
-	public DefaultTableModel getIRepaymentTable() {
+	public DefaultTableModel getIRepaymentTable(String str, String ID) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
-			query ="Select * from clientdetails";
+			if (str.equals("All")) {
+				query ="Select * from clientdetails";
+			}else if (str.equals("LID")) {
+				query ="Select * from clientdetails where LoanRequestID='"+ID+"'";
+			}else if (str.equals("CID")) {
+				query ="Select * from clientdetails where ClientID='"+ID+"'";
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {
@@ -879,12 +911,19 @@ public class MyQueries {
 	
 	}
 	
-	public DefaultTableModel getGRepaymentTable() {
+	public DefaultTableModel getGRepaymentTable(String str, String ID) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		String dataitem[]= new String[9];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from groupdetails";
+			if (str.equals("All")) {
+				query ="Select * from groupdetails";
+			}else if (str.equals("LID")) {
+				query ="Select * from groupdetails where LoanRequestID='"+ID+"'";
+			}else if (str.equals("GID")) {
+				query ="Select * from groupdetails where GroupID='"+ID+"'";
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			int count = dtm.getRowCount();
 			if (count==0) {

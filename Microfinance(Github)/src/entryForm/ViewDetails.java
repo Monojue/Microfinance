@@ -582,7 +582,7 @@ public class ViewDetails extends JFrame {
 				boolean delete = msql.DeleteData("loanrequest1",textID.getText());
 				if(delete) {
 					JOptionPane.showMessageDialog(null, "A loan Request is Deleted Sucessfully","Success!",JOptionPane.INFORMATION_MESSAGE);
-						LoanPanel.createRejectedITable();
+						LoanPanel.createRejectedITable("All",null);
 						dispose();
 				}
 				else {
@@ -593,7 +593,7 @@ public class ViewDetails extends JFrame {
 					boolean delete = msql.DeleteData("loanrequest2",textID.getText());
 					if(delete) {
 						JOptionPane.showMessageDialog(null, "A loan Request is Deleted Sucessfully","Success!",JOptionPane.INFORMATION_MESSAGE);
-						LoanPanel.createRejectedGTable();
+						LoanPanel.createRejectedGTable("All",null);
 						dispose();
 					}
 					else {
@@ -606,7 +606,7 @@ public class ViewDetails extends JFrame {
 				if(CPanel.isVisible()) {
 						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
 							PaidDay(textID.getText(),textAmount.getText());
-							LoanPanel.createITable();
+							LoanPanel.createITable("All",null);
 							dispose();
 						}
 				}
@@ -614,7 +614,7 @@ public class ViewDetails extends JFrame {
 				else if(GPanel.isVisible()) {
 						if (JOptionPane.showConfirmDialog(null, "Are you sure want to Pay!", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
 							PaidDay(textID.getText(),textAmount.getText());
-							LoanPanel.createGTable();
+							LoanPanel.createGTable("All",null);
 							dispose();
 				}
 			}
