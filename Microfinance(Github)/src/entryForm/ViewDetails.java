@@ -30,6 +30,7 @@ import javax.swing.text.JTextComponent;
 import database.MyQueries;
 import database.UQueries;
 import main.LoanPanel;
+import main.PaymentSchedule;
 import net.miginfocom.swing.MigLayout;
 import tool.Calculation;
 import tool.MyString;
@@ -620,6 +621,19 @@ public class ViewDetails extends JFrame {
 		});
 		
 		btnPrint = new JButton("To Print");
+		btnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(CPanel.isVisible()) {
+					new PaymentSchedule(textID.getText(),
+					textPName.getText()).setVisible(true);
+					}
+				
+				else if(GPanel.isVisible()) {
+					new PaymentSchedule(textID.getText(),
+							txtLName.getText()+" /'s Group").setVisible(true);
+				}
+			}
+		});
 		panel_1.add(btnPrint, "cell 0 0");
 		panel_1.add(btnAccept, "cell 1 0");
 		btnPrint.setVisible(false);
