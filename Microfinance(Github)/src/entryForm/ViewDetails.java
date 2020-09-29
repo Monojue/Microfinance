@@ -74,7 +74,7 @@ public class ViewDetails extends JFrame {
 	private JTextField textDuration;
 	private TextArea textRemark;
 	private String LoanRequestID, ID, Amount, Duration;
-	private JButton btnAccept,btnDecline;
+	private JButton btnAccept,btnDecline,btnPrint;
 	
 	MyQueries msql = new MyQueries();
 	static UQueries usql = new UQueries();
@@ -143,6 +143,7 @@ public class ViewDetails extends JFrame {
 				textRemark.setEditable(false);
 				btnAccept.setText("Pay");
 				btnDecline.setText("Cancle");
+				btnPrint.setVisible(true);
 			}
 			else if(Remark != null) {
 				textRemark.setText(Remark);
@@ -617,7 +618,11 @@ public class ViewDetails extends JFrame {
 			}
 			}	
 		});
+		
+		btnPrint = new JButton("To Print");
+		panel_1.add(btnPrint, "cell 0 0");
 		panel_1.add(btnAccept, "cell 1 0");
+		btnPrint.setVisible(false);
 		
 		btnDecline = new JButton("Decline");
 		btnDecline.addActionListener(new ActionListener() {
