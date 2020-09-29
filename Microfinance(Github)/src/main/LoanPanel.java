@@ -435,8 +435,7 @@ public class LoanPanel extends JPanel {
 					if(tableGroup.getSelectedRow()<0) {
 						JOptionPane.showMessageDialog(null, "Please Choose a Group Request","Error!",JOptionPane.INFORMATION_MESSAGE);
 					}
-					else {						
-						//new GroupRequestForm((String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),1)).setVisible(true);					
+					else {									
 						new ViewDetails("Group",(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),0),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),1),
 								(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),7),(String)tableGroup.getValueAt(tableGroup.getSelectedRow(),8),
 								"Accepted").setVisible(true);

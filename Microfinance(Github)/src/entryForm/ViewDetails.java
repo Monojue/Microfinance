@@ -114,12 +114,13 @@ public class ViewDetails extends JFrame {
 			Amount = amount;
 			Duration = duration;
 			GroupSetData();
-			if(Remark == "ToPay") {
+			if(Remark == "Accepted") {
 				textRemark.setText("Accepted");
 				textRemark.setForeground(Color.green);
 				textRemark.setEditable(false);
 				btnAccept.setText("Pay");
 				btnDecline.setText("Cancle");
+				btnPrint.setVisible(true);
 			}
 			else if(Remark != null) {
 				textRemark.setText(Remark);
@@ -151,6 +152,7 @@ public class ViewDetails extends JFrame {
 				textRemark.setEditable(false);
 				btnAccept.setText("Inform");
 				btnDecline.setText("Cancle");
+				btnPrint.setVisible(true);
 			}
 		}
 		

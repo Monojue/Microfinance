@@ -773,7 +773,7 @@ public class MyQueries {
 	}
 	
 	public String[] GetLoanRequestData(String id) {
-		String[] data = new String[7];
+		String[] data = new String[8];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from loanrequest where LoanRequestID = '"+id+"'";
@@ -786,6 +786,7 @@ public class MyQueries {
 			data[4] = rs.getString(6); //PayDay
 			data[5] = rs.getString(7); //Approve
 			data[6] = rs.getString(8); //Remark
+			data[7] = rs.getString("PayDay"); //Pay Day
 			return data;
 		}
 		catch(SQLException e) {

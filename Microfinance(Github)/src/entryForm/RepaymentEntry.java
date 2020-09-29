@@ -9,6 +9,10 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import tool.MyDate;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -137,7 +141,17 @@ public class RepaymentEntry extends JFrame {
 	
 	public void PaymentSetData() {
 		num = msql.GetPaymentNumber(LoanRequestID);
-		textMonth.setText((String) table_1.getValueAt(num, 0));
+		//textMonth.setText((String) table_1.getValueAt(num, 0));
+		String[] LoanDetails = msql.GetLoanRequestData(LoanRequestID);
+		Date today;
+		try {
+			today = new SimpleDateFormat("yyyy-MM-dd").parse(LoanDetails[7]);
+			textMonth.setText(MyDate.getdate2(today, Integer.parseInt((String) table_1.getValueAt(num, 0))));
+		} 
+		catch (Exception e) {
+			e.getStackTrace();
+			System.out.println(e);			
+		}
 		textPO.setText((String) table_1.getValueAt(num, 1));
 		textP.setText((String) table_1.getValueAt(num, 2));
 		textI.setText((String) table_1.getValueAt(num, 3));
@@ -475,12 +489,12 @@ public class RepaymentEntry extends JFrame {
 		panel.add(panel_1);
 		panel_1.setLayout(new MigLayout("", "[][][][63.00][90.00]", "[10][30][30][30][30][30]"));
 		
-		JLabel lblNewLabel_2 = new JLabel("For Month");
+		JLabel lblNewLabel_2 = new JLabel("Due Date");
 		panel_1.add(lblNewLabel_2, "cell 1 1");
 		
 		textMonth = new JTextField();
 		textMonth.setEditable(false);
-		panel_1.add(textMonth, "cell 3 1,growx");
+		panel_1.add(textMonth, "cell 3 1 2 1,growx");
 		textMonth.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("Principal Oustanding");
