@@ -237,8 +237,7 @@ public class GroupRequestForm extends JFrame{
 			return false;
 		}
 		if(msql.CheckAvaliable("Group",txtGroupID.getText())) {
-			noteClientError.setText("* This Group is Already Requested");
-			noteClientError.setVisible(true);
+			JOptionPane.showMessageDialog(null, "This Group is Already Requested");
 			return false;	
 		}
 		else {

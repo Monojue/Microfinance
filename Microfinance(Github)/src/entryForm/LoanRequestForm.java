@@ -401,12 +401,11 @@ public class LoanRequestForm extends JFrame {
 		}
 		//Check Avaliable
 		if(msql.CheckAvaliable("Individual",textCID.getText())) {
-			noteClientError.setText("* This Client is Already Requested");
-			noteClientError.setVisible(true);
+			JOptionPane.showMessageDialog(null, "This Client is Already Requested");
 			return false;	
 		}
 		else if(msql.CheckClientIsInGroup(textCID.getText())) {
-			noteClientError.setText( "This Client is in another Group!");
+			JOptionPane.showMessageDialog(null, "This Client is in another Group!");
 			noteClientError.setVisible(true);
 			return false;
 		}
