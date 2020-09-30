@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import database.MyQueries;
@@ -97,6 +98,8 @@ public class ClientPanel extends JPanel {
 	    }
 	
 	public void createTable() {
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			table.setModel(usql.getClient(null, MyString.All));
 			table.getColumnModel().getColumn(0).setPreferredWidth(100);
 			table.getColumnModel().getColumn(1).setPreferredWidth(150);
@@ -106,6 +109,7 @@ public class ClientPanel extends JPanel {
 			table.getColumnModel().getColumn(5).setPreferredWidth(100);
 			table.getColumnModel().getColumn(6).setPreferredWidth(50);
 			table.getColumnModel().getColumn(7).setPreferredWidth(100);
+			table.getColumnModel().getColumn(8).setCellRenderer(rightRenderer);
 	}
 	public void showError(String error) {
 		lblError.setText(error);
@@ -171,6 +175,8 @@ public class ClientPanel extends JPanel {
 							table.setModel(usql.getClient(textSearch.getText().trim(),MyString.Name));;
 						}
 					}
+					DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+					rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 					table.getColumnModel().getColumn(0).setPreferredWidth(100);
 					table.getColumnModel().getColumn(1).setPreferredWidth(150);
 					table.getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -179,7 +185,8 @@ public class ClientPanel extends JPanel {
 					table.getColumnModel().getColumn(5).setPreferredWidth(100);
 					table.getColumnModel().getColumn(6).setPreferredWidth(50);
 					table.getColumnModel().getColumn(7).setPreferredWidth(100);
-					table.getColumnModel().getColumn(7).setPreferredWidth(100);					
+					table.getColumnModel().getColumn(7).setPreferredWidth(100);
+					table.getColumnModel().getColumn(8).setCellRenderer(rightRenderer);
 			}
 		});
 		panel.add(btnSearch, "cell 6 0");

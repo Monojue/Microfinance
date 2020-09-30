@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -202,6 +203,8 @@ public class GroupRequestForm extends JFrame{
 			noteDuration.setVisible(true);
 		}
 		else {
+			DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+			rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 		DefaultTableModel dtm = new DefaultTableModel(Integer.parseInt(textDuration.getText())+2,5);
 		dtm = Calculation.calculator(Integer.parseInt(Calculation.removecomma(textAmount.getText())),Integer.parseInt(textDuration.getText()),Rate);
 		table.setModel(dtm);
@@ -215,6 +218,10 @@ public class GroupRequestForm extends JFrame{
 		table.getColumnModel().getColumn(2).setHeaderValue("Principal");
 		table.getColumnModel().getColumn(3).setHeaderValue("Interest");
 		table.getColumnModel().getColumn(4).setHeaderValue("Installment");
+		table.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+		table.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+		table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+		table.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
 		}
 	}
 	

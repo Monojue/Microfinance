@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
@@ -35,6 +36,7 @@ import main.PaymentPanel;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JScrollPane;
 
@@ -167,8 +169,11 @@ public class RepaymentEntry extends JFrame {
 	public void CreatePaymentTable() {
 		String[] LoanDetails = msql.GetLoanRequestData(LoanRequestID);
 		Rate = LoanDetails[3];
+		
 		DefaultTableModel dtm = new DefaultTableModel(Integer.parseInt(Duration)+2,5);
 		dtm = Calculation.calculator(Integer.parseInt(Calculation.removecomma(Amount)),Integer.parseInt(Duration),Float.parseFloat(Rate));
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 		table_1.setModel(dtm);
 		table_1.getColumnModel().getColumn(0).setPreferredWidth(40);
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(130);
@@ -180,6 +185,11 @@ public class RepaymentEntry extends JFrame {
 		table_1.getColumnModel().getColumn(2).setHeaderValue("Principal");
 		table_1.getColumnModel().getColumn(3).setHeaderValue("Interest");
 		table_1.getColumnModel().getColumn(4).setHeaderValue("Installment");
+		table_1.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+		table_1.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+		table_1.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+		table_1.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		
 	}
 	
 	public void ClientSetData() {

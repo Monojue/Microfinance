@@ -387,7 +387,7 @@ public class ClientEntry extends JFrame {
 				noteNRC.setVisible(false);
 			}
 		});
-		boxN3.addItem("");
+		
 		boxN3.addItem("(N)");
 		panel.add(boxN3, "cell 10 2,growx,aligny top");
 		
