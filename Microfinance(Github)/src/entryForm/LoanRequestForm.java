@@ -885,7 +885,7 @@ public class LoanRequestForm extends JFrame {
 	JTableHeader header = table.getTableHeader();
 	header.setBackground(Color.WHITE);
 	header.setForeground(Color.BLACK);
-	header.setFont(new Font("SansSerif", Font.BOLD , 16));
+	header.setFont(new Font("SansSerif", Font.BOLD , 14));
 	scrollPane.setColumnHeaderView(table);
 	scrollPane.setViewportView(table);
 	

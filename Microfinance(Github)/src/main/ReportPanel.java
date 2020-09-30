@@ -140,7 +140,7 @@ public class ReportPanel extends JPanel {
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE);
 		header.setForeground(Color.BLACK);
-		header.setFont(new Font("SansSerif", Font.BOLD , 16));
+		header.setFont(new Font("SansSerif", Font.BOLD , 14));
 		scrollPane.setViewportView(table);
 		if(table.getSelectedRow()>=0) {
 			createGroupTable();
@@ -168,7 +168,7 @@ public class ReportPanel extends JPanel {
 		JTableHeader header2 = tableGroup.getTableHeader();
 		header2.setBackground(Color.WHITE);
 		header2.setForeground(Color.BLACK);
-		header2.setFont(new Font("SansSerif", Font.BOLD , 16));
+		header2.setFont(new Font("SansSerif", Font.BOLD , 14));
 		scrollPane_1.setViewportView(tableGroup);
 
 		

@@ -25,6 +25,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import database.DBConnection;
 import database.MyQueries;
@@ -413,6 +414,13 @@ public class GroupRequestForm extends JFrame{
 		panel.add(scrollPane);
 		
 		table = new JTable();
+		table.setRowHeight(20);
+		table.setEnabled(false);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 14));
+		scrollPane.setColumnHeaderView(table);
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();

@@ -209,7 +209,7 @@ public class LoanPanel extends JPanel {
 		JTableHeader header = tableIndividual.getTableHeader();
 		header.setBackground(Color.WHITE);
 		header.setForeground(Color.BLACK);
-		header.setFont(new Font("SansSerif", Font.BOLD , 16));
+		header.setFont(new Font("SansSerif", Font.BOLD , 14));
 		scrollPane.setViewportView(tableIndividual);
 		
 		panel_2 = new JPanel();
@@ -409,7 +409,7 @@ public class LoanPanel extends JPanel {
 		JTableHeader header2 = tableGroup.getTableHeader();
 		header2.setBackground(Color.WHITE);
 		header2.setForeground(Color.BLACK);
-		header2.setFont(new Font("SansSerif", Font.BOLD , 16));
+		header2.setFont(new Font("SansSerif", Font.BOLD , 14));
 		scrollPane_1.setViewportView(tableGroup);
 		
 		

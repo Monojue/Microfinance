@@ -962,7 +962,7 @@ public class SettingPanel extends JPanel {
 		JTableHeader header = table.getTableHeader();
 		header.setBackground(Color.WHITE);
 		header.setForeground(Color.BLACK);
-		header.setFont(new Font("SansSerif", Font.BOLD , 16));
+		header.setFont(new Font("SansSerif", Font.BOLD , 14));
 		scrollPane.setViewportView(table);
 	}
 }
