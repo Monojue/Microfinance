@@ -61,6 +61,8 @@ public class LoanPanel extends JPanel {
 	private UQueries usql = new UQueries();
 	private final ButtonGroup rdoInGroup = new ButtonGroup();
 	private final ButtonGroup rdoGGroup = new ButtonGroup();
+	private JLabel lblprefix1;
+	private JLabel lblprefix2;
 
 	/**
 	 * Create the panel.
@@ -208,7 +210,7 @@ public class LoanPanel extends JPanel {
 		panel_2.setBackground(Color.LIGHT_GRAY);
 		panel_2.setBounds(10, 11, 1034, 34);
 		panel.add(panel_2);
-		panel_2.setLayout(new MigLayout("", "[][][][120][][][][][][27.00,grow][][][][][]", "[]"));
+		panel_2.setLayout(new MigLayout("", "[][][][][120][][][][][][27.00,grow][][][][][]", "[]"));
 		
 		JButton btnNewButton = new JButton("New Individual Loan");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -221,18 +223,31 @@ public class LoanPanel extends JPanel {
 		panel_2.add(lblNewLabel, "cell 0 0,growx,aligny center");
 		
 		JRadioButton rdoIRID = new JRadioButton("Loan Request ID");
+		rdoIRID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lblprefix1.setText("LR-");
+			}
+		});
 		rdoIRID.setSelected(true);
 		rdoInGroup.add(rdoIRID);
 		rdoIRID.setBackground(Color.LIGHT_GRAY);
 		panel_2.add(rdoIRID, "cell 1 0,growx,aligny center");
 		
 		JRadioButton rdoCID = new JRadioButton("Customer ID");
+		rdoCID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblprefix1.setText("CL-");
+			}
+		});
 		rdoInGroup.add(rdoCID);
 		rdoCID.setBackground(Color.LIGHT_GRAY);
 		panel_2.add(rdoCID, "cell 2 0,growx,aligny center");
 		
+		lblprefix1 = new JLabel("LR-");
+		panel_2.add(lblprefix1, "cell 3 0,alignx trailing");
+		
 		txtISearch = new JTextField();
-		panel_2.add(txtISearch, "cell 3 0,growx,aligny top");
+		panel_2.add(txtISearch, "cell 4 0,growx,aligny top");
 		txtISearch.setColumns(10);
 		
 		JButton btnISearch = new JButton("Search");
@@ -258,10 +273,10 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_2.add(btnISearch, "cell 4 0,growx,aligny center");
+		panel_2.add(btnISearch, "cell 5 0,growx,aligny center");
 		
 		JLabel lblNewLabel_1 = new JLabel("View Table Of");
-		panel_2.add(lblNewLabel_1, "cell 6 0");
+		panel_2.add(lblNewLabel_1, "cell 7 0");
 		
 		rdoIAccept = new JRadioButton("Accepted");
 		rdoIAccept.setSelected(true);
@@ -273,7 +288,7 @@ public class LoanPanel extends JPanel {
 		});
 		buttonGroup.add(rdoIAccept);
 		rdoIAccept.setBackground(Color.LIGHT_GRAY);
-		panel_2.add(rdoIAccept, "cell 7 0");
+		panel_2.add(rdoIAccept, "cell 8 0");
 		
 		rdoIRejected = new JRadioButton("Rejected");
 		rdoIRejected.addActionListener(new ActionListener() {
@@ -284,12 +299,12 @@ public class LoanPanel extends JPanel {
 		});
 		buttonGroup.add(rdoIRejected);
 		rdoIRejected.setBackground(Color.LIGHT_GRAY);
-		panel_2.add(rdoIRejected, "cell 8 0");
+		panel_2.add(rdoIRejected, "cell 9 0");
 		
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-		panel_2.add(separator, "cell 5 0,grow");
-		panel_2.add(btnNewButton, "cell 10 0,growx,aligny center");
+		panel_2.add(separator, "cell 6 0,grow");
+		panel_2.add(btnNewButton, "cell 11 0,growx,aligny center");
 		
 		btnIPaid = new JButton("To Pay");
 		btnIPaid.addActionListener(new ActionListener() {
@@ -317,7 +332,7 @@ public class LoanPanel extends JPanel {
 				}			
 			}
 		});
-		panel_2.add(btnIPaid, "cell 10 0,growx,aligny center");
+		panel_2.add(btnIPaid, "cell 11 0,growx,aligny center");
 		
 		JButton button = new JButton("Refresh");
 		button.addActionListener(new ActionListener() {
@@ -369,8 +384,8 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_2.add(btnInDelete, "cell 11 0");
-		panel_2.add(button, "cell 13 0,growx,aligny center");
+		panel_2.add(btnInDelete, "cell 12 0");
+		panel_2.add(button, "cell 14 0,growx,aligny center");
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Group", panel_1);
@@ -392,25 +407,38 @@ public class LoanPanel extends JPanel {
 		panel_4.setBounds(10, 11, 1034, 34);
 		panel_1.add(panel_4);
 //		panel_4.setLayout(new MigLayout("", "[58px][105px][85px][159px][65px][][129px][][71px]", "[23px]"));
-		panel_4.setLayout(new MigLayout("", "[][][][120][][][][][][grow][][][][][]", "[]"));
+		panel_4.setLayout(new MigLayout("", "[][][][][120][][][][][][grow][][][][][]", "[]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel_4.add(label, "cell 0 0,growx,aligny center");
 		
 		JRadioButton rdoGRID = new JRadioButton("Loan Request ID");
+		rdoGRID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblprefix2.setText("LR-");
+			}
+		});
 		rdoGRID.setSelected(true);
 		rdoGGroup.add(rdoGRID);
 		rdoGRID.setBackground(Color.LIGHT_GRAY);
 		panel_4.add(rdoGRID, "cell 1 0,growx,aligny center");
 		
 		JRadioButton rdoGID = new JRadioButton("Group ID");
+		rdoGID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblprefix2.setText("GP-");
+			}
+		});
 		rdoGGroup.add(rdoGID);
 		rdoGID.setBackground(Color.LIGHT_GRAY);
 		panel_4.add(rdoGID, "cell 2 0,growx,aligny center");
 		
+		lblprefix2 = new JLabel("LR-");
+		panel_4.add(lblprefix2, "cell 3 0,alignx trailing");
+		
 		txtGSearch = new JTextField();
 		txtGSearch.setColumns(10);
-		panel_4.add(txtGSearch, "cell 3 0,growx,aligny center");
+		panel_4.add(txtGSearch, "cell 4 0,growx,aligny center");
 		
 		JButton btnGSearch = new JButton("Search");
 		btnGSearch.addActionListener(new ActionListener() {
@@ -435,12 +463,12 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_4.add(btnGSearch, "cell 4 0,growx,aligny center");
+		panel_4.add(btnGSearch, "cell 5 0,growx,aligny center");
 		
 		ButtonGroup BG = new ButtonGroup();
 		
 		JLabel lblNewLabel_2 = new JLabel("View Table Of");
-		panel_4.add(lblNewLabel_2, "cell 6 0");
+		panel_4.add(lblNewLabel_2, "cell 7 0");
 		
 		rdoGAccepted = new JRadioButton("Accepted");
 		rdoGAccepted.setSelected(true);
@@ -451,7 +479,7 @@ public class LoanPanel extends JPanel {
 			}
 		});
 		rdoGAccepted.setBackground(Color.LIGHT_GRAY);
-		panel_4.add(rdoGAccepted, "cell 7 0");
+		panel_4.add(rdoGAccepted, "cell 8 0");
 		BG.add(rdoGAccepted);
 		
 		rdoGRejected = new JRadioButton("Rejected");
@@ -462,12 +490,12 @@ public class LoanPanel extends JPanel {
 			}
 		});
 		rdoGRejected.setBackground(Color.LIGHT_GRAY);
-		panel_4.add(rdoGRejected, "cell 8 0");
+		panel_4.add(rdoGRejected, "cell 9 0");
 		BG.add(rdoGRejected);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		panel_4.add(separator_1, "cell 5 0,grow");
+		panel_4.add(separator_1, "cell 6 0,grow");
 		
 		
 		
@@ -477,7 +505,7 @@ public class LoanPanel extends JPanel {
 				new GroupRequestForm(null,null).setVisible(true);
 			}
 		});
-		panel_4.add(btnNewGroupLoan, "cell 10 0,growx,aligny center");
+		panel_4.add(btnNewGroupLoan, "cell 11 0,growx,aligny center");
 		
 		btnGPaid = new JButton("To Pay");
 		btnGPaid.addActionListener(new ActionListener() {
@@ -506,7 +534,7 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_4.add(btnGPaid, "cell 10 0,growx,aligny center");
+		panel_4.add(btnGPaid, "cell 11 0,growx,aligny center");
 		
 		JButton button_3 = new JButton("Refresh");
 		button_3.addActionListener(new ActionListener() {
@@ -559,8 +587,8 @@ public class LoanPanel extends JPanel {
 				}
 			}
 		});
-		panel_4.add(btnGDelete, "cell 11 0");
-		panel_4.add(button_3, "cell 13 0,growx,aligny center");
+		panel_4.add(btnGDelete, "cell 12 0");
+		panel_4.add(button_3, "cell 14 0,growx,aligny center");
 		
 
 	}

@@ -46,6 +46,7 @@ public class PaymentPanel extends JPanel {
 	private JButton btnDelete;
 	private JRadioButton rdoDate;
 	private JDateChooser dateChooser;
+	private JLabel lblPrefix;
 
 	 public void updatePanelSize() {
 
@@ -106,7 +107,7 @@ public class PaymentPanel extends JPanel {
 		panel.setBounds(10, 11, 1039, 37);
 		panel.setBackground(Color.LIGHT_GRAY);
 		add(panel);
-		panel.setLayout(new MigLayout("", "[61px][111px][71px][49px][143.00][67px][grow][73px][55px][grow][69px][65px][73px]", "[23px,grow]"));
+		panel.setLayout(new MigLayout("", "[61px][111px][71px][49px][][143.00][67px][grow][73px][55px][grow][69px][65px][73px]", "[23px,grow]"));
 		
 		JLabel label = new JLabel("Search With");
 		panel.add(label, "cell 0 0,alignx left,aligny center");
@@ -116,6 +117,7 @@ public class PaymentPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				dateChooser.setVisible(false);
 				txtSearch.setVisible(true);
+				lblPrefix.setText("LR-");
 			}
 		});
 		rdoLRID.setSelected(true);
@@ -128,6 +130,7 @@ public class PaymentPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				dateChooser.setVisible(false);
 				txtSearch.setVisible(true);
+				lblPrefix.setText("CL-");
 			}
 		});
 		radioGroup.add(rdoCID);
@@ -139,14 +142,18 @@ public class PaymentPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				txtSearch.setVisible(false);
 				dateChooser.setVisible(true);
+				lblPrefix.setText("");
 			}
 		});
 		radioGroup.add(rdoDate);
 		rdoDate.setBackground(Color.LIGHT_GRAY);
 		panel.add(rdoDate, "cell 3 0,alignx left,aligny bottom");
 		
+		lblPrefix = new JLabel("LR-");
+		panel.add(lblPrefix, "cell 4 0");
+		
 		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, "cell 4 0,grow");
+		panel.add(panel_1, "cell 5 0,grow");
 		panel_1.setLayout(null);
 		
 //		JRadioButton radioButton_2 = new JRadioButton("Group ID");
@@ -201,7 +208,7 @@ public class PaymentPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(btnSearch, "cell 5 0,alignx left,aligny bottom");
+		panel.add(btnSearch, "cell 6 0,alignx left,aligny bottom");
 		
 		rdoIndividual = new JRadioButton("Individual");
 		rdoIndividual.setSelected(true);
@@ -213,9 +220,9 @@ public class PaymentPanel extends JPanel {
 		});
 		
 		JLabel lblNewLabel = new JLabel("View Table Of :");
-		panel.add(lblNewLabel, "cell 6 0,alignx right");
+		panel.add(lblNewLabel, "cell 7 0,alignx right");
 		rdoIndividual.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoIndividual, "cell 7 0,alignx left,aligny bottom");
+		panel.add(rdoIndividual, "cell 8 0,alignx left,aligny bottom");
 		radioGroup2.add(rdoIndividual);
 		
 		rdoGroup = new JRadioButton("Group");
@@ -226,7 +233,7 @@ public class PaymentPanel extends JPanel {
 			}
 		});
 		rdoGroup.setBackground(Color.LIGHT_GRAY);
-		panel.add(rdoGroup, "cell 8 0,alignx left,aligny bottom");
+		panel.add(rdoGroup, "cell 9 0,alignx left,aligny bottom");
 		radioGroup2.add(rdoGroup);
 		
 		btnRefresh = new JButton("Refresh");
@@ -271,7 +278,7 @@ public class PaymentPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(btnDetails, "cell 10 0,alignx left,aligny bottom");
+		panel.add(btnDetails, "cell 11 0,alignx left,aligny bottom");
 		
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
@@ -323,8 +330,8 @@ public class PaymentPanel extends JPanel {
 				}
 			}
 		});
-		panel.add(btnDelete, "cell 11 0,alignx left,aligny bottom");
-		panel.add(btnRefresh, "cell 12 0,alignx left,aligny bottom");
+		panel.add(btnDelete, "cell 12 0,alignx left,aligny bottom");
+		panel.add(btnRefresh, "cell 13 0,alignx left,aligny bottom");
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 59, 1039, 510);
