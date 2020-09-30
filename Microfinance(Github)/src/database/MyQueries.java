@@ -850,7 +850,7 @@ public class MyQueries {
 ///////////////////// Repayment Start ////////////////////////
 	public DefaultTableModel getIRepaymentTable(String str, String ID) {
 		DefaultTableModel dtm = new DefaultTableModel();
-		String dataitem[]= new String[9];
+		String dataitem[]= new String[10];
 		try {
 			stmt = con.createStatement();
 			if (str.equals("All")) {
@@ -874,6 +874,7 @@ public class MyQueries {
 				dtm.addColumn("Remaining Amount");
 				dtm.addColumn("Total Duration");
 				dtm.addColumn("Remaining Duration");
+				dtm.addColumn("Due Date");
 			}
 			while (rs.next()) {
 				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
@@ -897,6 +898,7 @@ public class MyQueries {
 				}
 				dataitem[6] = Calculation.addcomma(Integer.toString(RemainingAmount));
 				dataitem[8] = Integer.toString(RemainingDuration);
+				dataitem[9] = rs.getString("DueDate");
 				
 				if(RemainingDuration<=0) {
 					DeleteLoanRequest(dataitem[0],"Individual");
@@ -917,7 +919,7 @@ public class MyQueries {
 	
 	public DefaultTableModel getGRepaymentTable(String str, String ID) {
 		DefaultTableModel dtm = new DefaultTableModel();
-		String dataitem[]= new String[9];
+		String dataitem[]= new String[10];
 		try {
 			stmt = con.createStatement();
 			query ="Select * from groupdetails";
@@ -942,6 +944,7 @@ public class MyQueries {
 				dtm.addColumn("Remaining Amount");
 				dtm.addColumn("Total Duration");
 				dtm.addColumn("Remaining Duration");
+				dtm.addColumn("Due Date");
 			}
 			while (rs.next()) {
 				String[] LoanRequestDetails = GetLoanRequestData(rs.getString("LoanRequestID"));
@@ -969,6 +972,7 @@ public class MyQueries {
 				}
 				dataitem[6] = Calculation.addcomma(Integer.toString(RemainingAmount));
 				dataitem[8] = Integer.toString(RemainingDuration);
+				dataitem[9] = rs.getString("DueDate");
 				
 				if(RemainingDuration<=0) {
 					DeleteLoanRequest(dataitem[0],"Group");

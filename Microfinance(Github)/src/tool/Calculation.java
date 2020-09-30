@@ -76,7 +76,7 @@ public class Calculation {
 	
 	public String CalculateDueDate(String DateNow) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-		LocalDate duedate = LocalDate.parse("2020-Sep-05", formatter);
+		LocalDate duedate = LocalDate.parse(DateNow, formatter);
 		return duedate.plusMonths(1).format(formatter);
 	}
 	public static void main(String[] args) {

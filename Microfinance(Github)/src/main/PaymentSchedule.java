@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import javax.swing.JFrame;
@@ -86,7 +87,7 @@ public class PaymentSchedule extends JFrame {
 		table.getColumnModel().getColumn(1).setHeaderValue("Installment");
 		table.getColumnModel().getColumn(2).setHeaderValue("Schedule");
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */

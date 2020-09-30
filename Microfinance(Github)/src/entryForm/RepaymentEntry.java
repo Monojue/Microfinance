@@ -143,7 +143,6 @@ public class RepaymentEntry extends JFrame {
 	
 	public void PaymentSetData(String form) {
 		num = msql.GetPaymentNumber(LoanRequestID);
-		//textMonth.setText((String) table_1.getValueAt(num, 0));
 		String[] LoanDetails = msql.GetLoanRequestData(LoanRequestID);
 		Date today;
 		try {
@@ -549,6 +548,7 @@ public class RepaymentEntry extends JFrame {
 				boolean duedate = msql.updateDueDate(form, calculation.CalculateDueDate(txtDueDate.getText()), LoanRequestID);
 				if (save && duedate) {
 					JOptionPane.showMessageDialog(null,textI2.getText()+ " is Paid Successfully!","Saved Record",JOptionPane.INFORMATION_MESSAGE);
+					AutoID();
 					dispose();
 					if(CPanel.isVisible()) {
 						PaymentPanel.createITable("All",null);

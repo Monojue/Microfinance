@@ -638,7 +638,7 @@ public class ViewDetails extends JFrame {
 				
 				else if(GPanel.isVisible()) {
 					new PaymentSchedule(textID.getText(),
-							txtLName.getText()+" /'s Group").setVisible(true);
+							txtLName.getText()+" 's Group").setVisible(true);
 				}
 			}
 		});

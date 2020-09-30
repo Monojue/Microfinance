@@ -8,8 +8,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
-import org.omg.PortableInterceptor.ServerRequestInfo;
-
 import database.MyQueries;
 import database.UQueries;
 import entryForm.RepaymentEntry;
