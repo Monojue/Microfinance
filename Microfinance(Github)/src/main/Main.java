@@ -38,9 +38,7 @@ public class Main extends JFrame {
 	private ReportPanel reportPanel;
 	private SettingPanel settingPanel;
 	private String Role,OfficerID;
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
