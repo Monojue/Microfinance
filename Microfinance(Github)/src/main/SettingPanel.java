@@ -7,6 +7,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.JTableHeader;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 import tool.Checking;
@@ -957,6 +958,11 @@ public class SettingPanel extends JPanel {
 		panel_2.add(scrollPane);
 		 
 		table = new JTable();
+		table.setRowHeight(20);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 	}
 }

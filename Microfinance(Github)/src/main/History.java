@@ -1,11 +1,14 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.JTableHeader;
 
 import database.MyQueries;
 
@@ -51,6 +54,11 @@ public class History extends JFrame {
 		contentPane.add(scrollPane, "cell 0 0,grow");
 		
 		table = new JTable();
+		table.setRowHeight(20);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 		table.setModel(msql.GetAllLoanSetting());
 	}

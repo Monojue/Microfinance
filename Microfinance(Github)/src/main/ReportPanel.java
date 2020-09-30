@@ -1,12 +1,13 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-
+import javax.swing.table.JTableHeader;
 
 import database.MyQueries;
 import entryForm.ClientEntry;
@@ -135,6 +136,11 @@ public class ReportPanel extends JPanel {
 		panel.add(scrollPane);
 		
 		table = new JTable();
+		table.setRowHeight(20);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 		if(table.getSelectedRow()>=0) {
 			createGroupTable();
@@ -158,6 +164,11 @@ public class ReportPanel extends JPanel {
 		// scrollPane_1.setViewportView(tableApproved);
 
 		tableGroup = new JTable();
+		tableGroup.setRowHeight(20);
+		JTableHeader header2 = tableGroup.getTableHeader();
+		header2.setBackground(Color.WHITE);
+		header2.setForeground(Color.BLACK);
+		header2.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane_1.setViewportView(tableGroup);
 
 		

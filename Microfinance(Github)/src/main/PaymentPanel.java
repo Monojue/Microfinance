@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+import javax.swing.table.JTableHeader;
 
 import database.MyQueries;
 import database.UQueries;
@@ -331,6 +332,11 @@ public class PaymentPanel extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
+		table.setRowHeight(20);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 	}
 }

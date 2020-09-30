@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+import javax.swing.table.JTableHeader;
 
 import database.MyQueries;
 import database.UQueries;
@@ -202,6 +203,11 @@ public class LoanPanel extends JPanel {
 		panel.add(scrollPane);
 		
 		tableIndividual = new JTable();
+		tableIndividual.setRowHeight(20);
+		JTableHeader header = tableIndividual.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(tableIndividual);
 		
 		panel_2 = new JPanel();
@@ -384,6 +390,11 @@ public class LoanPanel extends JPanel {
 		panel_4 = new JPanel();
 
 		tableGroup = new JTable();
+		tableGroup.setRowHeight(20);
+		JTableHeader header2 = tableGroup.getTableHeader();
+		header2.setBackground(Color.WHITE);
+		header2.setForeground(Color.BLACK);
+		header2.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane_1.setViewportView(tableGroup);
 		
 		

@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.table.JTableHeader;
 
 import database.UQueries;
 
@@ -300,6 +301,11 @@ public class GroupPanel extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
+		table.setRowHeight(20);
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.WHITE);
+		header.setForeground(Color.BLACK);
+		header.setFont(new Font("SansSerif", Font.BOLD , 16));
 		scrollPane.setViewportView(table);
 	}
 }
