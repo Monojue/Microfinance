@@ -408,11 +408,17 @@ public class LoanRequestForm extends JFrame {
 		}
 		//Check Avaliable
 		if(msql.CheckAvaliable("Individual",textCID.getText())) {
+<<<<<<< Updated upstream
+			return false;	
+		}
+		else if(msql.CheckClientIsInGroup(textCID.getText())) {
+=======
 			JOptionPane.showMessageDialog(null, "This Client is Already Requested");
 			return false;	
 		}
 		else if(msql.CheckClientIsInGroup(textCID.getText())) {
 			JOptionPane.showMessageDialog(null, "This Client is in another Group!");
+>>>>>>> Stashed changes
 			noteClientError.setVisible(true);
 			return false;
 		}

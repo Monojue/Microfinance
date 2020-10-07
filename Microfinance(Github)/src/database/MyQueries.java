@@ -148,7 +148,7 @@ public class MyQueries {
 	public static boolean InsertData(String tbName, String[] data) {
 	if(tbName.equals(MyString.ClientEntry)) {
 		query = "insert into client(ClientID,Name,NRC,Address,Phone,DateofBirth,Home,Job,Salary) "
-				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+Integer.parseInt(data[4])+"','"+data[5]+"','"+Integer.parseInt(data[6])+"','"+data[7]+"','"+Integer.parseInt(data[8])+"')";
+				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+Integer.parseInt(data[6])+"','"+data[7]+"','"+Integer.parseInt(data[8])+"')";
 	}else if (tbName.equals(MyString.GroupEntry)) {
 		query = "Insert into clientGroup(groupID, leader, Member_1, Member_2, Member_3, Member_4, leaderName, M1Name, M2Name, M3Name, M4Name) "
 				+ "values('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+data[6]+"','"+data[7]+"','"+data[8]+"','"+data[9]+"','"+data[10]+"')";
@@ -226,10 +226,10 @@ public class MyQueries {
 	//////////////////// Update Start!!!/////////////////////////////////////
 	public static boolean UpdateData(String tbName, String[] data) {
 	if(tbName.equals("guarantor")) {
-		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+Integer.parseInt(data[6])+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
+		query = "update client set GName= '"+data[1]+"',GJob= '"+data[2]+"',GSalary= '"+Integer.parseInt(data[3])+"' ,Relationship= '"+data[4]+"' ,GAddress= '"+data[5]+"' ,GPhone= '"+data[6]+"' ,GNRC= '"+data[7]+"' where ClientID= '"+data[0]+"'";
 	}
 	if(tbName.equals("client")) {
-		query = "update client set Name= '"+data[1]+"',NRC= '"+data[2]+"',Address= '"+data[3]+"' ,Phone= '"+Integer.parseInt(data[4])+"' ,DateOfBirth= '"+data[5]+"' ,Home= '"+Integer.parseInt(data[6])+"' ,Job= '"+data[7]+"',Salary= '"+Integer.parseInt(data[8])+"' where ClientID= '"+data[0]+"'";
+		query = "update client set Name= '"+data[1]+"',NRC= '"+data[2]+"',Address= '"+data[3]+"' ,Phone= '"+data[4]+"' ,DateOfBirth= '"+data[5]+"' ,Home= '"+Integer.parseInt(data[6])+"' ,Job= '"+data[7]+"',Salary= '"+Integer.parseInt(data[8])+"' where ClientID= '"+data[0]+"'";
 	}
 	if(tbName.equals("clientgroup")) {
 		query = "update clientgroup set leader= '"+data[1]+"',Member_1= '"+data[2]+"',Member_2= '"+data[3]+"' ,Member_3= '"+data[4]+"' ,Member_4= '"+data[5]+"' ,leaderName= '"+data[6]+"' ,M1Name= '"+data[7]+"',M2Name= '"+data[8]+"',M3Name= '"+data[8]+"',M4Name= '"+data[8]+"' where GroupID= '"+data[0]+"'";
